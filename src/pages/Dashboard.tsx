@@ -10,7 +10,7 @@ import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
-  Layers, Award
+  Layers, Award, Gamepad2
 } from 'lucide-react';
 import koreanCharacter from '@/assets/korean-character.png';
 
@@ -173,29 +173,38 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3 mb-8">
+        <div className="grid grid-cols-3 gap-3 mb-8">
           <button
             onClick={() => navigate('/learn/1')}
-            className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
           >
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
               <Layers className="w-6 h-6 text-primary" />
             </div>
-            <div className="text-start">
-              <p className="font-semibold">{language === 'ar' ? 'مراجعة سريعة' : '빠른 복습'}</p>
-              <p className="text-xs text-muted-foreground">{language === 'ar' ? 'بطاقات تعليمية' : '플래시카드'}</p>
+            <div className="text-center">
+              <p className="font-semibold text-sm">{language === 'ar' ? 'مراجعة' : '복습'}</p>
+            </div>
+          </button>
+          <button
+            onClick={() => navigate('/games')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-pink-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-rose-500/20 flex items-center justify-center">
+              <Gamepad2 className="w-6 h-6 text-pink-500" />
+            </div>
+            <div className="text-center">
+              <p className="font-semibold text-sm">{language === 'ar' ? 'الألعاب' : '게임'}</p>
             </div>
           </button>
           <button
             onClick={() => navigate('/profile')}
-            className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-secondary/50 transition-all duration-300 hover:shadow-lg"
           >
             <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center">
               <Award className="w-6 h-6 text-secondary" />
             </div>
-            <div className="text-start">
-              <p className="font-semibold">{language === 'ar' ? 'الإنجازات' : '업적'}</p>
-              <p className="text-xs text-muted-foreground">{language === 'ar' ? 'شاهد تقدمك' : '진행 상황 보기'}</p>
+            <div className="text-center">
+              <p className="font-semibold text-sm">{language === 'ar' ? 'الإنجازات' : '업적'}</p>
             </div>
           </button>
         </div>

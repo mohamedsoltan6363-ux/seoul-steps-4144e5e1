@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Learn from "./pages/Learn";
+import Games from "./pages/Games";
 import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
 import NotFound from "./pages/NotFound";
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/learn/:level" element={<Learn />} />
+                <Route path="/games" element={<Games />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/certificate" element={<Certificate />} />
                 <Route path="*" element={<NotFound />} />
