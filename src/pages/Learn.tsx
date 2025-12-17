@@ -105,10 +105,10 @@ const Learn: React.FC = () => {
   const renderLevel1 = () => (
     <>
       {/* Tabs for consonants/vowels */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab('consonants')}
-          className={`px-5 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all ${
+          className={`flex-1 px-3 py-2 rounded-xl font-medium text-sm transition-all ${
             activeTab === 'consonants' 
               ? 'bg-primary text-primary-foreground shadow-lg' 
               : 'bg-muted hover:bg-muted/80'
@@ -118,7 +118,7 @@ const Learn: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveTab('vowels')}
-          className={`px-5 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all ${
+          className={`flex-1 px-3 py-2 rounded-xl font-medium text-sm transition-all ${
             activeTab === 'vowels' 
               ? 'bg-primary text-primary-foreground shadow-lg' 
               : 'bg-muted hover:bg-muted/80'
@@ -128,7 +128,7 @@ const Learn: React.FC = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3">
         {(activeTab === 'consonants' ? consonants : vowels).map((letter) => (
           <LetterCard
             key={letter.id}

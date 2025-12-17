@@ -52,16 +52,27 @@ const Profile: React.FC = () => {
   ];
 
   const streakDays = 0;
-  const unlockedAchievements = [
-    (progressByLevel[1]?.memorizedCount || 0) > 0 ? 'first_letter' : null,
-    (progressByLevel[1]?.memorizedCount || 0) >= 19 ? 'consonant_master' : null,
-    (progressByLevel[1]?.memorizedCount || 0) >= 40 ? 'vowel_master' : null,
-    getLevelProgress(1) >= 100 ? 'level1_complete' : null,
-    (progressByLevel[2]?.memorizedCount || 0) >= 50 ? 'vocabulary_50' : null,
-    streakDays >= 7 ? 'streak_7' : null,
-  ].filter(Boolean) as string[];
-
-  const achievements = unlockedAchievements.map(id => ({ id, unlocked: true }));
+  
+  // Calculate all achievements
+  const level1Memorized = progressByLevel[1]?.memorizedCount || 0;
+  const level2Memorized = progressByLevel[2]?.memorizedCount || 0;
+  const level3Memorized = progressByLevel[3]?.memorizedCount || 0;
+  
+  const achievements = [
+    { id: 'first_letter', unlocked: level1Memorized > 0 },
+    { id: 'consonant_master', unlocked: level1Memorized >= 19, progress: level1Memorized, maxProgress: 19 },
+    { id: 'vowel_master', unlocked: level1Memorized >= 40, progress: Math.max(0, level1Memorized - 19), maxProgress: 21 },
+    { id: 'level1_complete', unlocked: getLevelProgress(1) >= 100 },
+    { id: 'vocabulary_25', unlocked: level2Memorized >= 25, progress: level2Memorized, maxProgress: 25 },
+    { id: 'vocabulary_50', unlocked: level2Memorized >= 50, progress: level2Memorized, maxProgress: 50 },
+    { id: 'vocabulary_100', unlocked: level2Memorized >= 100, progress: level2Memorized, maxProgress: 100 },
+    { id: 'sentence_beginner', unlocked: level3Memorized >= 10, progress: level3Memorized, maxProgress: 10 },
+    { id: 'streak_3', unlocked: streakDays >= 3 },
+    { id: 'streak_7', unlocked: streakDays >= 7 },
+    { id: 'dedicated_learner', unlocked: totalPoints >= 500, progress: totalPoints, maxProgress: 500 },
+    { id: 'expert_learner', unlocked: totalPoints >= 1000, progress: totalPoints, maxProgress: 1000 },
+    { id: 'master_learner', unlocked: getLevelProgress(1) >= 100 && getLevelProgress(2) >= 100 && getLevelProgress(3) >= 100 && getLevelProgress(4) >= 100 },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
