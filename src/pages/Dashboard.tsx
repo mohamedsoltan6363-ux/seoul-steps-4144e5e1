@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress } from '@/hooks/useProgress';
+import { useStreak } from '@/hooks/useStreak';
+import { useAchievements } from '@/hooks/useAchievements';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
@@ -16,6 +19,8 @@ const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { currentLevel, totalPoints, isLevelUnlocked, getLevelProgress, loading, progressByLevel } = useProgress();
+  const { streakDays, todayCompleted, updateStreak } = useStreak();
+  const { showAchievement } = useAchievements();
   const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
@@ -141,22 +146,30 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="stat-card text-center p-5">
-            <Trophy className="w-8 h-8 mx-auto mb-2 text-white/90" />
-            <p className="text-3xl font-bold text-white">{totalPoints}</p>
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="stat-card text-center p-4">
+            <Trophy className="w-6 h-6 mx-auto mb-2 text-white/90" />
+            <p className="text-2xl font-bold text-white">{totalPoints}</p>
             <p className="text-xs text-white/70">{t('totalPoints')}</p>
           </div>
-          <div className="stat-card stat-card-secondary text-center p-5">
-            <Flame className="w-8 h-8 mx-auto mb-2 text-white/90" />
-            <p className="text-3xl font-bold text-white">{currentLevel}</p>
-            <p className="text-xs text-white/70">{t('currentLevel')}</p>
+          <div className="stat-card stat-card-secondary text-center p-4">
+            <Flame className="w-6 h-6 mx-auto mb-2 text-white/90" />
+            <p className="text-2xl font-bold text-white">{streakDays}</p>
+            <p className="text-xs text-white/70">{language === 'ar' ? 'أيام متتالية' : '연속'}</p>
           </div>
-          <div className="stat-card stat-card-success text-center p-5">
-            <Target className="w-8 h-8 mx-auto mb-2 text-white/90" />
-            <p className="text-3xl font-bold text-white">{totalMemorized}</p>
-            <p className="text-xs text-white/70">{language === 'ar' ? 'تم الحفظ' : '암기 완료'}</p>
+          <div className="stat-card stat-card-success text-center p-4">
+            <Target className="w-6 h-6 mx-auto mb-2 text-white/90" />
+            <p className="text-2xl font-bold text-white">{totalMemorized}</p>
+            <p className="text-xs text-white/70">{language === 'ar' ? 'تم الحفظ' : '암기'}</p>
           </div>
+        </div>
+
+        {/* Streak Display */}
+        <div className="mb-6">
+          <StreakDisplay 
+            streakDays={streakDays} 
+            todayCompleted={todayCompleted} 
+          />
         </div>
 
         {/* Quick Actions */}
