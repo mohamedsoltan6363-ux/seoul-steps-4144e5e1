@@ -213,7 +213,22 @@
     box-shadow: var(--shadow-md);
   }
 
-  /* Letter Cards Pro */
+  /* Letter Cards Mobile - Responsive */
+  .letter-card-mobile {
+    @apply relative p-3 sm:p-4 rounded-2xl bg-card border-2 border-transparent cursor-pointer transition-all duration-300 overflow-hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .letter-card-mobile:hover {
+    @apply border-primary/30;
+    box-shadow: var(--shadow-md);
+  }
+
+  .letter-card-mobile.memorized {
+    @apply border-korean-green/50 bg-korean-green/5;
+  }
+
+  /* Letter Cards Pro - Desktop */
   .letter-card-pro {
     @apply relative p-6 rounded-3xl bg-card border-2 border-transparent cursor-pointer transition-all duration-500 overflow-hidden;
     box-shadow: var(--shadow-sm);
