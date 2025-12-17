@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress } from '@/hooks/useProgress';
+import { useStreak } from '@/hooks/useStreak';
 import { supabase } from '@/integrations/supabase/client';
 import AvatarUpload from '@/components/AvatarUpload';
 import RewardsDisplay from '@/components/RewardsDisplay';
+import StreakDisplay from '@/components/StreakDisplay';
 import { 
   ArrowLeft, Trophy, Flame, Star, Settings, ChevronRight, 
   BookOpen, MessageSquare, GraduationCap, Mail
@@ -16,9 +18,10 @@ const Profile: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { currentLevel, totalPoints, getLevelProgress, progressByLevel } = useProgress();
+  const { streakDays, todayCompleted } = useStreak();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'progress' | 'rewards'>('progress');
+  const [activeTab, setActiveTab] = useState<'progress' | 'rewards' | 'streak'>('progress');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -50,8 +53,6 @@ const Profile: React.FC = () => {
     'from-amber-500 to-orange-600',
     'from-purple-500 to-violet-600',
   ];
-
-  const streakDays = 0;
   
   // Calculate all achievements
   const level1Memorized = progressByLevel[1]?.memorizedCount || 0;
@@ -67,8 +68,10 @@ const Profile: React.FC = () => {
     { id: 'vocabulary_50', unlocked: level2Memorized >= 50, progress: level2Memorized, maxProgress: 50 },
     { id: 'vocabulary_100', unlocked: level2Memorized >= 100, progress: level2Memorized, maxProgress: 100 },
     { id: 'sentence_beginner', unlocked: level3Memorized >= 10, progress: level3Memorized, maxProgress: 10 },
-    { id: 'streak_3', unlocked: streakDays >= 3 },
-    { id: 'streak_7', unlocked: streakDays >= 7 },
+    { id: 'streak_3', unlocked: streakDays >= 3, progress: streakDays, maxProgress: 3 },
+    { id: 'streak_7', unlocked: streakDays >= 7, progress: streakDays, maxProgress: 7 },
+    { id: 'streak_14', unlocked: streakDays >= 14, progress: streakDays, maxProgress: 14 },
+    { id: 'streak_30', unlocked: streakDays >= 30, progress: streakDays, maxProgress: 30 },
     { id: 'dedicated_learner', unlocked: totalPoints >= 500, progress: totalPoints, maxProgress: 500 },
     { id: 'expert_learner', unlocked: totalPoints >= 1000, progress: totalPoints, maxProgress: 1000 },
     { id: 'master_learner', unlocked: getLevelProgress(1) >= 100 && getLevelProgress(2) >= 100 && getLevelProgress(3) >= 100 && getLevelProgress(4) >= 100 },
@@ -136,20 +139,30 @@ const Profile: React.FC = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-1 bg-muted rounded-2xl">
+        <div className="flex gap-1 mb-6 p-1 bg-muted rounded-2xl">
           <button
             onClick={() => setActiveTab('progress')}
-            className={`flex-1 py-3 rounded-xl font-medium transition-all ${
+            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
               activeTab === 'progress' 
                 ? 'bg-card shadow-sm text-foreground' 
                 : 'text-muted-foreground'
             }`}
           >
-            {language === 'ar' ? 'التقدم' : '진행 상황'}
+            {language === 'ar' ? 'التقدم' : '진행'}
+          </button>
+          <button
+            onClick={() => setActiveTab('streak')}
+            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
+              activeTab === 'streak' 
+                ? 'bg-card shadow-sm text-foreground' 
+                : 'text-muted-foreground'
+            }`}
+          >
+            {language === 'ar' ? 'السلسلة' : '연속'}
           </button>
           <button
             onClick={() => setActiveTab('rewards')}
-            className={`flex-1 py-3 rounded-xl font-medium transition-all ${
+            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
               activeTab === 'rewards' 
                 ? 'bg-card shadow-sm text-foreground' 
                 : 'text-muted-foreground'
@@ -198,6 +211,14 @@ const Profile: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+        ) : activeTab === 'streak' ? (
+          <div className="space-y-4">
+            <h3 className="font-bold">{language === 'ar' ? 'أيامك المتتالية' : '연속 학습 일수'}</h3>
+            <StreakDisplay 
+              streakDays={streakDays} 
+              todayCompleted={todayCompleted} 
+            />
           </div>
         ) : (
           <RewardsDisplay
