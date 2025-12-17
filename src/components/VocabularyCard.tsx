@@ -11,16 +11,16 @@ interface VocabularyCardProps {
   onToggleMemorized: () => void;
 }
 
-const categoryColors: Record<string, string> = {
-  greetings: 'bg-korean-pink-light text-secondary',
-  family: 'bg-korean-blue-light text-primary',
-  numbers: 'bg-korean-gold-light text-accent-foreground',
-  food: 'bg-green-100 text-green-700',
-  places: 'bg-purple-100 text-purple-700',
-  time: 'bg-orange-100 text-orange-700',
-  body: 'bg-red-100 text-red-700',
-  verbs: 'bg-cyan-100 text-cyan-700',
-  adjectives: 'bg-indigo-100 text-indigo-700',
+const categoryColors: Record<string, { bg: string; text: string; gradient: string }> = {
+  greetings: { bg: 'bg-pink-100', text: 'text-pink-700', gradient: 'from-pink-400 to-rose-500' },
+  family: { bg: 'bg-blue-100', text: 'text-blue-700', gradient: 'from-blue-400 to-indigo-500' },
+  numbers: { bg: 'bg-amber-100', text: 'text-amber-700', gradient: 'from-amber-400 to-orange-500' },
+  food: { bg: 'bg-green-100', text: 'text-green-700', gradient: 'from-green-400 to-emerald-500' },
+  places: { bg: 'bg-purple-100', text: 'text-purple-700', gradient: 'from-purple-400 to-violet-500' },
+  time: { bg: 'bg-orange-100', text: 'text-orange-700', gradient: 'from-orange-400 to-red-500' },
+  body: { bg: 'bg-red-100', text: 'text-red-700', gradient: 'from-red-400 to-rose-500' },
+  verbs: { bg: 'bg-cyan-100', text: 'text-cyan-700', gradient: 'from-cyan-400 to-teal-500' },
+  adjectives: { bg: 'bg-indigo-100', text: 'text-indigo-700', gradient: 'from-indigo-400 to-purple-500' },
 };
 
 const categoryNames: Record<string, { ar: string; ko: string }> = {
@@ -45,8 +45,11 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
 }) => {
   const { language, t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  const colors = categoryColors[category] || { bg: 'bg-gray-100', text: 'text-gray-700', gradient: 'from-gray-400 to-gray-500' };
 
-  const playAudio = () => {
+  const playAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsPlaying(true);
     const utterance = new SpeechSynthesisUtterance(korean);
     utterance.lang = 'ko-KR';
@@ -56,26 +59,34 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
   };
 
   return (
-    <div 
-      className={`letter-card ${isMemorized ? 'memorized' : ''} animate-scale-in`}
-    >
+    <div className={`vocab-card-pro ${isMemorized ? 'memorized' : ''} animate-scale-in`}>
+      {/* Top gradient bar */}
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colors.gradient}`} />
+      
+      {/* Memorized indicator */}
+      {isMemorized && (
+        <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-korean-green flex items-center justify-center shadow-md">
+          <Check className="w-4 h-4 text-white" />
+        </div>
+      )}
+
       {/* Category Badge */}
-      <div className="flex justify-end mb-3">
-        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${categoryColors[category]}`}>
+      <div className="mb-3">
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text}`}>
           <Tag className="w-3 h-3" />
           {categoryNames[category]?.[language] || category}
         </span>
       </div>
 
       {/* Korean Word */}
-      <div className="text-center mb-3">
+      <div className="text-center mb-2">
         <span className="font-korean text-3xl md:text-4xl font-bold text-gradient">
           {korean}
         </span>
       </div>
 
-      {/* Translation */}
-      <div className="text-center mb-2">
+      {/* Arabic Translation */}
+      <div className="text-center mb-1">
         <span className="text-xl font-semibold text-foreground">{arabic}</span>
       </div>
 
@@ -89,33 +100,33 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
         <button
           onClick={playAudio}
           disabled={isPlaying}
-          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg 
+          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl 
             ${isPlaying 
-              ? 'bg-primary text-primary-foreground' 
-              : 'bg-muted hover:bg-muted/80'
+              ? 'bg-primary text-primary-foreground shadow-lg' 
+              : 'bg-muted hover:bg-primary hover:text-primary-foreground'
             } transition-all duration-300`}
         >
           <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse' : ''}`} />
-          <span className="text-sm">{t('listen')}</span>
+          <span className="text-sm font-medium">{t('listen')}</span>
         </button>
 
         <button
-          onClick={onToggleMemorized}
-          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-all duration-300
+          onClick={(e) => { e.stopPropagation(); onToggleMemorized(); }}
+          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-300
             ${isMemorized 
-              ? 'bg-korean-green text-white' 
-              : 'bg-muted hover:bg-muted/80'
+              ? 'bg-korean-green text-white shadow-lg' 
+              : 'bg-muted hover:bg-korean-green hover:text-white'
             }`}
         >
           {isMemorized ? (
             <>
               <Check className="w-4 h-4" />
-              <span className="text-sm">{t('memorized')}</span>
+              <span className="text-sm font-medium">{t('memorized')}</span>
             </>
           ) : (
             <>
               <RotateCcw className="w-4 h-4" />
-              <span className="text-sm">{t('notMemorized')}</span>
+              <span className="text-sm font-medium">{t('notMemorized')}</span>
             </>
           )}
         </button>

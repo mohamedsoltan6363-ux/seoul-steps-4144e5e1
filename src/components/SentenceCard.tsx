@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Volume2, Check, RotateCcw } from 'lucide-react';
+import { Volume2, Check, RotateCcw, Quote } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SentenceCardProps {
@@ -17,10 +17,11 @@ const SentenceCard: React.FC<SentenceCardProps> = ({
   isMemorized,
   onToggleMemorized,
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const playAudio = () => {
+  const playAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsPlaying(true);
     const utterance = new SpeechSynthesisUtterance(korean);
     utterance.lang = 'ko-KR';
@@ -30,9 +31,19 @@ const SentenceCard: React.FC<SentenceCardProps> = ({
   };
 
   return (
-    <div 
-      className={`korean-card ${isMemorized ? 'border-korean-green bg-green-50' : ''} animate-scale-in`}
-    >
+    <div className={`sentence-card-pro ${isMemorized ? 'memorized' : ''} animate-scale-in`}>
+      {/* Memorized indicator */}
+      {isMemorized && (
+        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-korean-green flex items-center justify-center shadow-lg">
+          <Check className="w-5 h-5 text-white" />
+        </div>
+      )}
+
+      {/* Quote icon */}
+      <div className="mb-4">
+        <Quote className="w-8 h-8 text-primary/20" />
+      </div>
+
       {/* Korean Sentence */}
       <div className="mb-4">
         <span className="font-korean text-2xl md:text-3xl font-bold text-gradient leading-relaxed">
@@ -41,23 +52,23 @@ const SentenceCard: React.FC<SentenceCardProps> = ({
       </div>
 
       {/* Arabic Translation */}
-      <div className="mb-3 p-3 bg-muted rounded-lg">
-        <span className="text-lg font-semibold text-foreground">{arabic}</span>
+      <div className="mb-3 p-4 rounded-2xl bg-gradient-to-r from-muted to-muted/50">
+        <span className="text-lg font-semibold text-foreground leading-relaxed">{arabic}</span>
       </div>
 
       {/* Romanization */}
-      <div className="mb-4 text-center">
+      <div className="mb-5 px-2">
         <span className="text-muted-foreground font-korean text-sm">{romanized}</span>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <button
           onClick={playAudio}
           disabled={isPlaying}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl 
             ${isPlaying 
-              ? 'bg-primary text-primary-foreground' 
+              ? 'bg-primary text-primary-foreground shadow-lg' 
               : 'bg-muted hover:bg-primary hover:text-primary-foreground'
             } transition-all duration-300`}
         >
@@ -66,10 +77,10 @@ const SentenceCard: React.FC<SentenceCardProps> = ({
         </button>
 
         <button
-          onClick={onToggleMemorized}
+          onClick={(e) => { e.stopPropagation(); onToggleMemorized(); }}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300
             ${isMemorized 
-              ? 'bg-korean-green text-white' 
+              ? 'bg-korean-green text-white shadow-lg' 
               : 'bg-muted hover:bg-korean-green hover:text-white'
             }`}
         >
