@@ -14,6 +14,10 @@ import Learn from "./pages/Learn";
 import Games from "./pages/Games";
 import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
+import Dictionary from "./pages/Dictionary";
+import DailyChallenge from "./pages/DailyChallenge";
+import Leaderboard from "./pages/Leaderboard";
+import TopikTest from "./pages/TopikTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
