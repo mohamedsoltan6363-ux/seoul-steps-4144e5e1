@@ -24,9 +24,13 @@ const Index: React.FC = () => {
   }, [user, navigate]);
 
   const playGreeting = () => {
-    const utterance = new SpeechSynthesisUtterance('안녕하세요! 한국어를 배워요!');
-    utterance.lang = 'ko-KR';
-    utterance.rate = 0.8;
+    const text = language === 'ar'
+      ? 'مرحباً! هيا نتعلم اللغة الكورية!'
+      : '안녕하세요! 한국어를 배워요!';
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = language === 'ar' ? 'ar' : 'ko-KR';
+    utterance.rate = 0.85;
     speechSynthesis.speak(utterance);
   };
 
@@ -35,7 +39,7 @@ const Index: React.FC = () => {
       const timer = setTimeout(playGreeting, 500);
       return () => clearTimeout(timer);
     }
-  }, [showGreeting]);
+  }, [showGreeting, language]);
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
@@ -100,17 +104,17 @@ const Index: React.FC = () => {
         <div className={`mt-4 transition-all duration-700 delay-500 ${showGreeting ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
           <div className="relative glass-effect px-6 py-3 rounded-2xl border border-white/30 shadow-xl">
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/20 backdrop-blur-xl rotate-45 border-l border-t border-white/30" />
-            <p className="font-korean text-lg md:text-xl text-white font-medium">
-              안녕하세요! 반가워요! 👋
+            <p className={`${language === 'ar' ? '' : 'font-korean'} text-lg md:text-xl text-white font-medium`}>
+              {language === 'ar' ? 'مرحباً! سعيدون بوجودك 👋' : '안녕하세요! 반가워요! 👋'}
             </p>
           </div>
         </div>
 
         {/* Title & Subtitle */}
         <div className={`text-center mt-8 mb-8 transition-all duration-1000 delay-300 ${showCharacter ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="font-korean text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+          <h1 className={`${language === 'ar' ? '' : 'font-korean'} text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg`}>
             <span className="bg-gradient-to-r from-white via-korean-pink-light to-white bg-clip-text text-transparent">
-              한국어를 배워요!
+              {language === 'ar' ? 'هيا نتعلم الكورية!' : '한국어를 배워요!'}
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-2">{t('welcome')}</p>

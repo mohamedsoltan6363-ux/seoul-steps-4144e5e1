@@ -124,6 +124,10 @@
     font-family: 'Tajawal', sans-serif;
   }
 
+  [dir="ltr"] {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
   .font-korean {
     font-family: 'Noto Sans KR', sans-serif;
   }
