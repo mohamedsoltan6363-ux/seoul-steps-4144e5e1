@@ -10,7 +10,7 @@ import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
-  Layers, Award, Gamepad2
+  Layers, Award, Gamepad2, Book, Zap, Crown, FileText
 } from 'lucide-react';
 import koreanCharacter from '@/assets/korean-character.png';
 
@@ -172,8 +172,8 @@ const Dashboard: React.FC = () => {
           />
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-3 gap-3 mb-8">
+        {/* Quick Actions - Row 1 */}
+        <div className="grid grid-cols-3 gap-3 mb-3">
           <button
             onClick={() => navigate('/learn/1')}
             className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
@@ -181,9 +181,7 @@ const Dashboard: React.FC = () => {
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
               <Layers className="w-6 h-6 text-primary" />
             </div>
-            <div className="text-center">
-              <p className="font-semibold text-sm">{language === 'ar' ? 'مراجعة' : '복습'}</p>
-            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'مراجعة' : '복습'}</p>
           </button>
           <button
             onClick={() => navigate('/games')}
@@ -192,20 +190,47 @@ const Dashboard: React.FC = () => {
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-rose-500/20 flex items-center justify-center">
               <Gamepad2 className="w-6 h-6 text-pink-500" />
             </div>
-            <div className="text-center">
-              <p className="font-semibold text-sm">{language === 'ar' ? 'الألعاب' : '게임'}</p>
-            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'الألعاب' : '게임'}</p>
           </button>
           <button
-            onClick={() => navigate('/profile')}
-            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-secondary/50 transition-all duration-300 hover:shadow-lg"
+            onClick={() => navigate('/dictionary')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg"
           >
-            <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center">
-              <Award className="w-6 h-6 text-secondary" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center">
+              <Book className="w-6 h-6 text-blue-500" />
             </div>
-            <div className="text-center">
-              <p className="font-semibold text-sm">{language === 'ar' ? 'الإنجازات' : '업적'}</p>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'القاموس' : '사전'}</p>
+          </button>
+        </div>
+
+        {/* Quick Actions - Row 2 */}
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <button
+            onClick={() => navigate('/daily-challenge')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-amber-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-amber-500" />
             </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'التحدي اليومي' : '일일 도전'}</p>
+          </button>
+          <button
+            onClick={() => navigate('/leaderboard')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-yellow-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 flex items-center justify-center">
+              <Crown className="w-6 h-6 text-yellow-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'المتصدرين' : '리더보드'}</p>
+          </button>
+          <button
+            onClick={() => navigate('/topik')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 flex items-center justify-center">
+              <FileText className="w-6 h-6 text-purple-500" />
+            </div>
+            <p className="font-semibold text-sm">TOPIK</p>
           </button>
         </div>
 

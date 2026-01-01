@@ -50,6 +50,10 @@ const App = () => (
                 <Route path="/games" element={<Games />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/certificate" element={<Certificate />} />
+                <Route path="/dictionary" element={<Dictionary />} />
+                <Route path="/daily-challenge" element={<DailyChallenge />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/topik" element={<TopikTest />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </TooltipProvider>
