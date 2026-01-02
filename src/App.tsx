@@ -18,6 +18,7 @@ import Dictionary from "./pages/Dictionary";
 import DailyChallenge from "./pages/DailyChallenge";
 import Leaderboard from "./pages/Leaderboard";
 import TopikTest from "./pages/TopikTest";
+import Stories from "./pages/Stories";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
                 <Route path="/daily-challenge" element={<DailyChallenge />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/topik" element={<TopikTest />} />
+                <Route path="/stories" element={<Stories />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </TooltipProvider>
