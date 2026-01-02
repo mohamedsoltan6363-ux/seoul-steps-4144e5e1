@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AchievementProvider, useAchievements } from "@/hooks/useAchievements";
 import AchievementNotification from "@/components/AchievementNotification";
+import Splash from "./pages/Splash";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -44,7 +45,8 @@ const App = () => (
               <Sonner />
               <AchievementOverlay />
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Splash />} />
+                <Route path="/home" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/learn/:level" element={<Learn />} />
