@@ -10,7 +10,7 @@ import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
-  Layers, Award, Gamepad2, Book, Zap, Crown, FileText
+  Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory
 } from 'lucide-react';
 import koreanCharacter from '@/assets/korean-character.png';
 
@@ -231,6 +231,19 @@ const Dashboard: React.FC = () => {
               <FileText className="w-6 h-6 text-purple-500" />
             </div>
             <p className="font-semibold text-sm">TOPIK</p>
+          </button>
+        </div>
+
+        {/* Quick Actions - Row 3 */}
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <button
+            onClick={() => navigate('/stories')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
+              <BookStory className="w-6 h-6 text-emerald-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'القصص' : '스토리'}</p>
           </button>
         </div>
 
