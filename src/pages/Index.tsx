@@ -73,16 +73,29 @@ const Index: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col overflow-hidden lg:overflow-hidden overflow-y-auto">
+    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col overflow-hidden lg:overflow-hidden overflow-y-auto relative">
+      {/* Korean Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url(/images/korean-bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+      {/* Overlay for readability */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-slate-950/90 via-slate-900/85 to-slate-950/90" />
+
       {/* Subtle Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]" style={{
+      <div className="absolute inset-0 z-[1] opacity-[0.02]" style={{
         backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 1px)`,
         backgroundSize: '40px 40px',
       }} />
 
       {/* Gradient Orbs - Subtle */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/10 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/10 to-transparent rounded-full blur-3xl z-[1]" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-3xl z-[1]" />
 
       {/* Header */}
       <header className="relative z-20 flex justify-between items-center px-6 lg:px-12 py-4 lg:py-6">

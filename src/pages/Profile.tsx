@@ -4,14 +4,15 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress } from '@/hooks/useProgress';
 import { useStreak } from '@/hooks/useStreak';
+import { useSpacedRepetition } from '@/hooks/useSpacedRepetition';
 import { supabase } from '@/integrations/supabase/client';
 import AvatarUpload from '@/components/AvatarUpload';
 import RewardsDisplay from '@/components/RewardsDisplay';
 import StreakDisplay from '@/components/StreakDisplay';
-import { 
-  ArrowLeft, Trophy, Flame, Star, Settings, ChevronRight, 
-  BookOpen, MessageSquare, GraduationCap, Mail
-} from 'lucide-react';
+import ProfileStats from '@/components/ProfileStats';
+import AchievementsList from '@/components/AchievementsList';
+import { ArrowLeft, Settings, Mail, Edit2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Profile: React.FC = () => {
   const { t, language } = useLanguage();
@@ -19,40 +20,40 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { currentLevel, totalPoints, getLevelProgress, progressByLevel } = useProgress();
   const { streakDays, todayCompleted } = useStreak();
+  const { getDueCount, totalReviews, masteredCount } = useSpacedRepetition();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'progress' | 'rewards' | 'streak'>('progress');
+  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards'>('stats');
+  const [quizzesPassed, setQuizzesPassed] = useState(0);
+
+  const isRTL = language === 'ar';
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
-      const { data } = await supabase
+      
+      const { data: profileData } = await supabase
         .from('profiles')
         .select('avatar_url, display_name')
         .eq('user_id', user.id)
         .single();
       
-      if (data) {
-        setAvatarUrl(data.avatar_url);
-        setDisplayName(data.display_name || '');
+      if (profileData) {
+        setAvatarUrl(profileData.avatar_url);
+        setDisplayName(profileData.display_name || '');
       }
+
+      // Fetch quiz results
+      const { data: quizData } = await supabase
+        .from('quiz_results')
+        .select('passed')
+        .eq('user_id', user.id)
+        .eq('passed', true);
+
+      setQuizzesPassed(quizData?.length || 0);
     };
     fetchProfile();
   }, [user]);
-
-  const levelIcons = [
-    <span key={1} className="text-xl font-korean">ㄱ</span>,
-    <BookOpen key={2} className="w-5 h-5" />,
-    <MessageSquare key={3} className="w-5 h-5" />,
-    <GraduationCap key={4} className="w-5 h-5" />,
-  ];
-
-  const levelColors = [
-    'from-blue-500 to-indigo-600',
-    'from-pink-500 to-rose-600',
-    'from-amber-500 to-orange-600',
-    'from-purple-500 to-violet-600',
-  ];
   
   // Calculate all achievements
   const level1Memorized = progressByLevel[1]?.memorizedCount || 0;
@@ -77,13 +78,25 @@ const Profile: React.FC = () => {
     { id: 'master_learner', unlocked: getLevelProgress(1) >= 100 && getLevelProgress(2) >= 100 && getLevelProgress(3) >= 100 && getLevelProgress(4) >= 100 },
   ];
 
+  const totalMemorized = level1Memorized + level2Memorized + level3Memorized;
+
+  const tabs = [
+    { id: 'stats', label: isRTL ? 'الإحصائيات' : '통계' },
+    { id: 'achievements', label: isRTL ? 'الإنجازات' : '업적' },
+    { id: 'streak', label: isRTL ? 'السلسلة' : '연속' },
+    { id: 'rewards', label: isRTL ? 'المكافآت' : '보상' },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
       <header className="sticky top-0 z-50 glass-effect border-b border-border">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <button onClick={() => navigate('/dashboard')} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+          <button 
+            onClick={() => navigate('/dashboard')} 
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
             <span className="font-medium">{t('dashboard')}</span>
           </button>
           <h1 className="font-bold text-lg">{t('profile')}</h1>
@@ -95,7 +108,11 @@ const Profile: React.FC = () => {
 
       <main className="container mx-auto px-4 py-6 max-w-lg">
         {/* Profile Card */}
-        <div className="relative mb-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative mb-6"
+        >
           <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
             <div className="absolute inset-0 opacity-30" />
           </div>
@@ -106,128 +123,107 @@ const Profile: React.FC = () => {
               onAvatarChange={setAvatarUrl}
             />
             
-            <h2 className="text-xl font-bold text-white mt-4">
+            <h2 className="text-xl font-bold text-white mt-4 flex items-center gap-2">
               {displayName || user?.email?.split('@')[0]}
+              <button className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                <Edit2 className="w-4 h-4 text-white/70" />
+              </button>
             </h2>
             <div className="flex items-center gap-2 text-white/70 text-sm mt-1">
               <Mail className="w-4 h-4" />
               <span>{user?.email}</span>
             </div>
             <p className="text-white/60 text-sm mt-2">
-              {language === 'ar' ? 'متعلم اللغة الكورية' : '한국어 학습자'}
+              {isRTL ? 'متعلم اللغة الكورية' : '한국어 학습자'}
             </p>
-          </div>
-        </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="pro-card p-4 text-center">
-            <Trophy className="w-7 h-7 mx-auto mb-2 text-korean-gold" />
-            <p className="text-2xl font-bold text-gradient">{totalPoints}</p>
-            <p className="text-xs text-muted-foreground">{t('totalPoints')}</p>
+            {/* Quick Stats in Header */}
+            <div className="flex items-center gap-6 mt-4 text-white/80">
+              <div className="text-center">
+                <p className="text-2xl font-bold">{totalPoints}</p>
+                <p className="text-xs text-white/60">{isRTL ? 'نقطة' : '점'}</p>
+              </div>
+              <div className="w-px h-8 bg-white/20" />
+              <div className="text-center">
+                <p className="text-2xl font-bold">{streakDays}</p>
+                <p className="text-xs text-white/60">{isRTL ? 'يوم' : '일'}</p>
+              </div>
+              <div className="w-px h-8 bg-white/20" />
+              <div className="text-center">
+                <p className="text-2xl font-bold">{achievements.filter(a => a.unlocked).length}</p>
+                <p className="text-xs text-white/60">{isRTL ? 'إنجاز' : '업적'}</p>
+              </div>
+            </div>
           </div>
-          <div className="pro-card p-4 text-center">
-            <Flame className="w-7 h-7 mx-auto mb-2 text-orange-500" />
-            <p className="text-2xl font-bold">{currentLevel}</p>
-            <p className="text-xs text-muted-foreground">{t('currentLevel')}</p>
-          </div>
-          <div className="pro-card p-4 text-center">
-            <Star className="w-7 h-7 mx-auto mb-2 text-korean-pink" />
-            <p className="text-2xl font-bold">{achievements.filter(a => a.unlocked).length}</p>
-            <p className="text-xs text-muted-foreground">{t('achievements')}</p>
-          </div>
-        </div>
+        </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 p-1 bg-muted rounded-2xl">
-          <button
-            onClick={() => setActiveTab('progress')}
-            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
-              activeTab === 'progress' 
-                ? 'bg-card shadow-sm text-foreground' 
-                : 'text-muted-foreground'
-            }`}
-          >
-            {language === 'ar' ? 'التقدم' : '진행'}
-          </button>
-          <button
-            onClick={() => setActiveTab('streak')}
-            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
-              activeTab === 'streak' 
-                ? 'bg-card shadow-sm text-foreground' 
-                : 'text-muted-foreground'
-            }`}
-          >
-            {language === 'ar' ? 'السلسلة' : '연속'}
-          </button>
-          <button
-            onClick={() => setActiveTab('rewards')}
-            className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${
-              activeTab === 'rewards' 
-                ? 'bg-card shadow-sm text-foreground' 
-                : 'text-muted-foreground'
-            }`}
-          >
-            {language === 'ar' ? 'المكافآت' : '보상'}
-          </button>
+        <div className="flex gap-1 mb-6 p-1 bg-muted rounded-2xl overflow-x-auto">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex-1 py-2.5 px-3 rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
+                activeTab === tab.id 
+                  ? 'bg-card shadow-sm text-foreground' 
+                  : 'text-muted-foreground'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'progress' ? (
-          <div className="space-y-3">
-            <h3 className="font-bold mb-4">{t('progress')}</h3>
-            {[1, 2, 3, 4].map((level) => {
-              const progress = getLevelProgress(level);
-              const memorized = progressByLevel[level]?.memorizedCount || 0;
-              const total = progressByLevel[level]?.totalItems || 0;
-              
-              return (
-                <div 
-                  key={level} 
-                  className="pro-card p-4 cursor-pointer"
-                  onClick={() => navigate(`/learn/${level}`)}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${levelColors[level - 1]} flex items-center justify-center text-white`}>
-                      {levelIcons[level - 1]}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold">{t(`level${level}` as any)}</span>
-                        <span className="text-sm font-bold text-primary">{progress}%</span>
-                      </div>
-                      <div className="progress-bar h-2">
-                        <div 
-                          className="progress-bar-fill"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1.5">
-                        {memorized} / {total} {language === 'ar' ? 'تم الحفظ' : '암기 완료'}
-                      </p>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : activeTab === 'streak' ? (
-          <div className="space-y-4">
-            <h3 className="font-bold">{language === 'ar' ? 'أيامك المتتالية' : '연속 학습 일수'}</h3>
-            <StreakDisplay 
-              streakDays={streakDays} 
-              todayCompleted={todayCompleted} 
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {activeTab === 'stats' && (
+            <ProfileStats
+              totalPoints={totalPoints}
+              currentLevel={currentLevel}
+              streakDays={streakDays}
+              totalMemorized={totalMemorized}
+              lettersMemorized={level1Memorized}
+              vocabularyMemorized={level2Memorized}
+              sentencesMemorized={level3Memorized}
+              totalReviews={totalReviews}
+              masteredItems={masteredCount}
+              quizzesPassed={quizzesPassed}
+              dueReviews={getDueCount()}
             />
-          </div>
-        ) : (
-          <RewardsDisplay
-            totalPoints={totalPoints}
-            currentLevel={currentLevel}
-            streakDays={streakDays}
-            achievements={achievements}
-          />
-        )}
+          )}
+          
+          {activeTab === 'achievements' && (
+            <AchievementsList
+              achievements={achievements}
+              totalPoints={totalPoints}
+              streakDays={streakDays}
+            />
+          )}
+          
+          {activeTab === 'streak' && (
+            <div className="space-y-4">
+              <h3 className="font-bold">{isRTL ? 'أيامك المتتالية' : '연속 학습 일수'}</h3>
+              <StreakDisplay 
+                streakDays={streakDays} 
+                todayCompleted={todayCompleted} 
+              />
+            </div>
+          )}
+          
+          {activeTab === 'rewards' && (
+            <RewardsDisplay
+              totalPoints={totalPoints}
+              currentLevel={currentLevel}
+              streakDays={streakDays}
+              achievements={achievements}
+            />
+          )}
+        </motion.div>
       </main>
     </div>
   );
