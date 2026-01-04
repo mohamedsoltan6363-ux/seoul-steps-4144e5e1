@@ -67,6 +67,14 @@ const Dashboard: React.FC = () => {
       color: 'from-purple-500 to-violet-600',
       items: 30
     },
+    { 
+      level: 5, 
+      titleKey: 'level5', 
+      icon: <Star className="w-6 h-6" />, 
+      desc: language === 'ar' ? 'جمل الحياة اليومية العملية' : '일상생활 문장',
+      color: 'from-emerald-500 to-teal-600',
+      items: 100
+    },
   ];
 
   if (loading) {
@@ -175,7 +183,7 @@ const Dashboard: React.FC = () => {
         {/* Quick Actions - Row 1 */}
         <div className="grid grid-cols-3 gap-3 mb-3">
           <button
-            onClick={() => navigate('/learn/1')}
+            onClick={() => navigate('/review')}
             className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
           >
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">

@@ -11,6 +11,7 @@ import RewardsDisplay from '@/components/RewardsDisplay';
 import StreakDisplay from '@/components/StreakDisplay';
 import ProfileStats from '@/components/ProfileStats';
 import AchievementsList from '@/components/AchievementsList';
+import IdVerification from '@/components/IdVerification';
 import { ArrowLeft, Settings, Mail, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -23,7 +24,7 @@ const Profile: React.FC = () => {
   const { getDueCount, totalReviews, masteredCount } = useSpacedRepetition();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards'>('stats');
+  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards' | 'verification'>('stats');
   const [quizzesPassed, setQuizzesPassed] = useState(0);
 
   const isRTL = language === 'ar';
@@ -85,6 +86,7 @@ const Profile: React.FC = () => {
     { id: 'achievements', label: isRTL ? 'الإنجازات' : '업적' },
     { id: 'streak', label: isRTL ? 'السلسلة' : '연속' },
     { id: 'rewards', label: isRTL ? 'المكافآت' : '보상' },
+    { id: 'verification', label: isRTL ? 'التوثيق' : '인증' },
   ];
 
   return (
@@ -222,6 +224,10 @@ const Profile: React.FC = () => {
               streakDays={streakDays}
               achievements={achievements}
             />
+          )}
+          
+          {activeTab === 'verification' && (
+            <IdVerification />
           )}
         </motion.div>
       </main>
