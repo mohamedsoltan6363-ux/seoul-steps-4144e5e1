@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/hooks/useProgress';
 import { consonants, vowels, vocabulary, basicSentences, advancedSentences } from '@/data/koreanData';
+import { dailyLifeSentences } from '@/data/level5Data';
 import LetterCard from '@/components/LetterCard';
 import VocabularyCard from '@/components/VocabularyCard';
 import SentenceCard from '@/components/SentenceCard';
@@ -71,6 +72,13 @@ const Learn: React.FC = () => {
         }));
       case 4:
         return advancedSentences.map(item => ({
+          id: item.id,
+          korean: item.korean,
+          romanized: item.romanized,
+          arabic: item.arabic,
+        }));
+      case 5:
+        return dailyLifeSentences.map(item => ({
           id: item.id,
           korean: item.korean,
           romanized: item.romanized,
@@ -190,11 +198,27 @@ const Learn: React.FC = () => {
     </div>
   );
 
+  const renderLevel5 = () => (
+    <div className="grid gap-4 max-w-2xl mx-auto">
+      {dailyLifeSentences.map((sentence) => (
+        <SentenceCard
+          key={sentence.id}
+          korean={sentence.korean}
+          romanized={sentence.romanized}
+          arabic={sentence.arabic}
+          isMemorized={isMemorized(sentence.id)}
+          onToggleMemorized={() => handleToggleMemorized(sentence.id, 'dailylife')}
+        />
+      ))}
+    </div>
+  );
+
   const handleFlashcardMemorize = async (id: string) => {
     const type = levelNum === 1 ? (consonants.find(c => c.id === id) ? 'consonants' : 'vowels') 
       : levelNum === 2 ? 'vocabulary' 
       : levelNum === 3 ? 'sentences' 
-      : 'advanced';
+      : levelNum === 4 ? 'advanced'
+      : 'dailylife';
     await markAsMemorized(levelNum, type, id);
   };
 
@@ -322,6 +346,7 @@ const Learn: React.FC = () => {
             {levelNum === 2 && renderLevel2()}
             {levelNum === 3 && renderLevel3()}
             {levelNum === 4 && renderLevel4()}
+            {levelNum === 5 && renderLevel5()}
           </>
         )}
       </main>

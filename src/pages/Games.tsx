@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, ArrowLeft, Gamepad2, Link2, Puzzle, Timer } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Gamepad2, Link2, Puzzle, Timer, Brain, Headphones, Sparkles } from 'lucide-react';
 import WordMatchingGame from '@/components/games/WordMatchingGame';
 import LetterPuzzleGame from '@/components/games/LetterPuzzleGame';
 import TimeRaceGame from '@/components/games/TimeRaceGame';
+import MemoryGame from '@/components/games/MemoryGame';
+import ListeningGame from '@/components/games/ListeningGame';
+import SpellingGame from '@/components/games/SpellingGame';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type GameType = 'menu' | 'matching' | 'puzzle' | 'race';
+type GameType = 'menu' | 'matching' | 'puzzle' | 'race' | 'memory' | 'listening' | 'spelling';
 
 const Games = () => {
   const { language } = useLanguage();
@@ -49,6 +52,36 @@ const Games = () => {
       gradient: 'from-amber-500 to-orange-500',
       bgGlow: 'bg-amber-500/20',
     },
+    {
+      id: 'memory',
+      icon: Brain,
+      title: isArabic ? 'لعبة الذاكرة' : '메모리 게임',
+      description: isArabic 
+        ? 'اختبر ذاكرتك بمطابقة أزواج الكلمات' 
+        : '단어 쌍을 맞춰서 기억력을 테스트하세요',
+      gradient: 'from-cyan-500 to-blue-500',
+      bgGlow: 'bg-cyan-500/20',
+    },
+    {
+      id: 'listening',
+      icon: Headphones,
+      title: isArabic ? 'الاستماع' : '듣기',
+      description: isArabic 
+        ? 'استمع واختر الترجمة الصحيحة' 
+        : '듣고 올바른 번역을 선택하세요',
+      gradient: 'from-purple-500 to-fuchsia-500',
+      bgGlow: 'bg-purple-500/20',
+    },
+    {
+      id: 'spelling',
+      icon: Sparkles,
+      title: isArabic ? 'التهجئة' : '철자',
+      description: isArabic 
+        ? 'رتب الحروف لتهجئة الكلمة الصحيحة' 
+        : '글자를 배열하여 올바른 단어를 만드세요',
+      gradient: 'from-emerald-500 to-teal-500',
+      bgGlow: 'bg-emerald-500/20',
+    },
   ];
 
   const renderGame = () => {
@@ -59,6 +92,12 @@ const Games = () => {
         return <LetterPuzzleGame onBack={() => setCurrentGame('menu')} />;
       case 'race':
         return <TimeRaceGame onBack={() => setCurrentGame('menu')} />;
+      case 'memory':
+        return <MemoryGame onBack={() => setCurrentGame('menu')} />;
+      case 'listening':
+        return <ListeningGame onBack={() => setCurrentGame('menu')} />;
+      case 'spelling':
+        return <SpellingGame onBack={() => setCurrentGame('menu')} />;
       default:
         return null;
     }
