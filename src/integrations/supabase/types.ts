@@ -79,43 +79,85 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age: number | null
           avatar_url: string | null
+          birth_date: string | null
+          college_name: string | null
           created_at: string | null
           current_level: number | null
           display_name: string | null
+          full_name_arabic: string | null
+          full_name_english: string | null
           id: string
+          job_title: string | null
           last_activity_at: string | null
+          latitude: number | null
+          location_address: string | null
+          longitude: number | null
+          national_id: string | null
+          other_occupation: string | null
+          phone: string | null
           preferred_language: string | null
           streak_days: number | null
+          teaching_place: string | null
           total_points: number | null
           updated_at: string | null
           user_id: string
+          user_type: string | null
         }
         Insert: {
+          age?: number | null
           avatar_url?: string | null
+          birth_date?: string | null
+          college_name?: string | null
           created_at?: string | null
           current_level?: number | null
           display_name?: string | null
+          full_name_arabic?: string | null
+          full_name_english?: string | null
           id?: string
+          job_title?: string | null
           last_activity_at?: string | null
+          latitude?: number | null
+          location_address?: string | null
+          longitude?: number | null
+          national_id?: string | null
+          other_occupation?: string | null
+          phone?: string | null
           preferred_language?: string | null
           streak_days?: number | null
+          teaching_place?: string | null
           total_points?: number | null
           updated_at?: string | null
           user_id: string
+          user_type?: string | null
         }
         Update: {
+          age?: number | null
           avatar_url?: string | null
+          birth_date?: string | null
+          college_name?: string | null
           created_at?: string | null
           current_level?: number | null
           display_name?: string | null
+          full_name_arabic?: string | null
+          full_name_english?: string | null
           id?: string
+          job_title?: string | null
           last_activity_at?: string | null
+          latitude?: number | null
+          location_address?: string | null
+          longitude?: number | null
+          national_id?: string | null
+          other_occupation?: string | null
+          phone?: string | null
           preferred_language?: string | null
           streak_days?: number | null
+          teaching_place?: string | null
           total_points?: number | null
           updated_at?: string | null
           user_id?: string
+          user_type?: string | null
         }
         Relationships: []
       }
