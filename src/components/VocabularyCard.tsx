@@ -21,6 +21,15 @@ const categoryColors: Record<string, { bg: string; text: string; gradient: strin
   body: { bg: 'bg-red-100', text: 'text-red-700', gradient: 'from-red-400 to-rose-500' },
   verbs: { bg: 'bg-cyan-100', text: 'text-cyan-700', gradient: 'from-cyan-400 to-teal-500' },
   adjectives: { bg: 'bg-indigo-100', text: 'text-indigo-700', gradient: 'from-indigo-400 to-purple-500' },
+  abstract: { bg: 'bg-violet-100', text: 'text-violet-700', gradient: 'from-violet-400 to-purple-500' },
+  professional: { bg: 'bg-slate-100', text: 'text-slate-700', gradient: 'from-slate-400 to-gray-500' },
+  academic: { bg: 'bg-emerald-100', text: 'text-emerald-700', gradient: 'from-emerald-400 to-teal-500' },
+  medical: { bg: 'bg-rose-100', text: 'text-rose-700', gradient: 'from-rose-400 to-red-500' },
+  legal: { bg: 'bg-amber-100', text: 'text-amber-700', gradient: 'from-amber-400 to-yellow-500' },
+  technology: { bg: 'bg-sky-100', text: 'text-sky-700', gradient: 'from-sky-400 to-blue-500' },
+  environment: { bg: 'bg-green-100', text: 'text-green-700', gradient: 'from-green-400 to-lime-500' },
+  social: { bg: 'bg-fuchsia-100', text: 'text-fuchsia-700', gradient: 'from-fuchsia-400 to-pink-500' },
+  emotions: { bg: 'bg-pink-100', text: 'text-pink-700', gradient: 'from-pink-400 to-rose-500' },
 };
 
 const categoryNames: Record<string, { ar: string; ko: string }> = {
@@ -33,6 +42,15 @@ const categoryNames: Record<string, { ar: string; ko: string }> = {
   body: { ar: 'جسم', ko: '신체' },
   verbs: { ar: 'أفعال', ko: '동사' },
   adjectives: { ar: 'صفات', ko: '형용사' },
+  abstract: { ar: 'مفاهيم', ko: '개념' },
+  professional: { ar: 'مهني', ko: '직업' },
+  academic: { ar: 'أكاديمي', ko: '학술' },
+  medical: { ar: 'طبي', ko: '의료' },
+  legal: { ar: 'قانوني', ko: '법률' },
+  technology: { ar: 'تقنية', ko: '기술' },
+  environment: { ar: 'بيئة', ko: '환경' },
+  social: { ar: 'اجتماعي', ko: '사회' },
+  emotions: { ar: 'مشاعر', ko: '감정' },
 };
 
 const VocabularyCard: React.FC<VocabularyCardProps> = ({

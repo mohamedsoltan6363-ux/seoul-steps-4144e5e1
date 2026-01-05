@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/hooks/useProgress';
 import { consonants, vowels, vocabulary, basicSentences, advancedSentences } from '@/data/koreanData';
+import { advancedVocabulary } from '@/data/level3VocabularyData';
 import { dailyLifeSentences } from '@/data/level5Data';
 import LetterCard from '@/components/LetterCard';
 import VocabularyCard from '@/components/VocabularyCard';
@@ -64,20 +65,27 @@ const Learn: React.FC = () => {
           arabic: item.arabic,
         }));
       case 3:
-        return basicSentences.map(item => ({
+        return advancedVocabulary.map(item => ({
           id: item.id,
           korean: item.korean,
           romanized: item.romanized,
           arabic: item.arabic,
         }));
       case 4:
-        return advancedSentences.map(item => ({
+        return basicSentences.map(item => ({
           id: item.id,
           korean: item.korean,
           romanized: item.romanized,
           arabic: item.arabic,
         }));
       case 5:
+        return advancedSentences.map(item => ({
+          id: item.id,
+          korean: item.korean,
+          romanized: item.romanized,
+          arabic: item.arabic,
+        }));
+      case 6:
         return dailyLifeSentences.map(item => ({
           id: item.id,
           korean: item.korean,
@@ -169,6 +177,22 @@ const Learn: React.FC = () => {
   );
 
   const renderLevel3 = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {advancedVocabulary.map((word) => (
+        <VocabularyCard
+          key={word.id}
+          korean={word.korean}
+          romanized={`${word.romanized} | ${word.romanizedAr}`}
+          arabic={word.arabic}
+          category={word.category}
+          isMemorized={isMemorized(word.id)}
+          onToggleMemorized={() => handleToggleMemorized(word.id, 'advancedVocab')}
+        />
+      ))}
+    </div>
+  );
+
+  const renderLevel4 = () => (
     <div className="grid gap-4 max-w-2xl mx-auto">
       {basicSentences.map((sentence) => (
         <SentenceCard
@@ -183,7 +207,7 @@ const Learn: React.FC = () => {
     </div>
   );
 
-  const renderLevel4 = () => (
+  const renderLevel5 = () => (
     <div className="grid gap-4 max-w-2xl mx-auto">
       {advancedSentences.map((sentence) => (
         <SentenceCard
@@ -198,7 +222,7 @@ const Learn: React.FC = () => {
     </div>
   );
 
-  const renderLevel5 = () => (
+  const renderLevel6 = () => (
     <div className="grid gap-4 max-w-2xl mx-auto">
       {dailyLifeSentences.map((sentence) => (
         <SentenceCard
@@ -216,8 +240,9 @@ const Learn: React.FC = () => {
   const handleFlashcardMemorize = async (id: string) => {
     const type = levelNum === 1 ? (consonants.find(c => c.id === id) ? 'consonants' : 'vowels') 
       : levelNum === 2 ? 'vocabulary' 
-      : levelNum === 3 ? 'sentences' 
-      : levelNum === 4 ? 'advanced'
+      : levelNum === 3 ? 'advancedVocab'
+      : levelNum === 4 ? 'sentences' 
+      : levelNum === 5 ? 'advanced'
       : 'dailylife';
     await markAsMemorized(levelNum, type, id);
   };
@@ -347,6 +372,7 @@ const Learn: React.FC = () => {
             {levelNum === 3 && renderLevel3()}
             {levelNum === 4 && renderLevel4()}
             {levelNum === 5 && renderLevel5()}
+            {levelNum === 6 && renderLevel6()}
           </>
         )}
       </main>

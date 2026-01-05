@@ -49,27 +49,35 @@ const Dashboard: React.FC = () => {
       icon: <BookOpen className="w-6 h-6" />, 
       desc: language === 'ar' ? 'كلمات أساسية للحياة اليومية' : '필수 단어',
       color: 'from-pink-500 to-rose-600',
-      items: 80
+      items: 130
     },
     { 
       level: 3, 
       titleKey: 'level3', 
-      icon: <MessageSquare className="w-6 h-6" />, 
-      desc: language === 'ar' ? 'جمل أساسية للمحادثة' : '기본 대화 문장',
-      color: 'from-amber-500 to-orange-600',
-      items: 25
+      icon: <Layers className="w-6 h-6" />, 
+      desc: language === 'ar' ? 'مفردات متقدمة وصعبة' : '고급 어휘',
+      color: 'from-cyan-500 to-blue-600',
+      items: 200
     },
     { 
       level: 4, 
       titleKey: 'level4', 
-      icon: <GraduationCap className="w-6 h-6" />, 
-      desc: language === 'ar' ? 'جمل متقدمة + اختبار نهائي' : '고급 문장 + 최종 시험',
-      color: 'from-purple-500 to-violet-600',
-      items: 30
+      icon: <MessageSquare className="w-6 h-6" />, 
+      desc: language === 'ar' ? 'جمل أساسية للمحادثة' : '기본 대화 문장',
+      color: 'from-amber-500 to-orange-600',
+      items: 40
     },
     { 
       level: 5, 
       titleKey: 'level5', 
+      icon: <GraduationCap className="w-6 h-6" />, 
+      desc: language === 'ar' ? 'جمل متقدمة + اختبار نهائي' : '고급 문장 + 최종 시험',
+      color: 'from-purple-500 to-violet-600',
+      items: 50
+    },
+    { 
+      level: 6, 
+      titleKey: 'level6', 
       icon: <Star className="w-6 h-6" />, 
       desc: language === 'ar' ? 'جمل الحياة اليومية العملية' : '일상생활 문장',
       color: 'from-emerald-500 to-teal-600',
