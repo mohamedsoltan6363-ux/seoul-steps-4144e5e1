@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Award, Lock, ShieldCheck } from 'lucide-react';
+import { Award, Lock, ShieldCheck, Crown, Star, Trophy, Sparkles, Medal } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CertificatePreview: React.FC = () => {
@@ -20,11 +20,11 @@ const CertificatePreview: React.FC = () => {
   return (
     <div className="space-y-4" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-xl bg-korean-gold/10">
-          <Award className="w-6 h-6 text-korean-gold" />
+        <div className="p-3 rounded-2xl bg-gradient-to-br from-amber-400/20 to-amber-500/10">
+          <Award className="w-7 h-7 text-amber-500" />
         </div>
         <div>
-          <h3 className="font-bold text-lg">
+          <h3 className="font-bold text-lg text-foreground">
             {isRTL ? 'شهادتك المستقبلية' : '미래 인증서'}
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -39,7 +39,7 @@ const CertificatePreview: React.FC = () => {
         onContextMenu={handleContextMenu}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.5 }}
         style={{ 
           userSelect: 'none',
           WebkitUserSelect: 'none',
@@ -47,90 +47,143 @@ const CertificatePreview: React.FC = () => {
         }}
       >
         <div
-          className="w-full aspect-[1.4/1] rounded-2xl p-6 relative overflow-hidden"
+          className="w-full aspect-[1.4/1] rounded-2xl relative overflow-hidden shadow-xl"
+          onDragStart={handleDragStart}
           style={{ 
-            background: 'linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 50%, hsl(var(--card)) 100%)',
-            filter: 'blur(0.5px)'
+            background: 'linear-gradient(145deg, #fffbeb 0%, #fef3c7 30%, #fde68a 50%, #fef3c7 70%, #fffbeb 100%)'
           }}
         >
+          {/* Decorative Pattern Background */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <pattern id="cert-pattern" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+                <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#b45309" strokeWidth="0.3" />
+              </pattern>
+              <rect x="0" y="0" width="100" height="100" fill="url(#cert-pattern)" />
+            </svg>
+          </div>
+
           {/* Watermark overlay */}
-          <div 
-            className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none"
-            style={{
-              background: `repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 50px,
-                rgba(0,0,0,0.03) 50px,
-                rgba(0,0,0,0.03) 100px
-              )`
-            }}
-          >
-            <div className="text-6xl font-bold text-foreground/20 rotate-[-30deg]">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="text-5xl font-bold text-amber-900/10 rotate-[-20deg] tracking-widest">
               PREVIEW
             </div>
           </div>
 
-          {/* Border Design */}
-          <div className="absolute inset-3 border-2 border-dashed border-korean-gold/30 rounded-xl" />
+          {/* Golden Border */}
+          <div className="absolute inset-2 border-2 border-amber-400/50 rounded-xl" />
+          <div className="absolute inset-4 border border-dashed border-amber-500/30 rounded-lg" />
           
           {/* Corner Decorations */}
-          <div className="absolute top-6 left-6 w-10 h-10 border-t-2 border-l-2 border-korean-gold/50 rounded-tl-lg" />
-          <div className="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-korean-gold/50 rounded-tr-lg" />
-          <div className="absolute bottom-6 left-6 w-10 h-10 border-b-2 border-l-2 border-korean-gold/50 rounded-bl-lg" />
-          <div className="absolute bottom-6 right-6 w-10 h-10 border-b-2 border-r-2 border-korean-gold/50 rounded-br-lg" />
+          <div className="absolute top-4 left-4">
+            <div className="w-12 h-12 border-t-2 border-l-2 border-amber-500/60 rounded-tl-xl" />
+            <Crown className="absolute top-1 left-1 w-5 h-5 text-amber-500/50" />
+          </div>
+          <div className="absolute top-4 right-4">
+            <div className="w-12 h-12 border-t-2 border-r-2 border-amber-500/60 rounded-tr-xl" />
+            <Crown className="absolute top-1 right-1 w-5 h-5 text-amber-500/50" />
+          </div>
+          <div className="absolute bottom-4 left-4">
+            <div className="w-12 h-12 border-b-2 border-l-2 border-amber-500/60 rounded-bl-xl" />
+            <Star className="absolute bottom-1 left-1 w-4 h-4 text-amber-500/50" />
+          </div>
+          <div className="absolute bottom-4 right-4">
+            <div className="w-12 h-12 border-b-2 border-r-2 border-amber-500/60 rounded-br-xl" />
+            <Star className="absolute bottom-1 right-1 w-4 h-4 text-amber-500/50" />
+          </div>
 
           {/* Content - Blurred/Hidden */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
-            <Award className="w-12 h-12 text-korean-gold/50 mb-3" />
+          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+            {/* Logo/Award Icon */}
+            <motion.div 
+              className="relative mb-4"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400/40 to-amber-500/30 flex items-center justify-center border-2 border-amber-400/30">
+                <Award className="w-8 h-8 text-amber-600/60" />
+              </div>
+              <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-amber-400/60" />
+            </motion.div>
             
-            <h1 className="font-korean text-2xl font-bold text-primary/50 mb-1">
+            <h1 className="font-korean text-2xl font-bold text-amber-700/60 mb-1">
               수료증
             </h1>
-            <h2 className="text-xl font-bold text-foreground/50 mb-4">
+            <h2 className="text-lg font-bold text-amber-800/50 mb-3">
               {isRTL ? 'شهادة إتمام' : 'Certificate of Completion'}
             </h2>
 
+            {/* Decorative Line */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-10 h-0.5 bg-gradient-to-r from-transparent to-amber-400/40" />
+              <Trophy className="w-4 h-4 text-amber-500/40" />
+              <div className="w-10 h-0.5 bg-gradient-to-l from-transparent to-amber-400/40" />
+            </div>
+
             {/* Hidden Name Area */}
-            <div className="w-48 h-8 bg-muted/50 rounded-lg mb-3 flex items-center justify-center">
-              <span className="text-xs text-muted-foreground">
-                {isRTL ? 'اسمك هنا' : '이름 입력'}
+            <div className="w-40 h-7 bg-amber-200/40 rounded-lg mb-3 flex items-center justify-center backdrop-blur-sm">
+              <span className="text-xs text-amber-700/50 font-medium">
+                {isRTL ? '✨ اسمك هنا ✨' : '✨ 이름 입력 ✨'}
               </span>
             </div>
 
             {/* Hidden Info Areas */}
-            <div className="w-64 h-6 bg-muted/30 rounded mb-2" />
-            <div className="w-48 h-6 bg-muted/30 rounded mb-4" />
+            <div className="w-52 h-5 bg-amber-200/30 rounded mb-2" />
+            <div className="w-36 h-5 bg-amber-200/30 rounded mb-4" />
 
-            {/* Hidden Date & Number */}
-            <div className="flex gap-4">
-              <div className="w-20 h-4 bg-muted/30 rounded" />
-              <div className="w-24 h-4 bg-muted/30 rounded" />
+            {/* Hidden QR Area */}
+            <div className="flex gap-4 items-center">
+              <div className="w-12 h-12 bg-amber-200/30 rounded-lg flex items-center justify-center">
+                <Medal className="w-5 h-5 text-amber-500/40" />
+              </div>
+              <div className="space-y-1">
+                <div className="w-20 h-3 bg-amber-200/30 rounded" />
+                <div className="w-16 h-3 bg-amber-200/30 rounded" />
+              </div>
             </div>
           </div>
+
+          {/* Bottom Decoration */}
+          <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-400/40 via-amber-300/30 to-amber-400/40" />
         </div>
 
         {/* Protection Badge */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-full shadow-lg">
-          <Lock className="w-4 h-4 text-korean-gold" />
-          <span className="text-xs font-medium">
+        <motion.div 
+          className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-50 to-white border border-amber-200 rounded-full shadow-lg"
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Lock className="w-4 h-4 text-amber-600" />
+          <span className="text-xs font-semibold text-amber-700">
             {isRTL ? 'محمية - للعرض فقط' : '보호됨 - 미리보기 전용'}
           </span>
-        </div>
+        </motion.div>
       </motion.div>
 
       {/* Info Box */}
-      <div className="mt-6 p-4 bg-muted/50 rounded-xl border border-border">
-        <div className="flex items-start gap-3">
-          <ShieldCheck className="w-5 h-5 text-korean-green mt-0.5" />
+      <div className="mt-8 p-5 bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-900/20 dark:to-amber-800/10 rounded-2xl border border-amber-200/50 dark:border-amber-700/30">
+        <div className="flex items-start gap-4">
+          <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/30">
+            <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          </div>
           <div>
-            <p className="font-medium text-sm mb-1">
-              {isRTL ? 'كيف تحصل على الشهادة؟' : '인증서를 받으려면?'}
+            <p className="font-bold text-base mb-2 text-foreground">
+              {isRTL ? 'كيف تحصل على الشهادة الرسمية؟' : '공식 인증서를 받으려면?'}
             </p>
-            <ul className="text-xs text-muted-foreground space-y-1">
-              <li>• {isRTL ? 'أكمل جميع المستويات الستة' : '6개 레벨 모두 완료'}</li>
-              <li>• {isRTL ? 'اجتز جميع الاختبارات بنجاح' : '모든 퀴즈 통과'}</li>
-              <li>• {isRTL ? 'وثّق هويتك بالبطاقة الشخصية' : '신분증으로 본인 확인'}</li>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                {isRTL ? 'أكمل جميع المستويات الستة بنجاح' : '6개 레벨 모두 완료'}
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                {isRTL ? 'اجتز جميع الاختبارات بنسبة 80% أو أعلى' : '80% 이상으로 모든 퀴즈 통과'}
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                {isRTL ? 'وثّق هويتك بالبطاقة الشخصية' : '신분증으로 본인 확인'}
+              </li>
             </ul>
           </div>
         </div>
