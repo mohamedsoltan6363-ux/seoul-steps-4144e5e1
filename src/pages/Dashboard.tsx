@@ -261,6 +261,24 @@ const Dashboard: React.FC = () => {
             </div>
             <p className="font-semibold text-sm">{language === 'ar' ? 'القصص' : '스토리'}</p>
           </button>
+          <button
+            onClick={() => navigate('/ai-chat')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-rose-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 flex items-center justify-center">
+              <MessageSquare className="w-6 h-6 text-rose-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'محادثة AI' : 'AI 채팅'}</p>
+          </button>
+          <button
+            onClick={() => navigate('/grammar')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-indigo-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center">
+              <Book className="w-6 h-6 text-indigo-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'القواعد' : '문법'}</p>
+          </button>
         </div>
 
         {/* Levels */}
