@@ -10,7 +10,7 @@ import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
-  Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory
+  Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, Mic
 } from 'lucide-react';
 import koreanCharacter from '@/assets/korean-character.png';
 
@@ -142,7 +142,14 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <div className="flex-1">
-              <p className="text-white/70 text-sm mb-1">{greeting}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-white/70 text-sm">{greeting}</p>
+                <span className="text-white/50 text-xs">•</span>
+                <span className="text-white/60 text-xs flex items-center gap-1">
+                  <span className="text-rose-300">♥</span>
+                  {language === 'ar' ? 'محمد أمين يرحب بك' : 'Mohamed Amin welcomes you'}
+                </span>
+              </div>
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 {language === 'ar' ? 'مرحباً بك!' : '환영합니다!'}
               </h1>
@@ -278,6 +285,15 @@ const Dashboard: React.FC = () => {
               <Book className="w-6 h-6 text-indigo-500" />
             </div>
             <p className="font-semibold text-sm">{language === 'ar' ? 'القواعد' : '문법'}</p>
+          </button>
+          <button
+            onClick={() => navigate('/pronunciation')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center">
+              <Mic className="w-6 h-6 text-cyan-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'النطق' : '발음'}</p>
           </button>
         </div>
 
