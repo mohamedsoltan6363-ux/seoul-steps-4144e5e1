@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AchievementProvider, useAchievements } from "@/hooks/useAchievements";
 import AchievementNotification from "@/components/AchievementNotification";
+import WelcomeModal from "@/components/WelcomeModal";
 import Splash from "./pages/Splash";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -24,6 +25,7 @@ import Stories from "./pages/Stories";
 import AIChat from "./pages/AIChat";
 import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
+import Songs from "./pages/Songs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <AchievementOverlay />
+              <WelcomeModal />
               <Routes>
                 <Route path="/" element={<Splash />} />
                 <Route path="/home" element={<Index />} />
@@ -66,6 +69,7 @@ const App = () => (
                 <Route path="/ai-chat" element={<AIChat />} />
                 <Route path="/grammar" element={<Grammar />} />
                 <Route path="/pronunciation" element={<Pronunciation />} />
+                <Route path="/songs" element={<Songs />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </TooltipProvider>

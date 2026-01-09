@@ -7,12 +7,13 @@ import { useToast } from '@/hooks/use-toast';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { 
   Mail, Lock, User, ArrowLeft, Loader2, Phone, MapPin, 
-  GraduationCap, Briefcase, School, Users, Calendar, CreditCard 
+  GraduationCap, Briefcase, School, Users, Calendar, CreditCard, Sparkles 
 } from 'lucide-react';
 
 type UserType = 'student' | 'graduate' | 'teacher' | 'other';
 
 interface RegistrationForm {
+  email: string;
   fullNameArabic: string;
   fullNameEnglish: string;
   nationalId: string;
@@ -38,6 +39,7 @@ const Auth: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [gettingLocation, setGettingLocation] = useState(false);
   const [form, setForm] = useState<RegistrationForm>({
+    email: '',
     fullNameArabic: '',
     fullNameEnglish: '',
     nationalId: '',
@@ -52,7 +54,7 @@ const Auth: React.FC = () => {
     longitude: null,
     locationAddress: ''
   });
-  const [loginForm, setLoginForm] = useState({ phone: '', password: '' });
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [extractedInfo, setExtractedInfo] = useState({ birthDate: '', age: 0 });
 
   const isRTL = language === 'ar';
@@ -126,25 +128,18 @@ const Auth: React.FC = () => {
 
     try {
       if (isLogin) {
-        // Login with phone and password
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('user_id')
-          .eq('phone', loginForm.phone)
-          .maybeSingle();
-
-        if (!profile) {
-          throw new Error(isRTL ? 'رقم الهاتف غير مسجل' : '등록되지 않은 전화번호입니다');
+        // Login with email and password directly
+        const { error } = await signIn(loginForm.email, loginForm.password);
+        if (error) {
+          if (error.message.includes('Invalid login credentials')) {
+            throw new Error(isRTL ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : '이메일 또는 비밀번호가 잘못되었습니다');
+          }
+          throw error;
         }
-
-        // Get user email from auth
-        const email = `${loginForm.phone}@korean-learn.app`;
-        const { error } = await signIn(email, loginForm.password);
-        if (error) throw error;
         navigate('/dashboard');
       } else {
         // Registration validation
-        if (!form.fullNameArabic || !form.fullNameEnglish || !form.nationalId || 
+        if (!form.email || !form.fullNameArabic || !form.fullNameEnglish || !form.nationalId || 
             !form.phone || !form.password || !form.userType) {
           throw new Error(isRTL ? 'يرجى ملء جميع الحقول المطلوبة' : '모든 필수 필드를 입력하세요');
         }
@@ -155,11 +150,19 @@ const Auth: React.FC = () => {
           throw new Error(isRTL ? 'يرجى تحديد موقعك الجغرافي' : '위치를 확인해주세요');
         }
 
-        // Create email from phone for Supabase auth
-        const email = `${form.phone}@korean-learn.app`;
-        
-        const { error: signUpError } = await signUp(email, form.password, form.fullNameArabic);
-        if (signUpError) throw signUpError;
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email)) {
+          throw new Error(isRTL ? 'يرجى إدخال بريد إلكتروني صحيح' : '올바른 이메일을 입력하세요');
+        }
+
+        const { error: signUpError } = await signUp(form.email, form.password, form.fullNameArabic);
+        if (signUpError) {
+          if (signUpError.message.includes('already registered')) {
+            throw new Error(isRTL ? 'هذا البريد الإلكتروني مسجل بالفعل' : '이미 등록된 이메일입니다');
+          }
+          throw signUpError;
+        }
 
         // Wait a bit for auth to complete then update profile
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -183,6 +186,9 @@ const Auth: React.FC = () => {
             other_occupation: form.otherOccupation || null,
             display_name: form.fullNameArabic
           }).eq('user_id', newUser.id);
+          
+          // Mark as first time user for welcome modal
+          localStorage.setItem('isFirstTimeUser', 'true');
         }
 
         navigate('/dashboard');
@@ -206,9 +212,38 @@ const Auth: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div 
+      className="min-h-screen flex flex-col relative overflow-hidden" 
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-pink-500/20" />
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-500/10 rounded-full blur-3xl" />
+      </div>
+      
+      {/* Floating Korean Characters */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {['한', '국', '어', '배', '우', '기', '사', '랑', '행', '복'].map((char, i) => (
+          <span
+            key={i}
+            className="absolute font-korean text-4xl text-primary/10 animate-float"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + Math.random() * 2}s`
+            }}
+          >
+            {char}
+          </span>
+        ))}
+      </div>
+
       {/* Header */}
-      <header className="flex justify-between items-center p-4">
+      <header className="relative z-10 flex justify-between items-center p-4">
         <button onClick={() => navigate('/')} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
           <span className="font-korean text-xl font-bold text-gradient">한국어</span>
@@ -217,25 +252,40 @@ const Auth: React.FC = () => {
       </header>
 
       {/* Auth Form */}
-      <main className="flex-1 flex items-center justify-center p-4">
+      <main className="relative z-10 flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-lg">
-          <div className="korean-card animate-scale-in">
-            <h1 className="text-2xl font-bold text-center mb-6">
+          <div className="relative bg-card/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 animate-scale-in">
+            {/* Decorative corner */}
+            <div className="absolute -top-3 -right-3 w-16 h-16 bg-gradient-to-br from-primary to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <Sparkles className="w-8 h-8 text-white" />
+            </div>
+            
+            {/* Welcome Text */}
+            <div className="text-center mb-6">
+              <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
+                {isLogin ? (isRTL ? 'مرحباً بعودتك!' : '다시 만나서 반가워요!') : (isRTL ? 'انضم إلينا!' : '우리와 함께하세요!')}
+              </h1>
+              <p className="text-muted-foreground text-sm">
+                {isRTL ? 'محمد أمين يرحب بك في رحلة تعلم الكورية' : 'Mohamed Amin이 한국어 학습 여정에 오신 것을 환영합니다'}
+              </p>
+            </div>
+
+            <h2 className="text-xl font-bold text-center mb-6">
               {isLogin ? (isRTL ? 'تسجيل الدخول' : '로그인') : (isRTL ? 'إنشاء حساب جديد' : '회원가입')}
-            </h1>
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {isLogin ? (
                 // Login Form
                 <>
                   <div className="relative">
-                    <Phone className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
+                    <Mail className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
-                      type="tel"
-                      placeholder={isRTL ? 'رقم الهاتف' : '전화번호'}
-                      value={loginForm.phone}
-                      onChange={(e) => setLoginForm({ ...loginForm, phone: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      type="email"
+                      placeholder={isRTL ? 'البريد الإلكتروني' : '이메일'}
+                      value={loginForm.email}
+                      onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       dir="ltr"
                     />
@@ -248,7 +298,7 @@ const Auth: React.FC = () => {
                       placeholder={isRTL ? 'كلمة المرور' : '비밀번호'}
                       value={loginForm.password}
                       onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       minLength={6}
                     />
@@ -256,16 +306,30 @@ const Auth: React.FC = () => {
                 </>
               ) : (
                 // Registration Form
-                <>
+                <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+                  {/* Email */}
+                  <div className="relative">
+                    <Mail className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
+                    <input
+                      type="email"
+                      placeholder={isRTL ? 'البريد الإلكتروني *' : '이메일 *'}
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
+                      required
+                      dir="ltr"
+                    />
+                  </div>
+
                   {/* Full Name Arabic */}
                   <div className="relative">
                     <User className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
                       type="text"
-                      placeholder={isRTL ? 'الاسم الرباعي بالعربية' : '아랍어 이름 (4부분)'}
+                      placeholder={isRTL ? 'الاسم الرباعي بالعربية *' : '아랍어 이름 (4부분) *'}
                       value={form.fullNameArabic}
                       onChange={(e) => setForm({ ...form, fullNameArabic: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                     />
                   </div>
@@ -275,10 +339,10 @@ const Auth: React.FC = () => {
                     <User className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
                       type="text"
-                      placeholder={isRTL ? 'الاسم الرباعي بالإنجليزية' : '영어 이름 (4부분)'}
+                      placeholder={isRTL ? 'الاسم الرباعي بالإنجليزية *' : '영어 이름 (4부분) *'}
                       value={form.fullNameEnglish}
                       onChange={(e) => setForm({ ...form, fullNameEnglish: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       dir="ltr"
                     />
@@ -289,10 +353,10 @@ const Auth: React.FC = () => {
                     <CreditCard className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
                       type="text"
-                      placeholder={isRTL ? 'الرقم القومي (14 رقم)' : '주민등록번호 (14자리)'}
+                      placeholder={isRTL ? 'الرقم القومي (14 رقم) *' : '주민등록번호 (14자리) *'}
                       value={form.nationalId}
                       onChange={(e) => handleNationalIdChange(e.target.value)}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       dir="ltr"
                       maxLength={14}
@@ -302,14 +366,14 @@ const Auth: React.FC = () => {
                   {/* Extracted Birth Date & Age */}
                   {extractedInfo.birthDate && (
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 bg-muted rounded-xl">
+                      <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                           <Calendar className="w-4 h-4" />
                           <span>{isRTL ? 'تاريخ الميلاد' : '생년월일'}</span>
                         </div>
                         <p className="font-semibold">{extractedInfo.birthDate}</p>
                       </div>
-                      <div className="p-3 bg-muted rounded-xl">
+                      <div className="p-3 bg-pink-500/10 rounded-xl border border-pink-500/20">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                           <User className="w-4 h-4" />
                           <span>{isRTL ? 'العمر' : '나이'}</span>
@@ -324,10 +388,10 @@ const Auth: React.FC = () => {
                     <Phone className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
                       type="tel"
-                      placeholder={isRTL ? 'رقم الهاتف' : '전화번호'}
+                      placeholder={isRTL ? 'رقم الهاتف *' : '전화번호 *'}
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       dir="ltr"
                     />
@@ -338,10 +402,10 @@ const Auth: React.FC = () => {
                     <Lock className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                     <input
                       type="password"
-                      placeholder={isRTL ? 'كلمة المرور' : '비밀번호'}
+                      placeholder={isRTL ? 'كلمة المرور *' : '비밀번호 *'}
                       value={form.password}
                       onChange={(e) => setForm({ ...form, password: e.target.value })}
-                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                      className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50 backdrop-blur-sm`}
                       required
                       minLength={6}
                     />
@@ -353,7 +417,7 @@ const Auth: React.FC = () => {
                     onClick={getLocation}
                     disabled={gettingLocation}
                     className={`w-full py-3 px-4 border-2 rounded-xl flex items-center justify-center gap-3 transition-colors ${
-                      form.latitude ? 'border-korean-green bg-korean-green/10 text-korean-green' : 'border-border hover:border-primary'
+                      form.latitude ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500' : 'border-border hover:border-primary'
                     }`}
                   >
                     {gettingLocation ? (
@@ -364,7 +428,7 @@ const Auth: React.FC = () => {
                     <span>
                       {form.latitude 
                         ? (isRTL ? 'تم تحديد الموقع ✓' : '위치 확인됨 ✓')
-                        : (isRTL ? 'تحديد الموقع الجغرافي' : '위치 확인')
+                        : (isRTL ? 'تحديد الموقع الجغرافي *' : '위치 확인 *')
                       }
                     </span>
                   </button>
@@ -372,7 +436,7 @@ const Auth: React.FC = () => {
                   {/* User Type Selection */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-muted-foreground">
-                      {isRTL ? 'نوع المستخدم' : '사용자 유형'}
+                      {isRTL ? 'نوع المستخدم *' : '사용자 유형 *'}
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       {userTypeOptions.map((option) => (
@@ -402,45 +466,33 @@ const Auth: React.FC = () => {
                         placeholder={isRTL ? 'اسم الكلية' : '대학교 이름'}
                         value={form.collegeName}
                         onChange={(e) => setForm({ ...form, collegeName: e.target.value })}
-                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50`}
                       />
                     </div>
                   )}
 
                   {form.userType === 'graduate' && (
-                    <div className="space-y-3 animate-scale-in">
-                      <div className="relative">
-                        <School className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
-                        <input
-                          type="text"
-                          placeholder={isRTL ? 'اسم الكلية التي تخرجت منها' : '졸업한 대학교'}
-                          value={form.collegeName}
-                          onChange={(e) => setForm({ ...form, collegeName: e.target.value })}
-                          className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
-                        />
-                      </div>
-                      <div className="relative">
-                        <Briefcase className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
-                        <input
-                          type="text"
-                          placeholder={isRTL ? 'الوظيفة الحالية' : '현재 직업'}
-                          value={form.jobTitle}
-                          onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
-                          className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
-                        />
-                      </div>
+                    <div className="relative animate-scale-in">
+                      <Briefcase className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
+                      <input
+                        type="text"
+                        placeholder={isRTL ? 'المسمى الوظيفي' : '직책'}
+                        value={form.jobTitle}
+                        onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
+                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50`}
+                      />
                     </div>
                   )}
 
                   {form.userType === 'teacher' && (
                     <div className="relative animate-scale-in">
-                      <Briefcase className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
+                      <School className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                       <input
                         type="text"
-                        placeholder={isRTL ? 'مكان التدريس' : '교육 기관'}
+                        placeholder={isRTL ? 'مكان التدريس' : '근무처'}
                         value={form.teachingPlace}
                         onChange={(e) => setForm({ ...form, teachingPlace: e.target.value })}
-                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50`}
                       />
                     </div>
                   )}
@@ -450,35 +502,46 @@ const Auth: React.FC = () => {
                       <Users className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground`} />
                       <input
                         type="text"
-                        placeholder={isRTL ? 'صف وضعك' : '상황을 설명해주세요'}
+                        placeholder={isRTL ? 'حدد مهنتك' : '직업을 입력하세요'}
                         value={form.otherOccupation}
                         onChange={(e) => setForm({ ...form, otherOccupation: e.target.value })}
-                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background`}
+                        className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border-2 border-border rounded-xl focus:border-primary outline-none transition-colors bg-background/50`}
                       />
                     </div>
                   )}
-                </>
+                </div>
               )}
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full korean-button flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-primary to-pink-500 text-white hover:shadow-lg hover:shadow-primary/30 disabled:opacity-50"
               >
-                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-                {isLogin ? (isRTL ? 'تسجيل الدخول' : '로그인') : (isRTL ? 'إنشاء الحساب' : '회원가입')}
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    {isLogin ? (isRTL ? 'تسجيل الدخول' : '로그인') : (isRTL ? 'إنشاء حساب' : '회원가입')}
+                    <Sparkles className="w-5 h-5" />
+                  </>
+                )}
               </button>
-            </form>
 
-            <p className="text-center mt-6 text-muted-foreground">
-              {isLogin ? (isRTL ? 'ليس لديك حساب؟' : '계정이 없으신가요?') : (isRTL ? 'لديك حساب بالفعل؟' : '이미 계정이 있으신가요?')}{' '}
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-primary font-semibold hover:underline"
-              >
-                {isLogin ? (isRTL ? 'إنشاء حساب' : '회원가입') : (isRTL ? 'تسجيل الدخول' : '로그인')}
-              </button>
-            </p>
+              {/* Toggle Login/Register */}
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+                >
+                  {isLogin 
+                    ? (isRTL ? 'ليس لديك حساب؟ سجل الآن' : '계정이 없으신가요? 회원가입')
+                    : (isRTL ? 'لديك حساب بالفعل؟ سجل دخول' : '이미 계정이 있으신가요? 로그인')
+                  }
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </main>
