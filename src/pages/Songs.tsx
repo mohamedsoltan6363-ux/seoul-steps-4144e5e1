@@ -223,7 +223,7 @@ const Songs: React.FC = () => {
         <div className="text-center mb-8">
           <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
-            {isArabic ? 'محمد أمين يرحب بك - تعلم الكورية بالأغاني' : 'Mohamed Amin welcomes you - 노래로 한국어 배우기'}
+            {isArabic ? 'محمد أيمن يرحب بك - تعلم الكورية بالأغاني' : 'Mohamed Ayman welcomes you - 노래로 한국어 배우기'}
           </p>
         </div>
 

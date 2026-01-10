@@ -266,7 +266,7 @@ const Auth: React.FC = () => {
                 {isLogin ? (isRTL ? 'مرحباً بعودتك!' : '다시 만나서 반가워요!') : (isRTL ? 'انضم إلينا!' : '우리와 함께하세요!')}
               </h1>
               <p className="text-muted-foreground text-sm">
-                {isRTL ? 'محمد أمين يرحب بك في رحلة تعلم الكورية' : 'Mohamed Amin이 한국어 학습 여정에 오신 것을 환영합니다'}
+                {isRTL ? 'محمد أيمن يرحب بك في رحلة تعلم الكورية' : 'Mohamed Ayman이 한국어 학습 여정에 오신 것을 환영합니다'}
               </p>
             </div>
 

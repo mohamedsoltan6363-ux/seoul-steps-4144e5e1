@@ -41,7 +41,7 @@ const Certificate: React.FC = () => {
           {/* Mohamed Amin Welcome */}
           <div className="hidden md:flex items-center gap-2 text-sm text-amber-600">
             <Heart className="w-4 h-4 fill-amber-500 text-amber-500" />
-            <span>{isRTL ? 'محمد أمين يهنئك!' : 'Mohamed Amin congratulates you!'}</span>
+            <span>{isRTL ? 'محمد أيمن يهنئك!' : 'Mohamed Ayman congratulates you!'}</span>
           </div>
 
           <motion.button 
@@ -253,7 +253,7 @@ const Certificate: React.FC = () => {
                     <div className="w-40 h-0.5 bg-gradient-to-r from-amber-400 to-transparent" />
                     <p className="text-sm text-amber-700 mt-2 font-medium flex items-center gap-1">
                       <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-                      Mohamed Amin
+                      Mohamed Ayman
                     </p>
                   </div>
                 </div>
