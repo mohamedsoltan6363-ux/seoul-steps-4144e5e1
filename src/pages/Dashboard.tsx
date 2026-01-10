@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import koreanCharacter from '@/assets/korean-character.png';
+import NotificationPanel from '@/components/NotificationPanel';
 
 const Dashboard: React.FC = () => {
   const { t, language } = useLanguage();
@@ -113,6 +114,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
+            <NotificationPanel />
             <button 
               onClick={() => navigate('/profile')} 
               className="p-2.5 rounded-xl hover:bg-muted transition-all duration-300"
