@@ -24,7 +24,7 @@ const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
       >
         <Heart className="w-3 h-3 text-rose-400 fill-rose-400" />
         <span>
-          {isRTL ? 'محمد أمين يرحب بك' : 'Mohamed Amin welcomes you'}
+          {isRTL ? 'محمد أيمن يرحب بك' : 'Mohamed Ayman welcomes you'}
         </span>
       </motion.div>
     );
@@ -43,7 +43,7 @@ const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
           </div>
           <div>
             <p className="text-sm font-medium text-rose-600 dark:text-rose-400">
-              {isRTL ? 'محمد أمين يرحب بك' : 'Mohamed Amin welcomes you'}
+              {isRTL ? 'محمد أيمن يرحب بك' : 'Mohamed Ayman welcomes you'}
             </p>
             <p className="text-xs text-muted-foreground">
               {isRTL ? 'تعلم الكورية بحب وشغف' : '사랑과 열정으로 한국어를 배우세요'}
@@ -64,7 +64,7 @@ const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
       <div className="flex items-center gap-2">
         <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
         <span className="text-sm text-muted-foreground">
-          {isRTL ? 'محمد أمين يرحب بك في رحلة تعلم اللغة الكورية' : 'Mohamed Amin이 한국어 학습 여정을 환영합니다'}
+          {isRTL ? 'محمد أيمن يرحب بك في رحلة تعلم اللغة الكورية' : 'Mohamed Ayman이 한국어 학습 여정을 환영합니다'}
         </span>
       </div>
     </motion.div>

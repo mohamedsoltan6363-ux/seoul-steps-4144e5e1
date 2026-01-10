@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, Heart } from 'lucide-react';
+import { X, Sparkles, Heart, Star } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import confetti from 'canvas-confetti';
+import koreanCharacter from '@/assets/korean-character.png';
 
 interface WelcomeModalProps {
   userName?: string;
@@ -26,12 +27,12 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ userName }) => {
       // Trigger confetti
       setTimeout(() => {
         confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#4F46E5', '#EC4899', '#10B981', '#F59E0B']
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors: ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4']
         });
-      }, 500);
+      }, 300);
     }
   }, []);
 
@@ -47,130 +48,195 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ userName }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ 
+            background: 'radial-gradient(ellipse at center, rgba(79, 70, 229, 0.3) 0%, rgba(0,0,0,0.8) 100%)'
+          }}
           onClick={handleClose}
         >
+          {/* Background floating elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ 
+                  opacity: [0.3, 0.8, 0.3],
+                  y: [0, -100],
+                  x: Math.sin(i) * 50
+                }}
+                transition={{ 
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: i * 0.2
+                }}
+                className="absolute text-2xl"
+                style={{
+                  top: `${70 + Math.random() * 30}%`,
+                  left: `${Math.random() * 100}%`
+                }}
+              >
+                {['✨', '🌟', '💫', '⭐', '🎉', '💜', '💖'][i % 7]}
+              </motion.div>
+            ))}
+          </div>
+
           <motion.div
-            initial={{ scale: 0.5, opacity: 0, y: 50 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.5, opacity: 0, y: 50 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="relative w-full max-w-sm"
+            initial={{ scale: 0.3, opacity: 0, rotate: -10 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            exit={{ scale: 0.3, opacity: 0, rotate: 10 }}
+            transition={{ type: 'spring', damping: 15, stiffness: 200 }}
+            className="relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Pill-shaped container */}
-            <div className="relative bg-gradient-to-br from-primary via-violet-500 to-pink-500 rounded-[40px] p-1 shadow-2xl shadow-primary/30">
-              <div className="bg-card rounded-[38px] p-6 relative overflow-hidden">
-                {/* Background decorations */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl" />
-                </div>
+            {/* Main circular container */}
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96">
+              {/* Outer glow ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: 'conic-gradient(from 0deg, #4F46E5, #EC4899, #8B5CF6, #06B6D4, #10B981, #F59E0B, #4F46E5)',
+                  padding: '4px'
+                }}
+              >
+                <div className="w-full h-full rounded-full bg-slate-900" />
+              </motion.div>
 
-                {/* Close button */}
-                <button
-                  onClick={handleClose}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors z-10"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+              {/* Inner content circle */}
+              <div className="absolute inset-3 rounded-full overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 shadow-2xl">
+                {/* Decorative inner rings */}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+                  className="absolute inset-4 border-2 border-dashed border-primary/20 rounded-full"
+                />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+                  className="absolute inset-8 border border-pink-500/20 rounded-full"
+                />
 
                 {/* Content */}
-                <div className="relative text-center" dir={isRTL ? 'rtl' : 'ltr'}>
-                  {/* Avatar/Icon area */}
-                  <div className="relative w-24 h-24 mx-auto mb-4">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary to-pink-500 rounded-full animate-pulse" />
-                    <div className="absolute inset-1 bg-card rounded-full flex items-center justify-center">
-                      <span className="text-4xl font-korean font-bold text-gradient">한</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8" dir={isRTL ? 'rtl' : 'ltr'}>
+                  {/* Image */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: 'spring' }}
+                    className="relative mb-4"
+                  >
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-gradient-to-r from-primary to-pink-500 shadow-lg shadow-primary/30">
+                      <img 
+                        src={koreanCharacter} 
+                        alt="Korean Learning" 
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                      className="absolute -inset-2 border-2 border-dashed border-primary/30 rounded-full"
-                    />
-                  </div>
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
+                    >
+                      <Star className="w-4 h-4 text-white fill-white" />
+                    </motion.div>
+                  </motion.div>
 
-                  {/* Korean greeting */}
+                  {/* Korean greeting with glow */}
                   <motion.p
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="font-korean text-2xl font-bold text-primary mb-2"
+                    transition={{ delay: 0.3 }}
+                    className="font-korean text-3xl sm:text-4xl font-bold mb-2"
+                    style={{ 
+                      background: 'linear-gradient(135deg, #60A5FA, #A78BFA, #F472B6)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 40px rgba(139, 92, 246, 0.5)'
+                    }}
                   >
                     환영합니다!
                   </motion.p>
 
                   {/* Arabic/English greeting */}
                   <motion.h2
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-xl font-bold mb-2"
+                    transition={{ delay: 0.4 }}
+                    className="text-lg sm:text-xl font-bold text-white mb-3"
                   >
                     {isRTL ? `مرحباً ${userName || 'بك'}!` : `Welcome ${userName || ''}!`}
                   </motion.h2>
 
                   {/* Welcome message */}
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="space-y-2 mb-4"
-                  >
-                    <p className="text-muted-foreground text-sm">
-                      {isRTL 
-                        ? 'محمد أمين يرحب بك في رحلة تعلم اللغة الكورية'
-                        : 'Mohamed Amin welcomes you to your Korean learning journey'}
-                    </p>
-                    <div className="flex items-center justify-center gap-2 text-sm">
-                      <Heart className="w-4 h-4 text-pink-500 animate-pulse" />
-                      <span className="text-muted-foreground">
-                        {isRTL ? 'نتمنى لك التوفيق!' : '화이팅!'}
-                      </span>
-                      <Heart className="w-4 h-4 text-pink-500 animate-pulse" />
-                    </div>
-                  </motion.div>
-
-                  {/* Start button */}
-                  <motion.button
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    onClick={handleClose}
-                    className="w-full py-3 rounded-full bg-gradient-to-r from-primary to-pink-500 text-white font-bold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/30 transition-all"
+                    className="text-center space-y-2"
                   >
-                    <Sparkles className="w-5 h-5" />
-                    {isRTL ? 'ابدأ التعلم!' : '학습 시작!'}
-                  </motion.button>
+                    <div className="flex items-center justify-center gap-2">
+                      <Heart className="w-4 h-4 text-pink-400 fill-pink-400 animate-pulse" />
+                      <p className="text-white/80 text-sm sm:text-base font-medium">
+                        {isRTL 
+                          ? 'محمد أيمن يرحب بك'
+                          : 'Mohamed Ayman welcomes you'}
+                      </p>
+                      <Heart className="w-4 h-4 text-pink-400 fill-pink-400 animate-pulse" />
+                    </div>
+                    <p className="text-white/60 text-xs sm:text-sm">
+                      {isRTL ? 'نتمنى لك رحلة تعلم ممتعة!' : '즐거운 학습 여정을 바랍니다!'}
+                    </p>
+                  </motion.div>
                 </div>
-              </div>
-            </div>
 
-            {/* Floating sparkles */}
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: [0, 1, 0],
-                  scale: [0.5, 1, 0.5],
-                  x: [0, (i % 2 === 0 ? 20 : -20)],
-                  y: [0, -30]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.3
-                }}
-                className="absolute"
-                style={{
-                  top: `${20 + Math.random() * 60}%`,
-                  left: `${10 + Math.random() * 80}%`
-                }}
+                {/* Close button */}
+                <button
+                  onClick={handleClose}
+                  className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 backdrop-blur-sm"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+
+              {/* Start button at bottom */}
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                onClick={handleClose}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white font-bold flex items-center gap-2 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
               >
-                <Sparkles className="w-4 h-4 text-yellow-400" />
-              </motion.div>
-            ))}
+                <Sparkles className="w-5 h-5" />
+                {isRTL ? 'ابدأ التعلم!' : '학습 시작!'}
+              </motion.button>
+
+              {/* Floating sparkles around the circle */}
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: [0, 1, 0],
+                    scale: [0.5, 1.2, 0.5]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: i * 0.25
+                  }}
+                  className="absolute"
+                  style={{
+                    top: `${50 + 45 * Math.sin((i / 8) * Math.PI * 2)}%`,
+                    left: `${50 + 45 * Math.cos((i / 8) * Math.PI * 2)}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  <Sparkles className="w-5 h-5 text-yellow-400" />
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       )}

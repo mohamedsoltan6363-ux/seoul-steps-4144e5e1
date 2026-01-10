@@ -10,8 +10,9 @@ import StreakDisplay from '@/components/StreakDisplay';
 import { 
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
-  Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, Mic
+  Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, Mic, Music, Bell
 } from 'lucide-react';
+import { useNotifications } from '@/hooks/useNotifications';
 import koreanCharacter from '@/assets/korean-character.png';
 
 const Dashboard: React.FC = () => {
@@ -147,7 +148,7 @@ const Dashboard: React.FC = () => {
                 <span className="text-white/50 text-xs">•</span>
                 <span className="text-white/60 text-xs flex items-center gap-1">
                   <span className="text-rose-300">♥</span>
-                  {language === 'ar' ? 'محمد أمين يرحب بك' : 'Mohamed Amin welcomes you'}
+                  {language === 'ar' ? 'محمد أيمن يرحب بك' : 'Mohamed Ayman welcomes you'}
                 </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
@@ -294,6 +295,15 @@ const Dashboard: React.FC = () => {
               <Mic className="w-6 h-6 text-cyan-500" />
             </div>
             <p className="font-semibold text-sm">{language === 'ar' ? 'النطق' : '발음'}</p>
+          </button>
+          <button
+            onClick={() => navigate('/songs')}
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border hover:border-fuchsia-500/50 transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 flex items-center justify-center">
+              <Music className="w-6 h-6 text-fuchsia-500" />
+            </div>
+            <p className="font-semibold text-sm">{language === 'ar' ? 'الأغاني' : '노래'}</p>
           </button>
         </div>
 

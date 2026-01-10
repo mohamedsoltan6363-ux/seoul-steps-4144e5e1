@@ -232,7 +232,7 @@ const Grammar: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <Heart className="w-4 h-4 text-purple-500" />
             <span className="text-sm font-medium text-purple-600">
-              {isRTL ? 'محمد أمين يرحب بك' : 'Mohamed Amin welcomes you'}
+              {isRTL ? 'محمد أيمن يرحب بك' : 'Mohamed Ayman welcomes you'}
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
