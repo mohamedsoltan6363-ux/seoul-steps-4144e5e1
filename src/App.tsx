@@ -26,6 +26,7 @@ import AIChat from "./pages/AIChat";
 import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="/grammar" element={<Grammar />} />
                 <Route path="/pronunciation" element={<Pronunciation />} />
                 <Route path="/songs" element={<Songs />} />
+                <Route path="/reports" element={<Reports />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </TooltipProvider>
