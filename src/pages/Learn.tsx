@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/hooks/useProgress';
@@ -9,16 +9,17 @@ import { dailyLifeSentences } from '@/data/level5Data';
 import LetterCard from '@/components/LetterCard';
 import VocabularyCard from '@/components/VocabularyCard';
 import SentenceCard from '@/components/SentenceCard';
-import Quiz from '@/components/Quiz';
+import EnhancedQuiz from '@/components/EnhancedQuiz';
 import Flashcard from '@/components/Flashcard';
 import WritingPractice from '@/components/WritingPractice';
+import BreakTimeModal from '@/components/BreakTimeModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, BookOpen, Ear, PenTool, GraduationCap, Layers, Lock, 
   CheckCircle, AlertCircle, Zap, Target, Trophy, Star, Sparkles,
   Lightbulb, Brain, MessageCircle, Play, Pause, RotateCcw, Volume2,
   ChevronRight, Award, Flame, Heart, Clock, TrendingUp, Bell,
-  Shuffle, Filter, Grid, List, Search
+  Shuffle, Filter, Grid, List, Search, Coffee
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
@@ -40,6 +41,9 @@ const Learn: React.FC = () => {
   const [shuffled, setShuffled] = useState(false);
   const [dailyGoal] = useState(10);
   const [todayProgress, setTodayProgress] = useState(0);
+  const [showBreakModal, setShowBreakModal] = useState(false);
+  const [studyStartTime] = useState(Date.now());
+  const [studyDuration, setStudyDuration] = useState(0);
 
   const progress = progressByLevel[levelNum]?.progress || [];
   const levelProgress = getLevelProgress(levelNum);
@@ -909,7 +913,7 @@ const Learn: React.FC = () => {
         <AnimatePresence mode="wait">
           {viewMode === 'quiz' ? (
             isQuizUnlocked ? (
-              <Quiz level={levelNum} onComplete={handleQuizComplete} onBack={() => setViewMode('cards')} />
+              <EnhancedQuiz level={levelNum} onComplete={handleQuizComplete} onBack={() => setViewMode('cards')} />
             ) : (
               renderQuizLocked()
             )
