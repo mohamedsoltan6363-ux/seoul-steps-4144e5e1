@@ -139,7 +139,8 @@ const Dashboard: React.FC = () => {
     visible: { opacity: 1, y: 0 }
   };
 
-  const itemVariantsUnused = {
+  // Item variants used for stagger animations
+  const _itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
   };
