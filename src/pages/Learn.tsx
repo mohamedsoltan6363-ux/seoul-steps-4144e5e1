@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/hooks/useProgress';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { consonants, vowels, vocabulary, basicSentences, advancedSentences } from '@/data/koreanData';
 import { advancedVocabulary } from '@/data/level3VocabularyData';
 import { dailyLifeSentences } from '@/data/level5Data';
@@ -44,6 +45,7 @@ const Learn: React.FC = () => {
   const navigate = useNavigate();
   const { progressByLevel, markAsMemorized, unmarkAsMemorized, getLevelProgress } = useProgress();
   const { addNotification } = useNotifications();
+  const { playPop, playBubble, playSwoosh, playChime } = useSoundEffects();
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
   const [activeTab, setActiveTab] = useState<'consonants' | 'vowels'>('consonants');
   const [displayMode, setDisplayMode] = useState<DisplayMode>('grid');
@@ -57,6 +59,7 @@ const Learn: React.FC = () => {
   const [studyDuration, setStudyDuration] = useState(0);
   const [activeFeature, setActiveFeature] = useState<FeatureModal>(null);
   const [showToolbar, setShowToolbar] = useState(true);
+  const [clickedButton, setClickedButton] = useState<string | null>(null);
 
   const progress = progressByLevel[levelNum]?.progress || [];
   const levelProgress = getLevelProgress(levelNum);
@@ -1001,35 +1004,119 @@ const Learn: React.FC = () => {
           >
             <div className="container mx-auto px-4 pb-4">
               <div className="relative bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl overflow-hidden">
-                {/* Gradient Border Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-pink-500/20 to-purple-500/20 opacity-50" />
+                {/* Animated Gradient Border Effect */}
+                <motion.div 
+                  animate={{ 
+                    background: [
+                      'linear-gradient(90deg, rgba(139,92,246,0.3), rgba(236,72,153,0.3), rgba(59,130,246,0.3))',
+                      'linear-gradient(180deg, rgba(236,72,153,0.3), rgba(59,130,246,0.3), rgba(139,92,246,0.3))',
+                      'linear-gradient(270deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3), rgba(236,72,153,0.3))',
+                      'linear-gradient(360deg, rgba(139,92,246,0.3), rgba(236,72,153,0.3), rgba(59,130,246,0.3))',
+                    ]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 opacity-60" 
+                />
                 
                 <div className="relative p-3">
                   <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-hide">
                     {[
-                      { id: 'rewards' as FeatureModal, icon: Gift, label: language === 'ar' ? 'المكافآت' : '보상', color: 'from-yellow-500 to-orange-500' },
-                      { id: 'nightMode' as FeatureModal, icon: Moon, label: language === 'ar' ? 'الليلي' : '야간', color: 'from-indigo-500 to-purple-500' },
-                      { id: 'studyTime' as FeatureModal, icon: Timer, label: language === 'ar' ? 'الوقت' : '시간', color: 'from-blue-500 to-cyan-500' },
-                      { id: 'imageLearning' as FeatureModal, icon: Image, label: language === 'ar' ? 'صور' : '이미지', color: 'from-green-500 to-emerald-500' },
-                      { id: 'pronunciation' as FeatureModal, icon: Mic, label: language === 'ar' ? 'النطق' : '발음', color: 'from-red-500 to-rose-500' },
-                      { id: 'video' as FeatureModal, icon: Video, label: language === 'ar' ? 'فيديو' : '비디오', color: 'from-purple-500 to-pink-500' },
-                      { id: 'groups' as FeatureModal, icon: Users, label: language === 'ar' ? 'مجموعات' : '그룹', color: 'from-teal-500 to-cyan-500' },
-                      { id: 'errors' as FeatureModal, icon: BarChart3, label: language === 'ar' ? 'التحليل' : '분석', color: 'from-orange-500 to-amber-500' },
-                      { id: 'sentences' as FeatureModal, icon: BookText, label: language === 'ar' ? 'الجمل' : '문장', color: 'from-pink-500 to-rose-500' },
-                    ].map((feature) => (
+                      { id: 'rewards' as FeatureModal, icon: Gift, label: language === 'ar' ? 'المكافآت' : '보상', color: 'from-yellow-500 to-orange-500', sound: 'chime' as const },
+                      { id: 'nightMode' as FeatureModal, icon: Moon, label: language === 'ar' ? 'الليلي' : '야간', color: 'from-indigo-500 to-purple-500', sound: 'swoosh' as const },
+                      { id: 'studyTime' as FeatureModal, icon: Timer, label: language === 'ar' ? 'الوقت' : '시간', color: 'from-blue-500 to-cyan-500', sound: 'pop' as const },
+                      { id: 'imageLearning' as FeatureModal, icon: Image, label: language === 'ar' ? 'صور' : '이미지', color: 'from-green-500 to-emerald-500', sound: 'bubble' as const },
+                      { id: 'pronunciation' as FeatureModal, icon: Mic, label: language === 'ar' ? 'النطق' : '발음', color: 'from-red-500 to-rose-500', sound: 'pop' as const },
+                      { id: 'video' as FeatureModal, icon: Video, label: language === 'ar' ? 'فيديو' : '비디오', color: 'from-purple-500 to-pink-500', sound: 'swoosh' as const },
+                      { id: 'groups' as FeatureModal, icon: Users, label: language === 'ar' ? 'مجموعات' : '그룹', color: 'from-teal-500 to-cyan-500', sound: 'bubble' as const },
+                      { id: 'errors' as FeatureModal, icon: BarChart3, label: language === 'ar' ? 'التحليل' : '분석', color: 'from-orange-500 to-amber-500', sound: 'pop' as const },
+                      { id: 'sentences' as FeatureModal, icon: BookText, label: language === 'ar' ? 'الجمل' : '문장', color: 'from-pink-500 to-rose-500', sound: 'chime' as const },
+                    ].map((feature, index) => (
                       <motion.button
                         key={feature.id}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setActiveFeature(feature.id)}
-                        className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all ${
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ 
+                          opacity: 1, 
+                          y: 0,
+                          scale: clickedButton === feature.id ? [1, 1.3, 1] : 1,
+                        }}
+                        transition={{ 
+                          delay: index * 0.05,
+                          scale: { duration: 0.3 }
+                        }}
+                        whileHover={{ 
+                          scale: 1.15, 
+                          y: -5,
+                          rotate: [-2, 2, -2, 0],
+                          transition: { rotate: { duration: 0.3 } }
+                        }}
+                        whileTap={{ scale: 0.85 }}
+                        onClick={() => {
+                          // Play sound based on feature
+                          if (feature.sound === 'chime') playChime();
+                          else if (feature.sound === 'swoosh') playSwoosh();
+                          else if (feature.sound === 'bubble') playBubble();
+                          else playPop();
+                          
+                          // Trigger click animation
+                          setClickedButton(feature.id);
+                          setTimeout(() => setClickedButton(null), 300);
+                          
+                          setActiveFeature(feature.id);
+                        }}
+                        className={`relative flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all overflow-hidden ${
                           activeFeature === feature.id
-                            ? `bg-gradient-to-br ${feature.color} text-white shadow-lg`
+                            ? `bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-current/30`
                             : 'hover:bg-muted'
                         }`}
                       >
-                        <feature.icon className="w-5 h-5" />
-                        <span className="text-[10px] font-medium whitespace-nowrap">{feature.label}</span>
+                        {/* Ripple effect on click */}
+                        <AnimatePresence>
+                          {clickedButton === feature.id && (
+                            <motion.div
+                              initial={{ scale: 0, opacity: 0.8 }}
+                              animate={{ scale: 3, opacity: 0 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.5 }}
+                              className={`absolute inset-0 rounded-full bg-gradient-to-br ${feature.color}`}
+                            />
+                          )}
+                        </AnimatePresence>
+                        
+                        {/* Icon with bounce animation */}
+                        <motion.div
+                          animate={clickedButton === feature.id ? { 
+                            rotate: [0, -15, 15, -10, 10, 0],
+                            scale: [1, 1.2, 1]
+                          } : {}}
+                          transition={{ duration: 0.4 }}
+                        >
+                          <feature.icon className="w-5 h-5 relative z-10" />
+                        </motion.div>
+                        
+                        {/* Floating particles on active */}
+                        {activeFeature === feature.id && (
+                          <>
+                            {[...Array(3)].map((_, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 0, x: 0 }}
+                                animate={{ 
+                                  opacity: [0, 1, 0],
+                                  y: [-5, -20],
+                                  x: [0, (i - 1) * 10]
+                                }}
+                                transition={{ 
+                                  duration: 1,
+                                  repeat: Infinity,
+                                  delay: i * 0.3
+                                }}
+                                className="absolute top-0 w-1 h-1 bg-white rounded-full"
+                              />
+                            ))}
+                          </>
+                        )}
+                        
+                        <span className="text-[10px] font-medium whitespace-nowrap relative z-10">{feature.label}</span>
                       </motion.button>
                     ))}
                   </div>
