@@ -13,18 +13,29 @@ import EnhancedQuiz from '@/components/EnhancedQuiz';
 import Flashcard from '@/components/Flashcard';
 import WritingPractice from '@/components/WritingPractice';
 import BreakTimeModal from '@/components/BreakTimeModal';
+import DailyRewardsSystem from '@/components/DailyRewardsSystem';
+import NightModeToggle from '@/components/NightModeToggle';
+import StudyTimeTracker from '@/components/StudyTimeTracker';
+import ImageLearning from '@/components/ImageLearning';
+import PronunciationTracker from '@/components/PronunciationTracker';
+import VideoLearning from '@/components/VideoLearning';
+import StudyGroups from '@/components/StudyGroups';
+import ErrorAnalysis from '@/components/ErrorAnalysis';
+import SentenceLibrary from '@/components/SentenceLibrary';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, BookOpen, Ear, PenTool, GraduationCap, Layers, Lock, 
   CheckCircle, AlertCircle, Zap, Target, Trophy, Star, Sparkles,
   Lightbulb, Brain, MessageCircle, Play, Pause, RotateCcw, Volume2,
   ChevronRight, Award, Flame, Heart, Clock, TrendingUp, Bell,
-  Shuffle, Filter, Grid, List, Search, Coffee
+  Shuffle, Filter, Grid, List, Search, Coffee, Gift, Moon, Timer,
+  Image, Mic, Video, Users, BarChart3, BookText, X
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 type ViewMode = 'cards' | 'flashcards' | 'writing' | 'quiz' | 'practice' | 'challenge';
 type DisplayMode = 'grid' | 'list';
+type FeatureModal = 'rewards' | 'nightMode' | 'studyTime' | 'imageLearning' | 'pronunciation' | 'video' | 'groups' | 'errors' | 'sentences' | null;
 
 const Learn: React.FC = () => {
   const { level } = useParams<{ level: string }>();
@@ -44,6 +55,8 @@ const Learn: React.FC = () => {
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [studyStartTime] = useState(Date.now());
   const [studyDuration, setStudyDuration] = useState(0);
+  const [activeFeature, setActiveFeature] = useState<FeatureModal>(null);
+  const [showToolbar, setShowToolbar] = useState(true);
 
   const progress = progressByLevel[levelNum]?.progress || [];
   const levelProgress = getLevelProgress(levelNum);
@@ -976,6 +989,141 @@ const Learn: React.FC = () => {
           </motion.div>
         )}
       </main>
+
+      {/* Bottom Feature Toolbar */}
+      <AnimatePresence>
+        {showToolbar && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 z-50 pb-safe"
+          >
+            <div className="container mx-auto px-4 pb-4">
+              <div className="relative bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl overflow-hidden">
+                {/* Gradient Border Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-pink-500/20 to-purple-500/20 opacity-50" />
+                
+                <div className="relative p-3">
+                  <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-hide">
+                    {[
+                      { id: 'rewards' as FeatureModal, icon: Gift, label: language === 'ar' ? 'المكافآت' : '보상', color: 'from-yellow-500 to-orange-500' },
+                      { id: 'nightMode' as FeatureModal, icon: Moon, label: language === 'ar' ? 'الليلي' : '야간', color: 'from-indigo-500 to-purple-500' },
+                      { id: 'studyTime' as FeatureModal, icon: Timer, label: language === 'ar' ? 'الوقت' : '시간', color: 'from-blue-500 to-cyan-500' },
+                      { id: 'imageLearning' as FeatureModal, icon: Image, label: language === 'ar' ? 'صور' : '이미지', color: 'from-green-500 to-emerald-500' },
+                      { id: 'pronunciation' as FeatureModal, icon: Mic, label: language === 'ar' ? 'النطق' : '발음', color: 'from-red-500 to-rose-500' },
+                      { id: 'video' as FeatureModal, icon: Video, label: language === 'ar' ? 'فيديو' : '비디오', color: 'from-purple-500 to-pink-500' },
+                      { id: 'groups' as FeatureModal, icon: Users, label: language === 'ar' ? 'مجموعات' : '그룹', color: 'from-teal-500 to-cyan-500' },
+                      { id: 'errors' as FeatureModal, icon: BarChart3, label: language === 'ar' ? 'التحليل' : '분석', color: 'from-orange-500 to-amber-500' },
+                      { id: 'sentences' as FeatureModal, icon: BookText, label: language === 'ar' ? 'الجمل' : '문장', color: 'from-pink-500 to-rose-500' },
+                    ].map((feature) => (
+                      <motion.button
+                        key={feature.id}
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setActiveFeature(feature.id)}
+                        className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all ${
+                          activeFeature === feature.id
+                            ? `bg-gradient-to-br ${feature.color} text-white shadow-lg`
+                            : 'hover:bg-muted'
+                        }`}
+                      >
+                        <feature.icon className="w-5 h-5" />
+                        <span className="text-[10px] font-medium whitespace-nowrap">{feature.label}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Feature Modals */}
+      <AnimatePresence>
+        {activeFeature && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+            onClick={() => setActiveFeature(null)}
+          >
+            <motion.div
+              initial={{ y: 100, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 100, opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-2xl max-h-[85vh] overflow-auto bg-card rounded-t-3xl sm:rounded-3xl shadow-2xl"
+            >
+              {/* Modal Header */}
+              <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-border bg-card/95 backdrop-blur-xl rounded-t-3xl">
+                <h2 className="text-lg font-bold">
+                  {activeFeature === 'rewards' && (language === 'ar' ? '🎁 المكافآت اليومية' : '🎁 일일 보상')}
+                  {activeFeature === 'nightMode' && (language === 'ar' ? '🌙 الوضع الليلي' : '🌙 야간 모드')}
+                  {activeFeature === 'studyTime' && (language === 'ar' ? '⏱️ تتبع الوقت' : '⏱️ 시간 추적')}
+                  {activeFeature === 'imageLearning' && (language === 'ar' ? '🖼️ التعلم بالصور' : '🖼️ 이미지 학습')}
+                  {activeFeature === 'pronunciation' && (language === 'ar' ? '🎤 تتبع النطق' : '🎤 발음 추적')}
+                  {activeFeature === 'video' && (language === 'ar' ? '🎬 التعلم بالفيديو' : '🎬 비디오 학습')}
+                  {activeFeature === 'groups' && (language === 'ar' ? '👥 مجموعات الدراسة' : '👥 스터디 그룹')}
+                  {activeFeature === 'errors' && (language === 'ar' ? '📊 تحليل الأخطاء' : '📊 오류 분석')}
+                  {activeFeature === 'sentences' && (language === 'ar' ? '📚 مكتبة الجمل' : '📚 문장 라이브러리')}
+                </h2>
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setActiveFeature(null)}
+                  className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </motion.button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-4">
+                {activeFeature === 'rewards' && (
+                  <DailyRewardsSystem 
+                    isOpen={true}
+                    onClose={() => setActiveFeature(null)}
+                    currentStreak={todayProgress}
+                    onClaimReward={(prize) => {
+                      addNotification(
+                        'achievement',
+                        language === 'ar' ? '🎁 مكافأة!' : '🎁 보상!',
+                        language === 'ar' ? `حصلت على ${prize.titleAr}` : `${prize.titleKo} 획득!`
+                      );
+                    }}
+                  />
+                )}
+                {activeFeature === 'nightMode' && <NightModeToggle />}
+                {activeFeature === 'studyTime' && <StudyTimeTracker />}
+                {activeFeature === 'imageLearning' && <ImageLearning level={levelNum} />}
+                {activeFeature === 'pronunciation' && (
+                  <PronunciationTracker 
+                    words={flashcardItems.slice(0, 10).map(item => ({
+                      korean: item.korean,
+                      romanized: item.romanized,
+                      arabic: item.arabic
+                    }))}
+                  />
+                )}
+                {activeFeature === 'video' && <VideoLearning level={levelNum} />}
+                {activeFeature === 'groups' && <StudyGroups />}
+                {activeFeature === 'errors' && <ErrorAnalysis level={levelNum} />}
+                {activeFeature === 'sentences' && <SentenceLibrary level={levelNum} />}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Break Time Modal */}
+      <BreakTimeModal 
+        isOpen={showBreakModal} 
+        onClose={() => setShowBreakModal(false)}
+        studyDuration={Math.floor(studyDuration / 60)}
+      />
     </div>
   );
 };
