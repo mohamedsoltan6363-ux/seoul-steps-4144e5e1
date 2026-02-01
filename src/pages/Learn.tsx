@@ -27,16 +27,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, BookOpen, Ear, PenTool, GraduationCap, Layers, Lock, 
   CheckCircle, AlertCircle, Zap, Target, Trophy, Star, Sparkles,
-  Lightbulb, Brain, MessageCircle, Play, Pause, RotateCcw, Volume2,
+  Lightbulb, Brain, MessageCircle, Play, Pause, RotateCcw,
   ChevronRight, Award, Flame, Heart, Clock, TrendingUp, Bell,
   Shuffle, Filter, Grid, List, Search, Coffee, Gift, Moon, Timer,
-  Image, Mic, Video, Users, BarChart3, BookText, X
+  Image, Mic, Video, Users, BarChart3, BookText, X, Volume2, VolumeX, Settings
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import SoundSettingsPanel from '@/components/SoundSettingsPanel';
 
 type ViewMode = 'cards' | 'flashcards' | 'writing' | 'quiz' | 'practice' | 'challenge';
 type DisplayMode = 'grid' | 'list';
-type FeatureModal = 'rewards' | 'nightMode' | 'studyTime' | 'imageLearning' | 'pronunciation' | 'video' | 'groups' | 'errors' | 'sentences' | null;
+type FeatureModal = 'rewards' | 'nightMode' | 'studyTime' | 'imageLearning' | 'pronunciation' | 'video' | 'groups' | 'errors' | 'sentences' | 'soundSettings' | null;
 
 const Learn: React.FC = () => {
   const { level } = useParams<{ level: string }>();
@@ -1030,6 +1031,7 @@ const Learn: React.FC = () => {
                       { id: 'groups' as FeatureModal, icon: Users, label: language === 'ar' ? 'مجموعات' : '그룹', color: 'from-teal-500 to-cyan-500', sound: 'bubble' as const },
                       { id: 'errors' as FeatureModal, icon: BarChart3, label: language === 'ar' ? 'التحليل' : '분석', color: 'from-orange-500 to-amber-500', sound: 'pop' as const },
                       { id: 'sentences' as FeatureModal, icon: BookText, label: language === 'ar' ? 'الجمل' : '문장', color: 'from-pink-500 to-rose-500', sound: 'chime' as const },
+                      { id: 'soundSettings' as FeatureModal, icon: Volume2, label: language === 'ar' ? 'الصوت' : '소리', color: 'from-gray-500 to-slate-600', sound: 'pop' as const },
                     ].map((feature, index) => (
                       <motion.button
                         key={feature.id}
@@ -1156,6 +1158,7 @@ const Learn: React.FC = () => {
                   {activeFeature === 'groups' && (language === 'ar' ? '👥 مجموعات الدراسة' : '👥 스터디 그룹')}
                   {activeFeature === 'errors' && (language === 'ar' ? '📊 تحليل الأخطاء' : '📊 오류 분석')}
                   {activeFeature === 'sentences' && (language === 'ar' ? '📚 مكتبة الجمل' : '📚 문장 라이브러리')}
+                  {activeFeature === 'soundSettings' && (language === 'ar' ? '🔊 إعدادات الصوت' : '🔊 사운드 설정')}
                 </h2>
                 <motion.button
                   whileHover={{ scale: 1.1, rotate: 90 }}
@@ -1199,6 +1202,7 @@ const Learn: React.FC = () => {
                 {activeFeature === 'groups' && <StudyGroups />}
                 {activeFeature === 'errors' && <ErrorAnalysis level={levelNum} />}
                 {activeFeature === 'sentences' && <SentenceLibrary level={levelNum} />}
+                {activeFeature === 'soundSettings' && <SoundSettingsPanel embedded />}
               </div>
             </motion.div>
           </motion.div>

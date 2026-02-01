@@ -10,8 +10,28 @@ const SOUNDS = {
   bubble: { frequency: 600, duration: 60, type: 'sine' as OscillatorType },
 };
 
+// Get sound settings from localStorage (standalone function for use outside React context)
+const getSoundSettings = () => {
+  try {
+    const saved = localStorage.getItem('soundSettings');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return { isMuted: false, volume: 0.5, effectsEnabled: true };
+};
+
 export const useSoundEffects = () => {
   const playSound = useCallback((soundType: keyof typeof SOUNDS) => {
+    const settings = getSoundSettings();
+    
+    // Check if sounds are enabled
+    if (settings.isMuted || !settings.effectsEnabled) {
+      return;
+    }
+
     try {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
@@ -35,8 +55,9 @@ export const useSoundEffects = () => {
         oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + sound.duration / 1000);
       }
 
-      // Volume envelope
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      // Volume envelope - apply user volume setting
+      const baseVolume = 0.3 * settings.volume;
+      gainNode.gain.setValueAtTime(baseVolume, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration / 1000);
 
       oscillator.start(audioContext.currentTime);
