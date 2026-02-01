@@ -37,7 +37,13 @@ const Splash: React.FC = () => {
 
   const handleStart = () => {
     localStorage.setItem('splash_seen', 'true');
-    navigate('/home');
+    // Check if user has seen onboarding
+    const hasSeenOnboarding = localStorage.getItem('onboarding_seen');
+    if (!hasSeenOnboarding) {
+      navigate('/onboarding');
+    } else {
+      navigate('/home');
+    }
   };
 
   const isRTL = language === 'ar';
