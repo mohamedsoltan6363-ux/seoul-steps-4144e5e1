@@ -167,23 +167,38 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ isRTL }) => {
             : '한국어 학습 여정이 지금 시작됩니다'}
         </motion.p>
 
-        {/* Developer credit */}
+        {/* Developer credit - Updated to first person */}
         <motion.div
-          className="flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+          className="flex items-center gap-3 px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-rose-100"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-purple-500 flex items-center justify-center text-white font-bold">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
             م
           </div>
           <div className="text-start">
             <p className="text-sm text-gray-500">
-              {isRTL ? 'تم التطوير بواسطة' : '개발자'}
+              {isRTL ? 'مرحباً، أنا' : '안녕하세요, 저는'}
             </p>
-            <p className="font-bold text-gray-800">Mohamed Ayman</p>
+            <p className="font-bold text-gray-800 text-lg">Mohamed Ayman</p>
+            <p className="text-sm text-rose-500 font-medium">
+              {isRTL ? 'أرحب بك في منصتي! 💝' : '제 플랫폼에 오신 것을 환영합니다! 💝'}
+            </p>
           </div>
         </motion.div>
+
+        {/* Personal message */}
+        <motion.p
+          className="mt-4 text-gray-500 text-sm max-w-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
+          {isRTL 
+            ? 'صممت هذه المنصة بكل حب لأساعدك في رحلة تعلم الكورية 🇰🇷'
+            : '한국어 학습 여정을 도와드리기 위해 이 플랫폼을 정성껏 만들었습니다 🇰🇷'}
+        </motion.p>
 
         {/* Animated arrow down */}
         <motion.div
