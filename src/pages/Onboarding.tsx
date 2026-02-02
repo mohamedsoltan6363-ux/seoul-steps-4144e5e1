@@ -5,16 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, ArrowRight } from 'lucide-react';
 import HeroSlide from '@/components/onboarding/HeroSlide';
 import OnboardingSlide from '@/components/onboarding/OnboardingSlide';
-import {
-  TankTransition,
-  BuffaloTransition,
-  BirdFlockTransition,
-  RocketTransition,
-  DragonTransition,
-  ButterflyTransition,
-  TrainTransition,
-  AirplaneTransition
-} from '@/components/onboarding/OnboardingTransitions';
+import OnboardingAudioControl from '@/components/onboarding/OnboardingAudioControl';
+import { transitions } from '@/components/onboarding/OnboardingTransitions';
+import { useOnboardingAudio } from '@/hooks/useOnboardingAudio';
 import characterImage from '@/assets/onboarding-character.png';
 
 const Onboarding: React.FC = () => {
@@ -24,6 +17,9 @@ const Onboarding: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionType, setTransitionType] = useState(0);
   const isRTL = language === 'ar';
+  
+  // Audio controls
+  const { isMuted, toggleMute, speakText, startMusic } = useOnboardingAudio();
 
   const slides = [
     // Slide 0: Hero with uploaded image
@@ -120,16 +116,7 @@ const Onboarding: React.FC = () => {
     }
   ];
 
-  const transitions = [
-    TankTransition,
-    BuffaloTransition,
-    DragonTransition,
-    BirdFlockTransition,
-    RocketTransition,
-    ButterflyTransition,
-    TrainTransition,
-    AirplaneTransition
-  ];
+  // Use imported transitions array
 
   const goToNextSlide = useCallback(() => {
     if (isTransitioning || currentSlide >= slides.length - 1) return;
@@ -159,10 +146,46 @@ const Onboarding: React.FC = () => {
     }
   }, [currentSlide, isTransitioning, goToNextSlide, slides.length]);
 
+  // Speak Korean text when slide changes
+  useEffect(() => {
+    const slide = slides[currentSlide];
+    if (slide.type === 'content' && slide.koreanText) {
+      // Small delay to let the slide animation finish
+      const timer = setTimeout(() => {
+        speakText(slide.koreanText!);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [currentSlide, speakText]);
+
+  // Start music on user interaction
+  useEffect(() => {
+    const handleInteraction = () => {
+      startMusic();
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+    
+    document.addEventListener('click', handleInteraction);
+    document.addEventListener('touchstart', handleInteraction);
+    
+    return () => {
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+  }, [startMusic]);
+
   const CurrentTransition = transitions[transitionType];
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Audio Control Button */}
+      <OnboardingAudioControl 
+        isMuted={isMuted} 
+        onToggle={toggleMute} 
+        isRTL={isRTL} 
+      />
+
       {/* Progress bar */}
       <div className="absolute top-0 left-0 right-0 z-50 h-1 bg-gray-200">
         <motion.div
