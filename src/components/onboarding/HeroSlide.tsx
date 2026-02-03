@@ -135,69 +135,26 @@ const HeroSlide: React.FC<HeroSlideProps> = ({ isRTL }) => {
           ))}
         </motion.div>
 
-        {/* Welcome Badge */}
-        <motion.div
-          className="px-6 py-2 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-bold text-lg shadow-lg shadow-rose-500/30 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          {isRTL ? '🎉 مرحباً بك!' : '🎉 환영합니다!'}
-        </motion.div>
-
-        {/* Title */}
+        {/* Title - Simple and Clean */}
         <motion.h1
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.5 }}
         >
           {isRTL ? 'منصة تعلم الكورية' : '한국어 학습 플랫폼'}
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          className="text-xl md:text-2xl text-gray-600 mb-6"
+          className="text-xl md:text-2xl text-gray-600 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.6 }}
         >
           {isRTL 
             ? 'رحلتك لتعلم اللغة الكورية تبدأ الآن'
             : '한국어 학습 여정이 지금 시작됩니다'}
-        </motion.p>
-
-        {/* Developer credit - Updated to first person */}
-        <motion.div
-          className="flex items-center gap-3 px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-rose-100"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-            م
-          </div>
-          <div className="text-start">
-            <p className="text-sm text-gray-500">
-              {isRTL ? 'مرحباً، أنا' : '안녕하세요, 저는'}
-            </p>
-            <p className="font-bold text-gray-800 text-lg">Mohamed Ayman</p>
-            <p className="text-sm text-rose-500 font-medium">
-              {isRTL ? 'أرحب بك في منصتي! 💝' : '제 플랫폼에 오신 것을 환영합니다! 💝'}
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Personal message */}
-        <motion.p
-          className="mt-4 text-gray-500 text-sm max-w-md"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          {isRTL 
-            ? 'صممت هذه المنصة بكل حب لأساعدك في رحلة تعلم الكورية 🇰🇷'
-            : '한국어 학습 여정을 도와드리기 위해 이 플랫폼을 정성껏 만들었습니다 🇰🇷'}
         </motion.p>
 
         {/* Animated arrow down */}

@@ -278,7 +278,7 @@ const Dashboard: React.FC = () => {
       </motion.header>
 
       <motion.main 
-        className="container mx-auto px-4 py-6 max-w-5xl relative z-10"
+        className="container mx-auto px-4 py-6 max-w-7xl relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -334,7 +334,7 @@ const Dashboard: React.FC = () => {
                 <span className="text-white/50 text-xs">•</span>
                 <span className="text-white/70 text-xs flex items-center gap-1">
                   <Heart className="w-3 h-3 text-rose-300 fill-rose-300" />
-                  {language === 'ar' ? 'محمد أيمن يرحب بك' : 'Mohamed Ayman welcomes you'}
+                  {language === 'ar' ? 'أهلاً بك في منصتي!' : '내 플랫폼에 오신 것을 환영합니다!'}
                 </span>
               </motion.div>
               <motion.h1 

@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-lg">
+      <main className="container mx-auto px-4 py-6 max-w-2xl">
         {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

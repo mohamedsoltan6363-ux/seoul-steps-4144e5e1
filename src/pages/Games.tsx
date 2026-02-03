@@ -73,7 +73,7 @@ const Games = () => {
                 </h1>
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
               {games.map((game, index) => (
                 <motion.div key={game.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
                   <Card className="relative overflow-hidden cursor-pointer group hover:scale-105 transition-all duration-300 border-0 shadow-xl h-full" onClick={() => setCurrentGame(game.id as GameType)}>
