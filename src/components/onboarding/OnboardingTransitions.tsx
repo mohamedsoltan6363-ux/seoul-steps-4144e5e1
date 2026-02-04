@@ -1097,203 +1097,141 @@ export const RocketTransition: React.FC<{ onComplete: () => void }> = ({ onCompl
   );
 };
 
-// Cute Kid Throwing Brick Transition - replaces dragon
-export const KidThrowingBrickTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const throwTime = 1.2;
-  const impactTime = 2.0;
+// Korean Dragon transition - enhanced
+export const DragonTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 5.5;
+  const impactTime = calculateImpactTime(totalDuration, -35, 130);
 
   return (
     <motion.div
-      className="absolute inset-0 z-50 pointer-events-none overflow-hidden bg-gradient-to-b from-amber-50/50 to-orange-50/50"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      className="absolute inset-0 z-50 pointer-events-none overflow-hidden bg-gradient-to-b from-emerald-100/50 to-teal-50/50"
     >
-      {/* Character waiting to be hit by brick */}
-      <HitCharacter impactTime={impactTime} direction="left" />
+      {/* Character waiting to be hit */}
+      <HitCharacter impactTime={impactTime} direction="right" />
       
       {/* Impact effect */}
       <ImpactEffect delay={impactTime} />
 
-      {/* Brick on the ground */}
       <motion.div
-        className="absolute z-15"
-        style={{ left: '15%', bottom: '22%' }}
-        initial={{ opacity: 1 }}
-        animate={{ opacity: [1, 1, 0] }}
-        transition={{ duration: 0.3, delay: throwTime - 0.2 }}
-      >
-        <svg width="50" height="30" viewBox="0 0 50 30">
-          <rect x="0" y="0" width="50" height="30" rx="3" fill="#C84C31" />
-          <rect x="3" y="3" width="44" height="24" rx="2" fill="#D4634E" />
-          <line x1="25" y1="3" x2="25" y2="27" stroke="#B8422A" strokeWidth="2" />
-        </svg>
-      </motion.div>
-
-      {/* Cute Kid - bottom left corner */}
-      <motion.div
-        className="absolute z-30"
-        style={{ left: '10%', bottom: '18%' }}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.svg 
-          width="140" 
-          height="200" 
-          viewBox="0 0 140 200"
-          animate={{ rotate: [0, 0, -15, 0] }}
-          transition={{ duration: 0.4, delay: throwTime - 0.3, times: [0, 0.3, 0.6, 1] }}
-        >
-          {/* Body - cute overalls */}
-          <rect x="40" y="90" width="60" height="70" rx="10" fill="#4A90D9" />
-          <rect x="45" y="95" width="50" height="60" rx="8" fill="#5BA0E9" />
-          
-          {/* Overall straps */}
-          <rect x="48" y="90" width="8" height="30" fill="#4A90D9" />
-          <rect x="84" y="90" width="8" height="30" fill="#4A90D9" />
-          
-          {/* Buttons on overalls */}
-          <circle cx="52" cy="105" r="3" fill="#FFD700" />
-          <circle cx="88" cy="105" r="3" fill="#FFD700" />
-          
-          {/* Shirt underneath */}
-          <rect x="45" y="85" width="50" height="15" rx="5" fill="#FF6B6B" />
-          
-          {/* Head */}
-          <circle cx="70" cy="55" r="35" fill="#FFDAB9" />
-          <ellipse cx="70" cy="50" rx="32" ry="33" fill="#FFE4C4" />
-          
-          {/* Cute rosy cheeks */}
-          <ellipse cx="48" cy="60" rx="8" ry="5" fill="#FFB6C1" opacity="0.6" />
-          <ellipse cx="92" cy="60" rx="8" ry="5" fill="#FFB6C1" opacity="0.6" />
-          
-          {/* Eyes - big and cute */}
-          <ellipse cx="55" cy="50" rx="10" ry="12" fill="white" />
-          <ellipse cx="85" cy="50" rx="10" ry="12" fill="white" />
-          <circle cx="57" cy="52" r="6" fill="#1A1A1A" />
-          <circle cx="87" cy="52" r="6" fill="#1A1A1A" />
-          <circle cx="59" cy="49" r="2" fill="white" />
-          <circle cx="89" cy="49" r="2" fill="white" />
-          
-          {/* Eyebrows - mischievous */}
-          <path d="M45 40 L65 44" stroke="#8B4513" strokeWidth="3" strokeLinecap="round" />
-          <path d="M95 44 L75 40" stroke="#8B4513" strokeWidth="3" strokeLinecap="round" />
-          
-          {/* Cute smile */}
-          <path d="M55 70 Q70 82 85 70" stroke="#1A1A1A" strokeWidth="3" fill="none" strokeLinecap="round" />
-          
-          {/* Hair - messy cute style */}
-          <path d="M40 35 Q50 15 70 20 Q90 15 100 35" fill="#8B4513" />
-          <path d="M35 40 Q45 25 55 30" fill="#8B4513" />
-          <path d="M105 40 Q95 25 85 30" fill="#8B4513" />
-          <ellipse cx="70" cy="22" rx="20" ry="12" fill="#8B4513" />
-          {/* Hair tuft */}
-          <path d="M68 10 Q72 0 76 10" stroke="#8B4513" strokeWidth="6" fill="none" strokeLinecap="round" />
-          
-          {/* Arms - throwing pose */}
-          <motion.g
-            animate={{ rotate: [0, 0, -60, 0] }}
-            transition={{ duration: 0.4, delay: throwTime - 0.3, times: [0, 0.3, 0.6, 1] }}
-            style={{ transformOrigin: '100px 100px' }}
-          >
-            <path d="M100 95 Q130 80 140 60" stroke="#FFE4C4" strokeWidth="16" fill="none" strokeLinecap="round" />
-            {/* Hand */}
-            <circle cx="140" cy="58" r="10" fill="#FFE4C4" />
-          </motion.g>
-          
-          {/* Other arm */}
-          <path d="M40 100 Q20 110 15 130" stroke="#FFE4C4" strokeWidth="14" fill="none" strokeLinecap="round" />
-          <circle cx="13" cy="132" r="8" fill="#FFE4C4" />
-          
-          {/* Legs */}
-          <rect x="45" y="155" width="18" height="35" rx="8" fill="#4A90D9" />
-          <rect x="77" y="155" width="18" height="35" rx="8" fill="#4A90D9" />
-          
-          {/* Shoes - cute sneakers */}
-          <ellipse cx="54" cy="195" rx="14" ry="8" fill="#E53E3E" />
-          <ellipse cx="86" cy="195" rx="14" ry="8" fill="#E53E3E" />
-          <ellipse cx="54" cy="192" rx="10" ry="4" fill="#FC8181" />
-          <ellipse cx="86" cy="192" rx="10" ry="4" fill="#FC8181" />
-        </motion.svg>
-      </motion.div>
-
-      {/* Flying Brick */}
-      <motion.div
-        className="absolute z-25"
-        style={{ bottom: '35%' }}
-        initial={{ x: '18vw', y: 0, rotate: 0, opacity: 0 }}
+        className="absolute z-20"
+        initial={{ x: '-35vw', y: '30%' }}
         animate={{ 
-          x: '50vw',
-          y: [0, -80, -40],
-          rotate: [0, 180, 360],
-          opacity: [0, 1, 1, 0]
+          x: '130vw',
+          y: ['30%', '20%', '40%', '25%', '35%', '30%']
         }}
-        transition={{ 
-          duration: impactTime - throwTime,
-          delay: throwTime,
-          ease: 'easeOut'
-        }}
+        transition={{ duration: totalDuration, ease: 'linear' }}
+        onAnimationComplete={onComplete}
       >
-        <svg width="60" height="35" viewBox="0 0 60 35">
-          <rect x="0" y="0" width="60" height="35" rx="4" fill="#C84C31" />
-          <rect x="4" y="4" width="52" height="27" rx="2" fill="#D4634E" />
-          <line x1="30" y1="4" x2="30" y2="31" stroke="#B8422A" strokeWidth="2" />
-          {/* Brick texture */}
-          <rect x="8" y="8" width="18" height="8" fill="#B8422A" opacity="0.3" />
-          <rect x="34" y="19" width="18" height="8" fill="#B8422A" opacity="0.3" />
-        </svg>
-        
-        {/* Motion lines */}
-        {[...Array(4)].map((_, i) => (
+        {/* Dragon body segments - larger */}
+        {[...Array(14)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute h-0.5 bg-amber-600"
-            style={{
-              left: -15 - i * 12,
-              top: 15 + (i - 2) * 6,
-              width: 10 - i * 2
-            }}
-            animate={{ opacity: [0.8, 0] }}
-            transition={{ duration: 0.2, repeat: Infinity, delay: i * 0.05 }}
-          />
-        ))}
-      </motion.div>
-
-      {/* Stars effect when brick hits - cartoon style */}
-      <motion.g
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 1, 0] }}
-        transition={{ duration: 0.5, delay: impactTime }}
-      >
-        {['⭐', '💫', '✨', '⭐', '💫'].map((star, i) => (
-          <motion.span
-            key={i}
-            className="absolute text-2xl"
-            style={{
-              left: `calc(50% + ${(i - 2) * 40}px)`,
-              top: '30%'
-            }}
-            animate={{
-              y: [0, -30 - Math.random() * 30],
-              x: [(i - 2) * 20, (i - 2) * 40],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0]
-            }}
-            transition={{ duration: 0.6, delay: impactTime + i * 0.05 }}
+            className="absolute"
+            style={{ left: -i * 55 }}
+            animate={{ y: [0, -25, 0, 25, 0] }}
+            transition={{ duration: 0.55, repeat: Infinity, delay: i * 0.08 }}
           >
-            {star}
-          </motion.span>
+            <div 
+              className={`rounded-full ${i === 0 ? 'bg-emerald-400' : 'bg-emerald-500'}`}
+              style={{ 
+                width: 70 - i * 3,
+                height: 70 - i * 3,
+                boxShadow: '0 0 35px rgba(16, 185, 129, 0.6)',
+              }}
+            />
+            {/* Scales detail */}
+            {i > 0 && (
+              <div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-600/30"
+                style={{ width: (70 - i * 3) * 0.6, height: (70 - i * 3) * 0.6 }}
+              />
+            )}
+          </motion.div>
         ))}
-      </motion.g>
-
-      {/* Complete after impact */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0 }}
-        transition={{ delay: impactTime + 1.2 }}
-        onAnimationComplete={onComplete}
-      />
+        
+        {/* Dragon head - larger and more detailed */}
+        <motion.svg 
+          width="180" 
+          height="140" 
+          viewBox="0 0 180 140"
+          animate={{ rotate: [-10, 10, -10] }}
+          transition={{ duration: 0.35, repeat: Infinity }}
+        >
+          {/* Head */}
+          <ellipse cx="80" cy="70" rx="65" ry="55" fill="#10B981" />
+          <ellipse cx="85" cy="65" rx="58" ry="48" fill="#34D399" />
+          
+          {/* Snout */}
+          <ellipse cx="140" cy="75" rx="30" ry="25" fill="#10B981" />
+          
+          {/* Eye */}
+          <ellipse cx="100" cy="50" rx="18" ry="15" fill="white" />
+          <circle cx="104" cy="52" r="10" fill="#1A1A1A" />
+          <circle cx="108" cy="48" r="4" fill="white" />
+          {/* Angry eyebrow */}
+          <path d="M82 38 L120 45" stroke="#059669" strokeWidth="6" strokeLinecap="round" />
+          
+          {/* Horns */}
+          <path d="M45 28 Q32 5 55 15" stroke="#059669" strokeWidth="10" fill="none" strokeLinecap="round" />
+          <path d="M75 22 Q75 -5 95 8" stroke="#059669" strokeWidth="10" fill="none" strokeLinecap="round" />
+          
+          {/* Whiskers */}
+          <motion.path
+            d="M155 58 Q180 45 200 52"
+            stroke="#059669"
+            strokeWidth="4"
+            fill="none"
+            animate={{ rotate: [0, 12, 0] }}
+            transition={{ duration: 0.45, repeat: Infinity }}
+            style={{ transformOrigin: '155px 58px' }}
+          />
+          <motion.path
+            d="M155 92 Q180 105 200 98"
+            stroke="#059669"
+            strokeWidth="4"
+            fill="none"
+            animate={{ rotate: [0, -12, 0] }}
+            transition={{ duration: 0.45, repeat: Infinity }}
+            style={{ transformOrigin: '155px 92px' }}
+          />
+          
+          {/* Fire breath - larger */}
+          <motion.g
+            animate={{ opacity: [1, 0.6, 1], scale: [1, 1.25, 1] }}
+            transition={{ duration: 0.12, repeat: Infinity }}
+          >
+            <path d="M155 65 L240 52 L225 70 L265 62 L220 82 L250 75 L155 88 Z" fill="#F59E0B" />
+            <path d="M162 68 L215 58 L205 72 L235 66 L200 80 L162 85 Z" fill="#FBBF24" />
+            <path d="M168 72 L190 66 L185 76 L168 80 Z" fill="#FEF3C7" />
+          </motion.g>
+        </motion.svg>
+      </motion.div>
+      
+      {/* Magical sparkles */}
+      {[...Array(25)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-4 h-4"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{ 
+            scale: [0, 1, 0],
+            opacity: [0, 1, 0],
+            rotate: [0, 180]
+          }}
+          transition={{ 
+            duration: 1.3, 
+            repeat: Infinity,
+            delay: Math.random() * 2
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+            <path d="M12 2L13.5 9L20 12L13.5 15L12 22L10.5 15L4 12L10.5 9L12 2Z" fill="#10B981" />
+          </svg>
+        </motion.div>
+      ))}
     </motion.div>
   );
 };
@@ -1549,11 +1487,11 @@ export const TrainTransition: React.FC<{ onComplete: () => void }> = ({ onComple
 export const transitions = [
   TankTransition,
   BuffaloTransition,
-  RPGSoldierTransition,
+  RPGSoldierTransition,    // Replaced ButterflyTransition
   ElephantTransition,
-  FighterJetBombTransition,
-  KidThrowingBrickTransition,  // Replaced DragonTransition
+  FighterJetBombTransition, // Replaced FighterJetTransition  
+  DragonTransition,
   RocketTransition,
-  HelicopterTransition,
+  HelicopterTransition,     // Replaced AirplaneTransition
   TrainTransition
 ];
