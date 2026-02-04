@@ -9,9 +9,8 @@ import { SoundSettingsProvider } from "@/contexts/SoundSettingsContext";
 import { AchievementProvider, useAchievements } from "@/hooks/useAchievements";
 import AchievementNotification from "@/components/AchievementNotification";
 import WelcomeModal from "@/components/WelcomeModal";
-import Splash from "./pages/Splash";
+import HomePage from "./pages/HomePage";
 import Onboarding from "./pages/Onboarding";
-import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Learn from "./pages/Learn";
@@ -56,9 +55,8 @@ const App = () => (
                 <AchievementOverlay />
                 <WelcomeModal />
                 <Routes>
-                  <Route path="/" element={<Splash />} />
+                  <Route path="/" element={<HomePage />} />
                   <Route path="/onboarding" element={<Onboarding />} />
-                  <Route path="/home" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/learn/:level" element={<Learn />} />
