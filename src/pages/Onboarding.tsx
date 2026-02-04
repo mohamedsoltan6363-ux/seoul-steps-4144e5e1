@@ -8,6 +8,7 @@ import OnboardingSlide from '@/components/onboarding/OnboardingSlide';
 import OnboardingAudioControl from '@/components/onboarding/OnboardingAudioControl';
 import { transitions } from '@/components/onboarding/OnboardingTransitions';
 import { useOnboardingAudio } from '@/hooks/useOnboardingAudio';
+import { onboardingSounds } from '@/hooks/useOnboardingSounds';
 import characterImage from '@/assets/onboarding-character.png';
 
 const Onboarding: React.FC = () => {
@@ -116,14 +117,31 @@ const Onboarding: React.FC = () => {
     }
   ];
 
-  // Use imported transitions array
+  // Sound effects for each transition type
+  const transitionSounds = [
+    () => onboardingSounds.playTankSound(),
+    () => onboardingSounds.playBuffaloSound(),
+    () => onboardingSounds.playRPGSound(),
+    () => onboardingSounds.playElephantSound(),
+    () => onboardingSounds.playFighterJetSound(),
+    () => onboardingSounds.playKidThrowSound(),
+    () => onboardingSounds.playRocketSound(),
+    () => onboardingSounds.playHelicopterSound(),
+    () => onboardingSounds.playTrainSound(),
+  ];
 
   const goToNextSlide = useCallback(() => {
     if (isTransitioning || currentSlide >= slides.length - 1) return;
     
+    const transitionIndex = currentSlide % transitions.length;
     setIsTransitioning(true);
-    setTransitionType(currentSlide % transitions.length);
-  }, [currentSlide, isTransitioning, slides.length, transitions.length]);
+    setTransitionType(transitionIndex);
+    
+    // Play sound for this transition
+    if (transitionSounds[transitionIndex]) {
+      transitionSounds[transitionIndex]();
+    }
+  }, [currentSlide, isTransitioning, slides.length]);
 
   const handleTransitionComplete = () => {
     setCurrentSlide(prev => prev + 1);
