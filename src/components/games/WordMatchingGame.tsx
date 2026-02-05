@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRight, ArrowLeft, Trophy, RotateCcw, Sparkles, CheckCircle2, XCircle } from 'lucide-react';
-import { vocabulary } from '@/data/koreanData';
+import { vocabulary, consonants, vowels, basicSentences, advancedSentences } from '@/data/koreanData';
+import { advancedVocabulary } from '@/data/level3VocabularyData';
+import { dailyLifeSentences } from '@/data/level5Data';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -18,13 +20,35 @@ interface WordPair {
   arabic: string;
 }
 
+// Combine all content sources for infinite variety
+const getAllContent = (): WordPair[] => {
+  const allItems: WordPair[] = [];
+  
+  // Add consonants and vowels
+  consonants.forEach(c => allItems.push({ id: `c_${c.id}`, korean: c.korean, arabic: c.arabic }));
+  vowels.forEach(v => allItems.push({ id: `v_${v.id}`, korean: v.korean, arabic: v.arabic }));
+  
+  // Add vocabulary
+  vocabulary.forEach(v => allItems.push({ id: v.id, korean: v.korean, arabic: v.arabic }));
+  
+  // Add advanced vocabulary
+  advancedVocabulary.forEach(v => allItems.push({ id: v.id, korean: v.korean, arabic: v.arabic }));
+  
+  // Add sentences
+  basicSentences.forEach(s => allItems.push({ id: s.id, korean: s.korean, arabic: s.arabic }));
+  advancedSentences.forEach(s => allItems.push({ id: s.id, korean: s.korean, arabic: s.arabic }));
+  dailyLifeSentences.forEach(s => allItems.push({ id: s.id, korean: s.korean, arabic: s.arabic }));
+  
+  return allItems;
+};
+
 const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
   const { language } = useLanguage();
   const isArabic = language === 'ar';
 
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
-  const [totalRounds] = useState(5);
+  const [totalRounds] = useState(10); // Increased to 10 rounds
   const [currentPairs, setCurrentPairs] = useState<WordPair[]>([]);
   const [selectedKorean, setSelectedKorean] = useState<string | null>(null);
   const [selectedArabic, setSelectedArabic] = useState<string | null>(null);
@@ -33,6 +57,8 @@ const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
   const [gameComplete, setGameComplete] = useState(false);
   const [shuffledKorean, setShuffledKorean] = useState<WordPair[]>([]);
   const [shuffledArabic, setShuffledArabic] = useState<WordPair[]>([]);
+  const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
+  const [allContent] = useState<WordPair[]>(() => getAllContent());
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
@@ -44,12 +70,26 @@ const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
   };
 
   const generateRound = useCallback(() => {
-    const shuffledVocab = shuffleArray(vocabulary);
-    const pairs = shuffledVocab.slice(0, 4).map(v => ({
-      id: v.id,
-      korean: v.korean,
-      arabic: v.arabic
-    }));
+    // Filter out already used items
+    let availableItems = allContent.filter(item => !usedIds.has(item.id));
+    
+    // If we've used most items, reset the pool
+    if (availableItems.length < 5) {
+      setUsedIds(new Set());
+      availableItems = [...allContent];
+    }
+    
+    // Shuffle and pick 5 items for variety
+    const shuffledItems = shuffleArray(availableItems);
+    const pairs = shuffledItems.slice(0, 5);
+    
+    // Track used items
+    setUsedIds(prev => {
+      const newSet = new Set(prev);
+      pairs.forEach(p => newSet.add(p.id));
+      return newSet;
+    });
+    
     setCurrentPairs(pairs);
     setShuffledKorean(shuffleArray([...pairs]));
     setShuffledArabic(shuffleArray([...pairs]));
@@ -57,11 +97,11 @@ const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
     setSelectedKorean(null);
     setSelectedArabic(null);
     setWrongPair(null);
-  }, []);
+  }, [allContent, usedIds]);
 
   useEffect(() => {
     generateRound();
-  }, [generateRound]);
+  }, []);
 
   useEffect(() => {
     if (selectedKorean && selectedArabic) {
@@ -104,6 +144,7 @@ const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
     setRound(1);
     setScore(0);
     setGameComplete(false);
+    setUsedIds(new Set()); // Reset used items for new game
     generateRound();
   };
 
