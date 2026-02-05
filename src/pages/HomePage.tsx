@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import EgyptMap from '@/components/maps/EgyptMap';
-import SouthKoreaMap from '@/components/maps/SouthKoreaMap';
 import ConnectionLine from '@/components/maps/ConnectionLine';
 import personEgyptianFlag from '@/assets/person-egyptian-flag.png';
 import personKoreanFlag from '@/assets/person-korean-flag.png';
@@ -118,13 +116,17 @@ const HomePage: React.FC = () => {
           transition={{ duration: 1, delay: 0.3 }}
         >
           <div className="relative">
-            <EgyptMap className="w-48 h-56 sm:w-64 sm:h-72 lg:w-80 lg:h-96" />
+            <img 
+              src="/images/egypt-map.png" 
+              alt="Egypt Map" 
+              className="w-48 sm:w-64 lg:w-80 h-auto object-contain drop-shadow-2xl"
+            />
             
             {/* Person with Egyptian flag */}
             <motion.img
               src={personEgyptianFlag}
               alt="Person with Egyptian Flag"
-              className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-2xl z-10"
+              className="absolute bottom-4 right-4 w-20 sm:w-28 lg:w-36 h-auto object-contain drop-shadow-2xl z-10"
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.5, duration: 0.8, type: 'spring' }}
@@ -268,13 +270,17 @@ const HomePage: React.FC = () => {
           transition={{ duration: 1, delay: 0.3 }}
         >
           <div className="relative">
-            <SouthKoreaMap className="w-44 h-56 sm:w-56 sm:h-72 lg:w-72 lg:h-96" />
+            <img 
+              src="/images/korea-map.png" 
+              alt="South Korea Map" 
+              className="w-40 sm:w-52 lg:w-72 h-auto object-contain drop-shadow-2xl"
+            />
             
             {/* Person with Korean flag */}
             <motion.img
               src={personKoreanFlag}
               alt="Person with Korean Flag"
-              className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-2xl z-10"
+              className="absolute bottom-4 left-4 w-20 sm:w-28 lg:w-36 h-auto object-contain drop-shadow-2xl z-10"
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.7, duration: 0.8, type: 'spring' }}
