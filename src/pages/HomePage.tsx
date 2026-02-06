@@ -119,14 +119,14 @@ const HomePage: React.FC = () => {
             <img 
               src="/images/egypt-map.png" 
               alt="Egypt Map" 
-              className="w-48 sm:w-64 lg:w-80 h-auto object-contain drop-shadow-2xl"
+              className="w-64 sm:w-80 lg:w-[400px] h-auto object-contain drop-shadow-2xl"
             />
             
             {/* Person with Egyptian flag */}
             <motion.img
               src={personEgyptianFlag}
               alt="Person with Egyptian Flag"
-              className="absolute bottom-4 right-4 w-20 sm:w-28 lg:w-36 h-auto object-contain drop-shadow-2xl z-10"
+              className="absolute bottom-4 right-4 w-24 sm:w-32 lg:w-44 h-auto object-contain drop-shadow-2xl z-10"
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.5, duration: 0.8, type: 'spring' }}
@@ -273,14 +273,14 @@ const HomePage: React.FC = () => {
             <img 
               src="/images/korea-map.png" 
               alt="South Korea Map" 
-              className="w-40 sm:w-52 lg:w-72 h-auto object-contain drop-shadow-2xl"
+              className="w-56 sm:w-72 lg:w-[380px] h-auto object-contain drop-shadow-2xl"
             />
             
             {/* Person with Korean flag */}
             <motion.img
               src={personKoreanFlag}
               alt="Person with Korean Flag"
-              className="absolute bottom-4 left-4 w-20 sm:w-28 lg:w-36 h-auto object-contain drop-shadow-2xl z-10"
+              className="absolute bottom-4 left-4 w-24 sm:w-32 lg:w-44 h-auto object-contain drop-shadow-2xl z-10"
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.7, duration: 0.8, type: 'spring' }}
