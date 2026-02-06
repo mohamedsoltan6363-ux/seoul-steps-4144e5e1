@@ -13,7 +13,8 @@ import ProfileStats from '@/components/ProfileStats';
 import AchievementsList from '@/components/AchievementsList';
 import IdVerification from '@/components/IdVerification';
 import CertificatePreview from '@/components/CertificatePreview';
-import { ArrowLeft, Settings, Mail, Edit2, Award } from 'lucide-react';
+import ReferralSystem from '@/components/ReferralSystem';
+import { ArrowLeft, Settings, Mail, Edit2, Award, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Profile: React.FC = () => {
@@ -25,7 +26,7 @@ const Profile: React.FC = () => {
   const { getDueCount, totalReviews, masteredCount } = useSpacedRepetition();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards' | 'verification' | 'certificate'>('stats');
+  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards' | 'verification' | 'certificate' | 'referral'>('stats');
   const [quizzesPassed, setQuizzesPassed] = useState(0);
 
   const isRTL = language === 'ar';
@@ -85,6 +86,7 @@ const Profile: React.FC = () => {
   const tabs = [
     { id: 'stats', label: isRTL ? 'الإحصائيات' : '통계' },
     { id: 'achievements', label: isRTL ? 'الإنجازات' : '업적' },
+    { id: 'referral', label: isRTL ? 'الإحالات' : '추천' },
     { id: 'streak', label: isRTL ? 'السلسلة' : '연속' },
     { id: 'rewards', label: isRTL ? 'المكافآت' : '보상' },
     { id: 'certificate', label: isRTL ? 'الشهادة' : '인증서' },
@@ -234,6 +236,10 @@ const Profile: React.FC = () => {
           
           {activeTab === 'verification' && (
             <IdVerification />
+          )}
+
+          {activeTab === 'referral' && (
+            <ReferralSystem />
           )}
         </motion.div>
       </main>

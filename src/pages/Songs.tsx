@@ -1,377 +1,379 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Music, Play, Pause, Volume2, Heart, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Play, Clock, Star, Film, Tv, Heart, Share2, Bookmark, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-interface Song {
+interface KoreanSeries {
   id: string;
   title: string;
-  titleArabic: string;
-  artist: string;
+  titleKr: string;
+  description: string;
+  thumbnail: string;
+  videoUrl: string;
+  duration: string;
+  rating: number;
+  episodes: number;
+  category: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  lyrics: {
-    korean: string;
-    romanized: string;
-    arabic: string;
-  }[];
-  vocabulary: {
-    korean: string;
-    romanized: string;
-    arabic: string;
-  }[];
 }
-
-const songs: Song[] = [
-  {
-    id: '1',
-    title: '학교 가는 길',
-    titleArabic: 'الطريق إلى المدرسة',
-    artist: 'أغنية تعليمية',
-    difficulty: 'beginner',
-    lyrics: [
-      { korean: '아침 일찍 일어나', romanized: 'achim iljjik ireonа', arabic: 'أستيقظ مبكراً في الصباح' },
-      { korean: '세수하고 밥 먹고', romanized: 'sesuhago bap meokgo', arabic: 'أغسل وجهي وآكل' },
-      { korean: '가방 메고 신발 신고', romanized: 'gabang mego sinbal singo', arabic: 'أحمل حقيبتي وألبس حذائي' },
-      { korean: '학교에 갑니다', romanized: 'hakgyoe gamnida', arabic: 'أذهب إلى المدرسة' },
-      { korean: '친구들을 만나서', romanized: 'chingudeureul mannaseo', arabic: 'ألتقي بأصدقائي' },
-      { korean: '같이 공부해요', romanized: 'gachi gongbuhaeyo', arabic: 'ندرس معاً' }
-    ],
-    vocabulary: [
-      { korean: '아침', romanized: 'achim', arabic: 'صباح' },
-      { korean: '학교', romanized: 'hakgyo', arabic: 'مدرسة' },
-      { korean: '친구', romanized: 'chingu', arabic: 'صديق' },
-      { korean: '가방', romanized: 'gabang', arabic: 'حقيبة' }
-    ]
-  },
-  {
-    id: '2',
-    title: '나의 가족',
-    titleArabic: 'عائلتي',
-    artist: 'أغنية تعليمية',
-    difficulty: 'beginner',
-    lyrics: [
-      { korean: '우리 가족 소개해요', romanized: 'uri gajok sogaehaeyo', arabic: 'أقدم عائلتي' },
-      { korean: '아버지 어머니', romanized: 'abeoji eomeoni', arabic: 'أبي وأمي' },
-      { korean: '형과 누나', romanized: 'hyeonggwa nuna', arabic: 'أخي الأكبر وأختي الكبرى' },
-      { korean: '동생도 있어요', romanized: 'dongsaengdo isseoyo', arabic: 'لدي أخ/أخت أصغر أيضاً' },
-      { korean: '할아버지 할머니', romanized: 'harabeoji halmeoni', arabic: 'جدي وجدتي' },
-      { korean: '모두 사랑해요', romanized: 'modu saranghaeyo', arabic: 'أحب الجميع' }
-    ],
-    vocabulary: [
-      { korean: '가족', romanized: 'gajok', arabic: 'عائلة' },
-      { korean: '아버지', romanized: 'abeoji', arabic: 'أب' },
-      { korean: '어머니', romanized: 'eomeoni', arabic: 'أم' },
-      { korean: '사랑', romanized: 'sarang', arabic: 'حب' }
-    ]
-  },
-  {
-    id: '3',
-    title: '숫자 노래',
-    titleArabic: 'أغنية الأرقام',
-    artist: 'أغنية تعليمية',
-    difficulty: 'beginner',
-    lyrics: [
-      { korean: '하나 둘 셋 넷 다섯', romanized: 'hana dul set net daseot', arabic: 'واحد اثنان ثلاثة أربعة خمسة' },
-      { korean: '여섯 일곱 여덟', romanized: 'yeoseot ilgop yeodeol', arabic: 'ستة سبعة ثمانية' },
-      { korean: '아홉 열', romanized: 'ahop yeol', arabic: 'تسعة عشرة' },
-      { korean: '숫자를 세어 봐요', romanized: 'sutjareul seeo bwayo', arabic: 'لنعد الأرقام' },
-      { korean: '하나부터 열까지', romanized: 'hanabутео yeolkkaji', arabic: 'من واحد إلى عشرة' },
-      { korean: '잘 알았어요', romanized: 'jal arasseoyo', arabic: 'فهمت جيداً' }
-    ],
-    vocabulary: [
-      { korean: '하나', romanized: 'hana', arabic: 'واحد' },
-      { korean: '둘', romanized: 'dul', arabic: 'اثنان' },
-      { korean: '열', romanized: 'yeol', arabic: 'عشرة' },
-      { korean: '숫자', romanized: 'sutja', arabic: 'رقم' }
-    ]
-  },
-  {
-    id: '4',
-    title: '날씨 노래',
-    titleArabic: 'أغنية الطقس',
-    artist: 'أغنية تعليمية',
-    difficulty: 'intermediate',
-    lyrics: [
-      { korean: '오늘 날씨가 어때요?', romanized: 'oneul nalssiga eottaeyo?', arabic: 'كيف الطقس اليوم؟' },
-      { korean: '맑고 화창해요', romanized: 'malkgo hwachanhaeyo', arabic: 'صافٍ ومشرق' },
-      { korean: '비가 와요 우산 써요', romanized: 'biga wayo usan sseoyo', arabic: 'تمطر، أستخدم مظلة' },
-      { korean: '눈이 와요 춥네요', romanized: 'nuni wayo chupneyo', arabic: 'تثلج، الجو بارد' },
-      { korean: '바람이 불어요', romanized: 'barami bureoyo', arabic: 'الرياح تهب' },
-      { korean: '날씨가 좋아요', romanized: 'nalssiga joayo', arabic: 'الطقس جميل' }
-    ],
-    vocabulary: [
-      { korean: '날씨', romanized: 'nalssi', arabic: 'طقس' },
-      { korean: '비', romanized: 'bi', arabic: 'مطر' },
-      { korean: '눈', romanized: 'nun', arabic: 'ثلج' },
-      { korean: '바람', romanized: 'baram', arabic: 'رياح' }
-    ]
-  },
-  {
-    id: '5',
-    title: '한글 노래',
-    titleArabic: 'أغنية الهانغول',
-    artist: 'أغنية تعليمية',
-    difficulty: 'beginner',
-    lyrics: [
-      { korean: '가나다라 마바사', romanized: 'ga na da ra ma ba sa', arabic: 'جا نا دا را ما با سا' },
-      { korean: '아자차카 타파하', romanized: 'a ja cha ka ta pa ha', arabic: 'آ جا تشا كا تا با ها' },
-      { korean: '한글을 배워요', romanized: 'hangeureul baeweoyo', arabic: 'نتعلم الهانغول' },
-      { korean: '쉽고 재미있어요', romanized: 'swipgo jaemiisseoyo', arabic: 'سهل وممتع' },
-      { korean: '매일 연습해요', romanized: 'maeil yeonseubhaeyo', arabic: 'نتمرن كل يوم' },
-      { korean: '한글 최고예요', romanized: 'hangeul choegoyeyo', arabic: 'الهانغول الأفضل' }
-    ],
-    vocabulary: [
-      { korean: '한글', romanized: 'hangeul', arabic: 'الهانغول' },
-      { korean: '배우다', romanized: 'baeuda', arabic: 'يتعلم' },
-      { korean: '쉽다', romanized: 'swipda', arabic: 'سهل' },
-      { korean: '연습', romanized: 'yeonseup', arabic: 'تمرين' }
-    ]
-  }
-];
 
 const Songs: React.FC = () => {
   const navigate = useNavigate();
   const { language } = useLanguage();
-  const isArabic = language === 'ar';
-  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentLine, setCurrentLine] = useState(0);
+  const isRTL = language === 'ar';
+  const [selectedSeries, setSelectedSeries] = useState<KoreanSeries | null>(null);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-  const speakLyric = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ko-KR';
-    utterance.rate = 0.8;
-    speechSynthesis.speak(utterance);
+  const categories = [
+    { id: 'all', label: isRTL ? 'الكل' : '전체' },
+    { id: 'drama', label: isRTL ? 'دراما' : '드라마' },
+    { id: 'learning', label: isRTL ? 'تعليمي' : '학습' },
+    { id: 'conversation', label: isRTL ? 'محادثات' : '대화' },
+    { id: 'culture', label: isRTL ? 'ثقافة' : '문화' },
+  ];
+
+  const koreanSeries: KoreanSeries[] = [
+    {
+      id: '1',
+      title: isRTL ? 'تعلم الكورية - المحادثات اليومية' : 'Learn Korean - Daily Conversations',
+      titleKr: '한국어 배우기 - 일상 대화',
+      description: isRTL 
+        ? 'تعلم العبارات والمحادثات الأساسية المستخدمة في الحياة اليومية الكورية'
+        : '한국 일상생활에서 사용되는 기본 표현과 대화를 배우세요',
+      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/0l6HmEF6nQQ',
+      duration: '15:30',
+      rating: 4.8,
+      episodes: 24,
+      category: 'learning',
+      difficulty: 'beginner'
+    },
+    {
+      id: '2',
+      title: isRTL ? 'مسلسل كوري مترجم - مستوى مبتدئ' : 'Korean Drama - Beginner Level',
+      titleKr: '한국 드라마 - 초급',
+      description: isRTL 
+        ? 'شاهد مقاطع من المسلسلات الكورية الشهيرة مع ترجمة عربية وكورية'
+        : '인기 한국 드라마 클립을 아랍어와 한국어 자막과 함께 시청하세요',
+      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/3P1CnWI62Ik',
+      duration: '22:45',
+      rating: 4.9,
+      episodes: 16,
+      category: 'drama',
+      difficulty: 'beginner'
+    },
+    {
+      id: '3',
+      title: isRTL ? 'نطق اللغة الكورية' : 'Korean Pronunciation',
+      titleKr: '한국어 발음',
+      description: isRTL 
+        ? 'تعلم النطق الصحيح للحروف والكلمات الكورية من متحدثين أصليين'
+        : '원어민과 함께 한글과 단어의 올바른 발음을 배우세요',
+      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/YTprR3Ud9HA',
+      duration: '18:20',
+      rating: 4.7,
+      episodes: 12,
+      category: 'learning',
+      difficulty: 'beginner'
+    },
+    {
+      id: '4',
+      title: isRTL ? 'الثقافة الكورية' : 'Korean Culture',
+      titleKr: '한국 문화',
+      description: isRTL 
+        ? 'استكشف الثقافة والتقاليد الكورية من خلال فيديوهات تعليمية ممتعة'
+        : '재미있는 교육 영상을 통해 한국 문화와 전통을 탐험하세요',
+      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/kV8v2GKC8WA',
+      duration: '25:10',
+      rating: 4.6,
+      episodes: 20,
+      category: 'culture',
+      difficulty: 'intermediate'
+    },
+    {
+      id: '5',
+      title: isRTL ? 'محادثات متقدمة' : 'Advanced Conversations',
+      titleKr: '고급 대화',
+      description: isRTL 
+        ? 'محادثات متقدمة للمتعلمين ذوي المستوى المتوسط والمتقدم'
+        : '중급 및 고급 학습자를 위한 고급 대화',
+      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/2N8urTqTxhw',
+      duration: '30:00',
+      rating: 4.5,
+      episodes: 15,
+      category: 'conversation',
+      difficulty: 'advanced'
+    },
+    {
+      id: '6',
+      title: isRTL ? 'K-Drama مقاطع مترجمة' : 'K-Drama Translated Clips',
+      titleKr: 'K-드라마 번역 클립',
+      description: isRTL 
+        ? 'مشاهد مختارة من أشهر المسلسلات الكورية مع شرح اللغة'
+        : '인기 한국 드라마의 선별된 장면과 언어 설명',
+      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
+      videoUrl: 'https://www.youtube.com/embed/GTIFZBsd4mk',
+      duration: '28:15',
+      rating: 4.9,
+      episodes: 30,
+      category: 'drama',
+      difficulty: 'intermediate'
+    },
+  ];
+
+  const filteredSeries = activeCategory === 'all' 
+    ? koreanSeries 
+    : koreanSeries.filter(s => s.category === activeCategory);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev => 
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    );
   };
 
-  const playFullSong = (song: Song) => {
-    setIsPlaying(true);
-    let lineIndex = 0;
-    
-    const speakNextLine = () => {
-      if (lineIndex < song.lyrics.length) {
-        setCurrentLine(lineIndex);
-        const utterance = new SpeechSynthesisUtterance(song.lyrics[lineIndex].korean);
-        utterance.lang = 'ko-KR';
-        utterance.rate = 0.7;
-        utterance.onend = () => {
-          lineIndex++;
-          setTimeout(speakNextLine, 500);
-        };
-        speechSynthesis.speak(utterance);
-      } else {
-        setIsPlaying(false);
-        setCurrentLine(0);
-      }
-    };
-    
-    speakNextLine();
-  };
-
-  const stopPlaying = () => {
-    speechSynthesis.cancel();
-    setIsPlaying(false);
-    setCurrentLine(0);
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
-      case 'intermediate': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
-      case 'advanced': return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
-      default: return 'bg-muted';
+  const getDifficultyColor = (diff: string) => {
+    switch(diff) {
+      case 'beginner': return 'bg-green-500/20 text-green-600';
+      case 'intermediate': return 'bg-amber-500/20 text-amber-600';
+      case 'advanced': return 'bg-red-500/20 text-red-600';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
-  const getDifficultyLabel = (difficulty: string) => {
-    if (isArabic) {
-      switch (difficulty) {
+  const getDifficultyLabel = (diff: string) => {
+    if (isRTL) {
+      switch(diff) {
         case 'beginner': return 'مبتدئ';
         case 'intermediate': return 'متوسط';
         case 'advanced': return 'متقدم';
-        default: return difficulty;
+        default: return diff;
       }
     }
-    return difficulty;
+    switch(diff) {
+      case 'beginner': return '초급';
+      case 'intermediate': return '중급';
+      case 'advanced': return '고급';
+      default: return diff;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-pink-500/5" dir={isArabic ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-background pb-20 md:pb-0" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-effect border-b border-border">
+      <header className="sticky top-0 z-50 glass-effect border-b border-border/50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Button variant="ghost" onClick={() => navigate('/dashboard')} className="gap-2">
-            {isArabic ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            {isArabic ? 'العودة' : '돌아가기'}
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/dashboard')}
+            className="gap-2"
+          >
+            <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
+            {isRTL ? 'العودة' : '돌아가기'}
           </Button>
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-pink-500/20 to-rose-500/20">
-              <Music className="w-6 h-6 text-pink-500" />
-            </div>
-            <h1 className="text-xl font-bold">
-              {isArabic ? 'الأغاني الكورية' : '한국어 노래'}
+          <div className="flex items-center gap-2">
+            <Tv className="w-6 h-6 text-primary" />
+            <h1 className="text-lg font-bold">
+              {isRTL ? 'المسلسلات الكورية' : '한국 드라마'}
             </h1>
           </div>
+          <div className="w-20" />
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* Welcome message */}
-        <div className="text-center mb-8">
-          <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
-            <Heart className="w-4 h-4 text-pink-500" />
-            {isArabic ? 'محمد أيمن يرحب بك - تعلم الكورية بالأغاني' : 'Mohamed Ayman welcomes you - 노래로 한국어 배우기'}
-          </p>
+      <main className="container mx-auto px-4 py-6 max-w-7xl">
+        {/* Hero Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 p-8"
+        >
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-3">
+              <Film className="w-5 h-5 text-white/80" />
+              <span className="text-white/80 text-sm">
+                {isRTL ? 'تعلم من خلال المشاهدة' : '시청하며 배우기'}
+              </span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+              {isRTL ? 'تعلم الكورية من المسلسلات' : '드라마로 한국어 배우기'}
+            </h2>
+            <p className="text-white/80 max-w-xl">
+              {isRTL 
+                ? 'شاهد مقاطع فيديو تعليمية من المسلسلات الكورية مع ترجمة عربية وكورية'
+                : '아랍어와 한국어 자막이 있는 한국 드라마 교육 클립을 시청하세요'}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Categories */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+          {categories.map((cat) => (
+            <motion.button
+              key={cat.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+                activeCategory === cat.id
+                  ? 'bg-primary text-primary-foreground shadow-lg'
+                  : 'bg-muted hover:bg-muted/80'
+              }`}
+            >
+              {cat.label}
+            </motion.button>
+          ))}
         </div>
 
-        <AnimatePresence mode="wait">
-          {!selectedSong ? (
-            // Songs List
+        {/* Series Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSeries.map((series, index) => (
             <motion.div
-              key="songs-list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid gap-4"
+              key={series.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="group cursor-pointer"
+              onClick={() => setSelectedSeries(series)}
             >
-              {songs.map((song, index) => (
-                <motion.div
-                  key={song.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card 
-                    className="cursor-pointer hover:border-pink-500/50 transition-all hover:shadow-lg hover:shadow-pink-500/10"
-                    onClick={() => setSelectedSong(song)}
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg">
-                          <Music className="w-8 h-8 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-bold text-lg">{song.title}</h3>
-                          <p className="text-muted-foreground text-sm">{song.titleArabic}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <span className={`px-2 py-0.5 rounded-full text-xs border ${getDifficultyColor(song.difficulty)}`}>
-                              {getDifficultyLabel(song.difficulty)}
-                            </span>
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
-                              <Star className="w-3 h-3" />
-                              {song.lyrics.length} {isArabic ? 'سطر' : '줄'}
-                            </span>
-                          </div>
-                        </div>
-                        <Play className="w-6 h-6 text-pink-500" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            // Song Detail
-            <motion.div
-              key="song-detail"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-            >
-              <Button 
-                variant="ghost" 
-                onClick={() => { setSelectedSong(null); stopPlaying(); }}
-                className="mb-4 gap-2"
-              >
-                {isArabic ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-                {isArabic ? 'العودة للقائمة' : '목록으로'}
-              </Button>
-
-              {/* Song Header */}
-              <Card className="mb-6 overflow-hidden">
-                <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-6 text-white">
-                  <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                      <Music className="w-10 h-10" />
-                    </div>
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold">{selectedSong.title}</h2>
-                      <p className="text-white/80">{selectedSong.titleArabic}</p>
-                    </div>
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      onClick={() => isPlaying ? stopPlaying() : playFullSong(selectedSong)}
-                      className="rounded-full w-14 h-14"
+              <div className="relative rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all hover:shadow-xl">
+                {/* Thumbnail */}
+                <div className="relative aspect-video overflow-hidden">
+                  <img 
+                    src={series.thumbnail} 
+                    alt={series.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  
+                  {/* Play Button */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl"
                     >
-                      {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
-                    </Button>
+                      <Play className="w-7 h-7 text-primary fill-primary ml-1" />
+                    </motion.div>
+                  </div>
+
+                  {/* Duration */}
+                  <div className="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-black/70 text-white text-xs flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {series.duration}
+                  </div>
+
+                  {/* Favorite Button */}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); toggleFavorite(series.id); }}
+                    className="absolute top-3 right-3 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+                  >
+                    <Heart 
+                      className={`w-4 h-4 ${favorites.includes(series.id) ? 'text-red-500 fill-red-500' : 'text-white'}`} 
+                    />
+                  </button>
+
+                  {/* Difficulty Badge */}
+                  <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-medium ${getDifficultyColor(series.difficulty)}`}>
+                    {getDifficultyLabel(series.difficulty)}
                   </div>
                 </div>
-              </Card>
 
-              {/* Lyrics */}
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Volume2 className="w-5 h-5 text-pink-500" />
-                    {isArabic ? 'كلمات الأغنية' : '가사'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {selectedSong.lyrics.map((line, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0 }}
-                      animate={{ 
-                        opacity: 1,
-                        scale: isPlaying && currentLine === index ? 1.02 : 1,
-                        backgroundColor: isPlaying && currentLine === index ? 'hsl(var(--primary) / 0.1)' : 'transparent'
-                      }}
-                      className={`p-4 rounded-xl cursor-pointer hover:bg-muted transition-all ${
-                        isPlaying && currentLine === index ? 'ring-2 ring-primary' : ''
-                      }`}
-                      onClick={() => speakLyric(line.korean)}
-                    >
-                      <p className="font-korean text-xl font-bold mb-1">{line.korean}</p>
-                      <p className="text-primary text-sm mb-1">{line.romanized}</p>
-                      <p className="text-muted-foreground">{line.arabic}</p>
-                    </motion.div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Vocabulary */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-amber-500" />
-                    {isArabic ? 'المفردات المهمة' : '중요 단어'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    {selectedSong.vocabulary.map((word, index) => (
-                      <div
-                        key={index}
-                        className="p-3 rounded-xl bg-muted/50 cursor-pointer hover:bg-primary/10 transition-colors"
-                        onClick={() => speakLyric(word.korean)}
-                      >
-                        <p className="font-korean text-lg font-bold">{word.korean}</p>
-                        <p className="text-xs text-primary">{word.romanized}</p>
-                        <p className="text-sm text-muted-foreground">{word.arabic}</p>
-                      </div>
-                    ))}
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{series.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{series.description}</p>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <span className="text-sm font-medium">{series.rating}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {series.episodes} {isRTL ? 'حلقة' : '에피소드'}
+                    </span>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
+          ))}
+        </div>
       </main>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedSeries && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setSelectedSeries(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-4xl bg-card rounded-3xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Video Player */}
+              <div className="relative aspect-video bg-black">
+                <iframe
+                  src={selectedSeries.videoUrl}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <button
+                  onClick={() => setSelectedSeries(null)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+
+              {/* Info */}
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h2 className="text-xl font-bold mb-1">{selectedSeries.title}</h2>
+                    <p className="text-sm text-primary font-korean">{selectedSeries.titleKr}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="p-2 rounded-xl bg-muted hover:bg-muted/80">
+                      <Bookmark className="w-5 h-5" />
+                    </button>
+                    <button className="p-2 rounded-xl bg-muted hover:bg-muted/80">
+                      <Share2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+                <p className="text-muted-foreground text-sm">{selectedSeries.description}</p>
+                
+                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <span className="font-medium">{selectedSeries.rating}</span>
+                  </div>
+                  <span className="text-muted-foreground">•</span>
+                  <span className="text-sm">{selectedSeries.episodes} {isRTL ? 'حلقة' : '에피소드'}</span>
+                  <span className="text-muted-foreground">•</span>
+                  <span className={`px-2 py-0.5 rounded-lg text-xs ${getDifficultyColor(selectedSeries.difficulty)}`}>
+                    {getDifficultyLabel(selectedSeries.difficulty)}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

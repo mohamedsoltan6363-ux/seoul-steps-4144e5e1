@@ -2,13 +2,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SoundSettingsProvider } from "@/contexts/SoundSettingsContext";
 import { AchievementProvider, useAchievements } from "@/hooks/useAchievements";
 import AchievementNotification from "@/components/AchievementNotification";
 import WelcomeModal from "@/components/WelcomeModal";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import AIChatButton from "@/components/AIChatButton";
 import HomePage from "./pages/HomePage";
 import Onboarding from "./pages/Onboarding";
 import Auth from "./pages/Auth";
@@ -29,6 +31,7 @@ import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,27 @@ const AchievementOverlay = () => {
       onClose={clearAchievement} 
     />
   );
+};
+
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
+
+// Show AI Chat button only on dashboard pages
+const ConditionalAIChatButton = () => {
+  const { pathname } = useLocation();
+  const showOnPaths = ['/dashboard', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs'];
+  
+  if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
+  
+  return <AIChatButton />;
 };
 
 const App = () => (
@@ -54,6 +78,7 @@ const App = () => (
                 <Sonner />
                 <AchievementOverlay />
                 <WelcomeModal />
+                <ScrollToTop />
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/onboarding" element={<Onboarding />} />
@@ -76,6 +101,8 @@ const App = () => (
                   <Route path="/reports" element={<Reports />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+                <MobileBottomNav />
+                <ConditionalAIChatButton />
               </TooltipProvider>
             </AchievementProvider>
           </SoundSettingsProvider>
