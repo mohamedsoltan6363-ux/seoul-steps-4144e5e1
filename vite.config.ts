@@ -1,12 +1,20 @@
-import userConfig from './vite.user-config'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 
-export default {
-  ...userConfig,
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
+  },
   server: {
-    ...(userConfig.server || {}),
+    host: '::',
+    port: 8080,
     allowedHosts: [
-      ...(userConfig.server?.allowedHosts || []),
       '.vusercontent.net',
       '.vercel.run',
       '.localhost:3001',
@@ -14,12 +22,6 @@ export default {
     fs: {
       strict: false,
     },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
   optimizeDeps: {
     include: [
@@ -32,6 +34,5 @@ export default {
       '@radix-ui/react-tooltip',
       '@radix-ui/react-toast',
     ],
-    exclude: [],
   },
-}
+})
