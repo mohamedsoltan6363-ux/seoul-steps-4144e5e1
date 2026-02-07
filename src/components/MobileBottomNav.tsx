@@ -49,79 +49,64 @@ const MobileBottomNav: React.FC = () => {
     <motion.nav
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 35 }}
       className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
     >
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-background/90 backdrop-blur-xl border-t border-border/40" />
+      {/* Premium Background */}
+      <div className="absolute inset-0 bg-white/95 backdrop-blur-md border-t border-slate-200/50" />
       
       {/* Navigation Items Container */}
-      <div className="relative flex items-end justify-around px-2 py-3 safe-area-pb">
+      <div className="relative flex items-center justify-around px-3 py-2.5 safe-area-pb">
         {navItems.map((item, index) => {
           const active = isActive(item.path);
           return (
             <motion.button
               key={item.path}
               onClick={() => navigate(item.path)}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ y: -1 }}
-              initial={{ opacity: 0, y: 20 }}
+              whileTap={{ scale: 0.92 }}
+              whileHover={{ y: -2 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 type: 'spring',
-                stiffness: 400,
+                stiffness: 380,
                 damping: 40,
-                delay: index * 0.05,
+                delay: index * 0.04,
               }}
-              className="flex flex-col items-center gap-1.5 py-2 px-2 relative group transition-all duration-200"
+              className="relative w-full h-20 flex flex-col items-center justify-center gap-1 rounded-xl transition-all duration-150 group"
             >
-              {/* Smooth background on active */}
+              {/* Active background */}
               {active && (
                 <motion.div
-                  layoutId="activeNavBg"
-                  className="absolute inset-0 bg-primary/8 rounded-2xl"
+                  layoutId="navActiveBg"
+                  className="absolute inset-0 bg-blue-50 rounded-xl"
                   transition={{ type: 'spring', stiffness: 500, damping: 50 }}
                 />
               )}
 
-              {/* Icon */}
+              {/* Icon with smooth animation */}
               <motion.div
                 className="relative z-10"
                 animate={{
-                  scale: active ? 1.15 : 1,
+                  scale: active ? 1.2 : 1,
+                  color: active ? 'rgb(37, 99, 235)' : 'rgb(107, 114, 128)'
                 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 40 }}
               >
-                <item.icon 
-                  className={`w-6 h-6 transition-colors duration-200 ${
-                    active 
-                      ? 'text-primary' 
-                      : 'text-muted-foreground group-hover:text-foreground'
-                  }`}
-                />
+                <item.icon className="w-6 h-6" />
               </motion.div>
 
-              {/* Label - only show if active */}
-              {active && (
-                <motion.span 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-                  className="text-xs font-medium text-primary whitespace-nowrap"
-                >
-                  {item.label}
-                </motion.span>
-              )}
-
-              {/* Indicator dot */}
-              {active && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="w-1.5 h-1.5 bg-primary rounded-full"
-                  transition={{ type: 'spring', stiffness: 500, damping: 50 }}
-                />
-              )}
+              {/* Label */}
+              <motion.span 
+                className="text-xs font-semibold transition-colors duration-200"
+                animate={{
+                  color: active ? 'rgb(37, 99, 235)' : 'rgb(107, 114, 128)',
+                  opacity: 1,
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                {item.label}
+              </motion.span>
             </motion.button>
           );
         })}

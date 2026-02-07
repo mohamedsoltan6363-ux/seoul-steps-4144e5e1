@@ -31,6 +31,7 @@ import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
 import KoreanSeries from "./pages/KoreanSeries";
 import Reports from "./pages/Reports";
+import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -60,7 +61,7 @@ const ScrollToTop = () => {
 // Show AI Chat button only on dashboard pages
 const ConditionalAIChatButton = () => {
   const { pathname } = useLocation();
-  const showOnPaths = ['/dashboard', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
+  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
   
   if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
   
@@ -85,6 +86,7 @@ const App = () => (
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/explore" element={<Explore />} />
                   <Route path="/learn/:level" element={<Learn />} />
                   <Route path="/review" element={<Review />} />
                   <Route path="/games" element={<Games />} />
