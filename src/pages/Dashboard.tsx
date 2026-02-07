@@ -594,6 +594,9 @@ const Dashboard: React.FC = () => {
           </motion.div>
         )}
       </motion.main>
+      
+      {/* Padding for bottom navigation on mobile */}
+      <div className="h-24 md:h-0" />
     </div>
   );
 };
