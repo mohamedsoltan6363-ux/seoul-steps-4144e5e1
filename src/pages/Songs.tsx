@@ -2,135 +2,141 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Play, Clock, Star, Film, Tv, Heart, Share2, Bookmark, X } from 'lucide-react';
+import { ArrowLeft, Play, Music, Heart, Clock, Star, X, Pause, SkipForward, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface KoreanSeries {
+interface Song {
   id: string;
   title: string;
   titleKr: string;
-  description: string;
+  artist: string;
+  artistKr: string;
   thumbnail: string;
-  videoUrl: string;
+  videoId: string;
   duration: string;
-  rating: number;
-  episodes: number;
-  category: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  category: string;
+  lyrics?: string;
 }
 
 const Songs: React.FC = () => {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const isRTL = language === 'ar';
-  const [selectedSeries, setSelectedSeries] = useState<KoreanSeries | null>(null);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const categories = [
     { id: 'all', label: isRTL ? 'الكل' : '전체' },
-    { id: 'drama', label: isRTL ? 'دراما' : '드라마' },
-    { id: 'learning', label: isRTL ? 'تعليمي' : '학습' },
-    { id: 'conversation', label: isRTL ? 'محادثات' : '대화' },
-    { id: 'culture', label: isRTL ? 'ثقافة' : '문화' },
+    { id: 'kpop', label: 'K-Pop' },
+    { id: 'ballad', label: isRTL ? 'بالاد' : '발라드' },
+    { id: 'children', label: isRTL ? 'أطفال' : '동요' },
+    { id: 'ost', label: 'OST' },
   ];
 
-  const koreanSeries: KoreanSeries[] = [
+  const songs: Song[] = [
     {
-      id: '1',
-      title: isRTL ? 'تعلم الكورية - المحادثات اليومية' : 'Learn Korean - Daily Conversations',
-      titleKr: '한국어 배우기 - 일상 대화',
-      description: isRTL 
-        ? 'تعلم العبارات والمحادثات الأساسية المستخدمة في الحياة اليومية الكورية'
-        : '한국 일상생활에서 사용되는 기본 표현과 대화를 배우세요',
-      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/0l6HmEF6nQQ',
-      duration: '15:30',
-      rating: 4.8,
-      episodes: 24,
-      category: 'learning',
-      difficulty: 'beginner'
+      id: 's1',
+      title: isRTL ? 'أغنية الحروف الكورية' : 'Korean Alphabet Song',
+      titleKr: '한글 노래',
+      artist: isRTL ? 'تعليمي' : 'Educational',
+      artistKr: '교육용',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=225&fit=crop',
+      videoId: 'TYMahTwqo2Y',
+      duration: '3:45',
+      difficulty: 'beginner',
+      category: 'children',
     },
     {
-      id: '2',
-      title: isRTL ? 'مسلسل كوري مترجم - مستوى مبتدئ' : 'Korean Drama - Beginner Level',
-      titleKr: '한국 드라마 - 초급',
-      description: isRTL 
-        ? 'شاهد مقاطع من المسلسلات الكورية الشهيرة مع ترجمة عربية وكورية'
-        : '인기 한국 드라마 클립을 아랍어와 한국어 자막과 함께 시청하세요',
-      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/3P1CnWI62Ik',
-      duration: '22:45',
-      rating: 4.9,
-      episodes: 16,
-      category: 'drama',
-      difficulty: 'beginner'
+      id: 's2',
+      title: isRTL ? 'ثلاث دببة - أغنية أطفال كورية' : 'Three Bears - Korean Children Song',
+      titleKr: '곰 세 마리',
+      artist: isRTL ? 'أغاني أطفال' : 'Children Songs',
+      artistKr: '동요',
+      thumbnail: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=225&fit=crop',
+      videoId: 'gomhS-gIH1o',
+      duration: '2:30',
+      difficulty: 'beginner',
+      category: 'children',
     },
     {
-      id: '3',
-      title: isRTL ? 'نطق اللغة الكورية' : 'Korean Pronunciation',
-      titleKr: '한국어 발음',
-      description: isRTL 
-        ? 'تعلم النطق الصحيح للحروف والكلمات الكورية من متحدثين أصليين'
-        : '원어민과 함께 한글과 단어의 올바른 발음을 배우세요',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/YTprR3Ud9HA',
-      duration: '18:20',
-      rating: 4.7,
-      episodes: 12,
-      category: 'learning',
-      difficulty: 'beginner'
+      id: 's3',
+      title: isRTL ? 'ربيع ربيع ربيع' : 'Spring Spring Spring',
+      titleKr: '봄봄봄',
+      artist: 'Roy Kim',
+      artistKr: '로이킴',
+      thumbnail: 'https://images.unsplash.com/photo-1462275646964-a0e3c11f18a6?w=400&h=225&fit=crop',
+      videoId: 'k3-BDy5qMSI',
+      duration: '4:12',
+      difficulty: 'intermediate',
+      category: 'ballad',
     },
     {
-      id: '4',
-      title: isRTL ? 'الثقافة الكورية' : 'Korean Culture',
-      titleKr: '한국 문화',
-      description: isRTL 
-        ? 'استكشف الثقافة والتقاليد الكورية من خلال فيديوهات تعليمية ممتعة'
-        : '재미있는 교육 영상을 통해 한국 문화와 전통을 탐험하세요',
-      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/kV8v2GKC8WA',
-      duration: '25:10',
-      rating: 4.6,
-      episodes: 20,
-      category: 'culture',
-      difficulty: 'intermediate'
+      id: 's4',
+      title: isRTL ? 'Dynamite' : 'Dynamite',
+      titleKr: '다이너마이트',
+      artist: 'BTS',
+      artistKr: '방탄소년단',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=225&fit=crop',
+      videoId: 'gdZLi9oWNZg',
+      duration: '3:43',
+      difficulty: 'intermediate',
+      category: 'kpop',
     },
     {
-      id: '5',
-      title: isRTL ? 'محادثات متقدمة' : 'Advanced Conversations',
-      titleKr: '고급 대화',
-      description: isRTL 
-        ? 'محادثات متقدمة للمتعلمين ذوي المستوى المتوسط والمتقدم'
-        : '중급 및 고급 학습자를 위한 고급 대화',
-      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/2N8urTqTxhw',
-      duration: '30:00',
-      rating: 4.5,
-      episodes: 15,
-      category: 'conversation',
-      difficulty: 'advanced'
+      id: 's5',
+      title: isRTL ? 'أغنية الأرقام الكورية' : 'Korean Numbers Song',
+      titleKr: '숫자 노래',
+      artist: isRTL ? 'تعليمي' : 'Educational',
+      artistKr: '교육용',
+      thumbnail: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=225&fit=crop',
+      videoId: 'dBUGfs5VUZs',
+      duration: '3:15',
+      difficulty: 'beginner',
+      category: 'children',
     },
     {
-      id: '6',
-      title: isRTL ? 'K-Drama مقاطع مترجمة' : 'K-Drama Translated Clips',
-      titleKr: 'K-드라마 번역 클립',
-      description: isRTL 
-        ? 'مشاهد مختارة من أشهر المسلسلات الكورية مع شرح اللغة'
-        : '인기 한국 드라마의 선별된 장면과 언어 설명',
-      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
-      videoUrl: 'https://www.youtube.com/embed/GTIFZBsd4mk',
-      duration: '28:15',
-      rating: 4.9,
-      episodes: 30,
-      category: 'drama',
-      difficulty: 'intermediate'
+      id: 's6',
+      title: isRTL ? 'أغنية أيام الأسبوع' : 'Days of the Week Song',
+      titleKr: '요일 노래',
+      artist: isRTL ? 'تعليمي' : 'Educational',
+      artistKr: '교육용',
+      thumbnail: 'https://images.unsplash.com/photo-1458560871784-56d23406c091?w=400&h=225&fit=crop',
+      videoId: 'K2yG4iMD1M4',
+      duration: '2:58',
+      difficulty: 'beginner',
+      category: 'children',
+    },
+    {
+      id: 's7',
+      title: isRTL ? 'ماي ديستني - OST' : 'My Destiny - OST',
+      titleKr: '마이 데스티니',
+      artist: 'Lyn',
+      artistKr: '린',
+      thumbnail: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=225&fit=crop',
+      videoId: 'KSzpMilfNJo',
+      duration: '4:25',
+      difficulty: 'advanced',
+      category: 'ost',
+    },
+    {
+      id: 's8',
+      title: isRTL ? 'لوف شوت' : 'Love Shot',
+      titleKr: '러브 샷',
+      artist: 'EXO',
+      artistKr: '엑소',
+      thumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=225&fit=crop',
+      videoId: 'pSudEWBAYRE',
+      duration: '3:33',
+      difficulty: 'intermediate',
+      category: 'kpop',
     },
   ];
 
-  const filteredSeries = activeCategory === 'all' 
-    ? koreanSeries 
-    : koreanSeries.filter(s => s.category === activeCategory);
+  const filteredSongs = activeCategory === 'all' 
+    ? songs 
+    : songs.filter(s => s.category === activeCategory);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => 
@@ -167,7 +173,7 @@ const Songs: React.FC = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-effect border-b border-border/50">
+      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button 
             variant="ghost" 
@@ -178,9 +184,9 @@ const Songs: React.FC = () => {
             {isRTL ? 'العودة' : '돌아가기'}
           </Button>
           <div className="flex items-center gap-2">
-            <Tv className="w-6 h-6 text-primary" />
+            <Music className="w-6 h-6 text-primary" />
             <h1 className="text-lg font-bold">
-              {isRTL ? 'المسلسلات الكورية' : '한국 드라마'}
+              {isRTL ? 'الأغاني الكورية' : '한국 노래'}
             </h1>
           </div>
           <div className="w-20" />
@@ -192,23 +198,22 @@ const Songs: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 p-8"
+          className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 p-8"
         >
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
-              <Film className="w-5 h-5 text-white/80" />
+              <Music className="w-5 h-5 text-white/80" />
               <span className="text-white/80 text-sm">
-                {isRTL ? 'تعلم من خلال المشاهدة' : '시청하며 배우기'}
+                {isRTL ? 'تعلم من خلال الأغاني' : '노래로 배우기'}
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              {isRTL ? 'تعلم الكورية من المسلسلات' : '드라마로 한국어 배우기'}
+              {isRTL ? 'تعلم الكورية بالأغاني' : '노래로 한국어 배우기'}
             </h2>
             <p className="text-white/80 max-w-xl">
               {isRTL 
-                ? 'شاهد مقاطع فيديو تعليمية من المسلسلات الكورية مع ترجمة عربية وكورية'
-                : '아랍어와 한국어 자막이 있는 한국 드라마 교육 클립을 시청하세요'}
+                ? 'استمع إلى الأغاني الكورية الشهيرة وتعلم المفردات والنطق الصحيح'
+                : '인기 한국 노래를 듣고 어휘와 올바른 발음을 배우세요'}
             </p>
           </div>
         </motion.div>
@@ -232,72 +237,57 @@ const Songs: React.FC = () => {
           ))}
         </div>
 
-        {/* Series Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSeries.map((series, index) => (
+        {/* Songs Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filteredSongs.map((song, index) => (
             <motion.div
-              key={series.id}
+              key={song.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.05 }}
               className="group cursor-pointer"
-              onClick={() => setSelectedSeries(series)}
+              onClick={() => setSelectedSong(song)}
             >
               <div className="relative rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all hover:shadow-xl">
-                {/* Thumbnail */}
                 <div className="relative aspect-video overflow-hidden">
                   <img 
-                    src={series.thumbnail} 
-                    alt={series.title}
+                    src={song.thumbnail} 
+                    alt={song.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   
-                  {/* Play Button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <motion.div 
                       whileHover={{ scale: 1.1 }}
-                      className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl"
+                      className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-xl"
                     >
-                      <Play className="w-7 h-7 text-primary fill-primary ml-1" />
+                      <Play className="w-6 h-6 text-primary fill-primary ml-1" />
                     </motion.div>
                   </div>
 
-                  {/* Duration */}
                   <div className="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-black/70 text-white text-xs flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {series.duration}
+                    {song.duration}
                   </div>
 
-                  {/* Favorite Button */}
                   <button
-                    onClick={(e) => { e.stopPropagation(); toggleFavorite(series.id); }}
+                    onClick={(e) => { e.stopPropagation(); toggleFavorite(song.id); }}
                     className="absolute top-3 right-3 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
                   >
-                    <Heart 
-                      className={`w-4 h-4 ${favorites.includes(series.id) ? 'text-red-500 fill-red-500' : 'text-white'}`} 
-                    />
+                    <Heart className={`w-4 h-4 ${favorites.includes(song.id) ? 'text-red-500 fill-red-500' : 'text-white'}`} />
                   </button>
 
-                  {/* Difficulty Badge */}
-                  <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-medium ${getDifficultyColor(series.difficulty)}`}>
-                    {getDifficultyLabel(series.difficulty)}
+                  <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-medium ${getDifficultyColor(song.difficulty)}`}>
+                    {getDifficultyLabel(song.difficulty)}
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{series.title}</h3>
-                  <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{series.description}</p>
-                  
+                <div className="p-3">
+                  <h3 className="font-bold text-sm mb-0.5 line-clamp-1">{song.title}</h3>
+                  <p className="text-xs text-primary mb-1">{song.titleKr}</p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                      <span className="text-sm font-medium">{series.rating}</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {series.episodes} {isRTL ? 'حلقة' : '에피소드'}
-                    </span>
+                    <p className="text-xs text-muted-foreground">{song.artist} · {song.artistKr}</p>
                   </div>
                 </div>
               </div>
@@ -308,66 +298,48 @@ const Songs: React.FC = () => {
 
       {/* Video Modal */}
       <AnimatePresence>
-        {selectedSeries && (
+        {selectedSong && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setSelectedSeries(null)}
+            onClick={() => setSelectedSong(null)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-4xl bg-card rounded-3xl overflow-hidden"
+              className="w-full max-w-3xl bg-card rounded-3xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Video Player */}
               <div className="relative aspect-video bg-black">
                 <iframe
-                  src={selectedSeries.videoUrl}
+                  src={`https://www.youtube.com/embed/${selectedSong.videoId}?autoplay=1&rel=0`}
                   className="w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  title={selectedSong.title}
                 />
                 <button
-                  onClick={() => setSelectedSeries(null)}
+                  onClick={() => setSelectedSong(null)}
                   className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>
               </div>
 
-              {/* Info */}
               <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-xl font-bold mb-1">{selectedSeries.title}</h2>
-                    <p className="text-sm text-primary font-korean">{selectedSeries.titleKr}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="p-2 rounded-xl bg-muted hover:bg-muted/80">
-                      <Bookmark className="w-5 h-5" />
-                    </button>
-                    <button className="p-2 rounded-xl bg-muted hover:bg-muted/80">
-                      <Share2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-                <p className="text-muted-foreground text-sm">{selectedSeries.description}</p>
-                
-                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="font-medium">{selectedSeries.rating}</span>
-                  </div>
-                  <span className="text-muted-foreground">•</span>
-                  <span className="text-sm">{selectedSeries.episodes} {isRTL ? 'حلقة' : '에피소드'}</span>
-                  <span className="text-muted-foreground">•</span>
-                  <span className={`px-2 py-0.5 rounded-lg text-xs ${getDifficultyColor(selectedSeries.difficulty)}`}>
-                    {getDifficultyLabel(selectedSeries.difficulty)}
+                <h2 className="text-xl font-bold mb-1">{selectedSong.title}</h2>
+                <p className="text-sm text-primary font-korean mb-2">{selectedSong.titleKr}</p>
+                <p className="text-sm text-muted-foreground">
+                  {selectedSong.artist} · {selectedSong.artistKr}
+                </p>
+                <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border">
+                  <span className={`px-2 py-0.5 rounded-lg text-xs ${getDifficultyColor(selectedSong.difficulty)}`}>
+                    {getDifficultyLabel(selectedSong.difficulty)}
                   </span>
+                  <span className="text-xs text-muted-foreground">{selectedSong.duration}</span>
                 </div>
               </div>
             </motion.div>

@@ -37,7 +37,7 @@ const MobileBottomNav: React.FC = () => {
     { 
       path: '/songs', 
       icon: BookOpen, 
-      label: language === 'ar' ? 'المسلسلات' : '드라마',
+      label: language === 'ar' ? 'الأغاني' : '노래',
       gradient: 'from-rose-500 to-red-500'
     },
     { 

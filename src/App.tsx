@@ -29,6 +29,7 @@ import AIChat from "./pages/AIChat";
 import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
+import KoreanSeries from "./pages/KoreanSeries";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
@@ -59,7 +60,7 @@ const ScrollToTop = () => {
 // Show AI Chat button only on dashboard pages
 const ConditionalAIChatButton = () => {
   const { pathname } = useLocation();
-  const showOnPaths = ['/dashboard', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs'];
+  const showOnPaths = ['/dashboard', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
   
   if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
   
@@ -98,6 +99,7 @@ const App = () => (
                   <Route path="/grammar" element={<Grammar />} />
                   <Route path="/pronunciation" element={<Pronunciation />} />
                   <Route path="/songs" element={<Songs />} />
+                  <Route path="/korean-series" element={<KoreanSeries />} />
                   <Route path="/reports" element={<Reports />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
