@@ -149,10 +149,10 @@ const HomePage: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-20 w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-8 lg:py-12 overflow-x-hidden">
+      <main className="relative z-20 w-full flex flex-col items-center justify-start px-4 py-8 lg:py-12 overflow-x-hidden">
         
         {/* Full Hero Section Container */}
-        <div className="flex flex-col items-center w-full max-w-6xl mx-auto gap-8 lg:gap-12">
+        <div className="flex flex-col-reverse lg:flex-col items-center w-full max-w-7xl mx-auto gap-2 lg:gap-8 mb-16 lg:mb-24">
           
           {/* Top Text Section */}
           <motion.div
@@ -248,96 +248,248 @@ const HomePage: React.FC = () => {
             </motion.button>
           </motion.div>
 
-          {/* Flags Section - Now visible without scrolling */}
+          {/* Flags Section - Positioned at top with premium animations */}
           <motion.div
-            className="w-full flex flex-col lg:flex-row items-center justify-center gap-6 sm:gap-10 lg:gap-16"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 40 }}
-            transition={{ delay: 0.6, duration: 0.9 }}
+            className="w-full flex flex-row items-start justify-center gap-4 sm:gap-6 lg:gap-12 mb-8 lg:mb-16 order-first lg:order-last"
+            initial={{ opacity: 0, y: -60 }}
+            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : -60 }}
+            transition={{ duration: 1, delay: 0.3 }}
           >
             {/* Egyptian Flag */}
             <motion.div
-              className="flex flex-col items-center gap-3"
-              whileHover={{ y: -8 }}
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1, duration: 0.8, type: 'spring', stiffness: 100 }}
+              className="flex flex-col items-center gap-2"
+              whileHover={{ scale: 1.08 }}
+              initial={{ opacity: 0, x: -60, y: -40 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
             >
               <motion.div
                 className="relative"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <motion.img
                   src={personEgyptianFlag}
                   alt="Person with Egyptian Flag"
-                  className="w-24 sm:w-32 lg:w-48 h-auto object-contain drop-shadow-2xl filter brightness-110"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 1.2, duration: 0.8, type: 'spring' }}
+                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                  initial={{ scale: 0.6, opacity: 0, rotateZ: -15 }}
+                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
+                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
                 />
               </motion.div>
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
                 className="text-center"
               >
-                <span className="text-3xl sm:text-4xl block mb-2">🇪🇬</span>
-                <p className="text-slate-700 font-semibold">
-                  {isRTL ? 'مصر' : 'Egypt'}
-                </p>
+                <span className="text-2xl sm:text-3xl block">🇪🇬</span>
               </motion.div>
             </motion.div>
 
-            {/* Decorative divider on desktop */}
+            {/* Decorative element between */}
             <motion.div
-              className="hidden lg:flex flex-col items-center gap-2"
+              className="flex items-center justify-center"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.3 }}
+              transition={{ delay: 1, type: 'spring', stiffness: 100 }}
             >
-              <div className="h-12 w-0.5 bg-gradient-to-b from-transparent via-blue-400 to-transparent" />
-              <Star className="w-6 h-6 text-blue-500 animate-spin" style={{ animationDuration: '4s' }} />
-              <div className="h-12 w-0.5 bg-gradient-to-b from-transparent via-blue-400 to-transparent" />
+              <div className="hidden lg:block relative">
+                <div className="w-16 h-16 rounded-full border-2 border-blue-300 flex items-center justify-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <Star className="w-6 h-6 text-blue-500" />
+                  </motion.div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Korean Flag */}
             <motion.div
-              className="flex flex-col items-center gap-3"
-              whileHover={{ y: -8 }}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1, duration: 0.8, type: 'spring', stiffness: 100 }}
+              className="flex flex-col items-center gap-2"
+              whileHover={{ scale: 1.08 }}
+              initial={{ opacity: 0, x: 60, y: -40 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
             >
               <motion.div
                 className="relative"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
               >
                 <motion.img
                   src={personKoreanFlag}
                   alt="Person with Korean Flag"
-                  className="w-24 sm:w-32 lg:w-48 h-auto object-contain drop-shadow-2xl filter brightness-110"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 1.4, duration: 0.8, type: 'spring' }}
+                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                  initial={{ scale: 0.6, opacity: 0, rotateZ: 15 }}
+                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
+                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
                 />
               </motion.div>
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
                 className="text-center"
               >
-                <span className="text-3xl sm:text-4xl block mb-2">🇰🇷</span>
-                <p className="text-slate-700 font-semibold font-korean">
-                  {isRTL ? 'كوريا' : '한국'}
-                </p>
+                <span className="text-2xl sm:text-3xl block">🇰🇷</span>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Features Section */}
+        <motion.section
+          className="w-full max-w-7xl mx-auto mb-16 lg:mb-24"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true, margin: '0px 0px -200px 0px' }}
+        >
+          <motion.h2
+            className="text-3xl lg:text-4xl font-bold text-center text-slate-800 mb-12"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            {isRTL ? 'لماذا تختار منصتنا؟' : '왜 우리 플랫폼을 선택할까요?'}
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: BookOpen,
+                title: isRTL ? 'دروس تفاعلية' : '대화형 수업',
+                desc: isRTL ? 'تعلم من خلال محتوى تفاعلي مصمم بعناية' : '신중하게 설계된 대화형 콘텐츠를 통해 학습하세요'
+              },
+              {
+                icon: GraduationCap,
+                title: isRTL ? 'معلمون محترفون' : '전문 강사진',
+                desc: isRTL ? 'تعليم من قبل متخصصين في اللغة الكورية' : '한국어 전문가들로부터 배우세요'
+              },
+              {
+                icon: Zap,
+                title: isRTL ? 'تقدم سريع' : '빠른 진도',
+                desc: isRTL ? 'تقدم ملحوظ في مستوى اللغة الكورية' : '한국어 수준을 빠르게 향상시키세요'
+              },
+              {
+                icon: Globe,
+                title: isRTL ? 'مجتمع عالمي' : '글로벌 커뮤니티',
+                desc: isRTL ? 'تواصل مع متعلمين من جميع أنحاء العالم' : '전 세계 학습자들과 연결하세요'
+              },
+              {
+                icon: Star,
+                title: isRTL ? 'شهادات معتمدة' : '인증 자격증',
+                desc: isRTL ? 'احصل على شهادة معترف بها دولياً' : '국제적으로 인정받는 인증서를 획득하세요'
+              },
+              {
+                icon: Sparkles,
+                title: isRTL ? 'محتوى حصري' : '독점 콘텐츠',
+                desc: isRTL ? 'وصول حصري للمحتوى الثقافي الكوري الحصري' : '독점적인 한국 문화 콘텐츠에 접근하세요'
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                className="group relative p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-blue-100 hover:border-blue-300 hover:bg-white/80 transition-all duration-300 cursor-pointer overflow-hidden"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -8 }}
+              >
+                {/* Gradient overlay on hover */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                />
+
+                <div className="relative z-10">
+                  <motion.div
+                    className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors"
+                    whileHover={{ rotate: 12, scale: 1.1 }}
+                  >
+                    <feature.icon className="w-6 h-6 text-blue-600" />
+                  </motion.div>
+
+                  <h3 className="text-lg font-bold text-slate-800 mb-2">
+                    {feature.title}
+                  </h3>
+
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {feature.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* CTA Section */}
+        <motion.section
+          className="w-full max-w-5xl mx-auto mb-16 lg:mb-24"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true, margin: '0px 0px -200px 0px' }}
+        >
+          <motion.div
+            className="relative rounded-3xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 p-8 sm:p-12 lg:p-16 overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            {/* Background pattern */}
+            <motion.div
+              className="absolute inset-0 opacity-20"
+              animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+              transition={{ duration: 20, repeat: Infinity }}
+              style={{
+                backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 1px, transparent 1px)',
+                backgroundSize: '50px 50px',
+              }}
+            />
+
+            <div className="relative z-10 text-center text-white max-w-2xl mx-auto">
+              <motion.h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                {isRTL 
+                  ? 'ابدأ رحلتك التعليمية اليوم'
+                  : '오늘부터 학습 여정을 시작하세요'}
+              </motion.h2>
+
+              <motion.p
+                className="text-lg sm:text-xl text-white/90 mb-8"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                {isRTL
+                  ? 'انضم إلى آلاف المتعلمين حول العالم وتعلم اللغة الكورية بطريقة ممتعة وفعالة'
+                  : '전 세계 수천 명의 학습자와 함께 재미있고 효과적인 방식으로 한국어를 배우세요'}
+              </motion.p>
+
+              <motion.button
+                onClick={handleStart}
+                className="px-8 py-4 rounded-2xl bg-white text-blue-600 font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isRTL ? 'ابدأ الآن مجاناً' : '지금 무료로 시작하기'}
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.section>
       </main>
 
       {/* Footer */}
