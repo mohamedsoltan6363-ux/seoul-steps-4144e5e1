@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import SoundSettingsPanel from '@/components/SoundSettingsPanel';
+import CollapsibleLevelHeader from '@/components/CollapsibleLevelHeader';
 
 type ViewMode = 'cards' | 'flashcards' | 'writing' | 'quiz' | 'practice' | 'challenge';
 type DisplayMode = 'grid' | 'list';
@@ -758,113 +759,46 @@ const Learn: React.FC = () => {
         />
       </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-50 glass-effect border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          {/* Top Row */}
-          <div className="flex items-center justify-between mb-4">
-            <motion.button 
-              whileHover={{ x: -5 }}
-              onClick={() => navigate('/dashboard')} 
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium hidden sm:inline">{t('dashboard')}</span>
-            </motion.button>
-            
-            <div className="flex items-center gap-3">
-              <div className="text-center">
-                <h1 className="font-bold text-lg">{currentLevelInfo.title}</h1>
-                <p className="text-xs text-muted-foreground">{currentLevelInfo.subtitle}</p>
-              </div>
-              {isQuizUnlocked && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/30"
-                >
-                  <CheckCircle className="w-5 h-5 text-white" />
-                </motion.div>
-              )}
-            </div>
+      {/* Collapsible Level Header */}
+      <CollapsibleLevelHeader
+        levelNum={levelNum}
+        levelTitle={currentLevelInfo.title}
+        levelSubtitle={currentLevelInfo.subtitle}
+        levelProgress={levelProgress}
+        memorizedCount={memorizedCount}
+        totalItems={currentLevelInfo.total}
+        todayProgress={todayProgress}
+        dailyGoal={dailyGoal}
+        language={language}
+      />
 
-            {/* Test Notification Button */}
+      {/* View Mode Tabs */}
+      <div className="sticky top-[72px] z-30 bg-background/95 backdrop-blur-lg border-b border-border/50 px-4 py-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {modes.map((mode, index) => (
             <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={testNotification}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30"
-              title={language === 'ar' ? 'اختبار الإشعارات' : '알림 테스트'}
+              key={mode.key}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => !mode.locked && setViewMode(mode.key)}
+              disabled={mode.locked}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all ${
+                viewMode === mode.key 
+                  ? `bg-gradient-to-r ${mode.color} text-white shadow-lg` 
+                  : mode.locked
+                    ? 'bg-muted/50 text-muted-foreground cursor-not-allowed'
+                    : 'bg-muted hover:bg-muted/80'
+              }`}
             >
-              <Bell className="w-5 h-5" />
+              {mode.locked ? <Lock className="w-4 h-4" /> : mode.icon}
+              <span className="hidden sm:inline">{mode.label}</span>
             </motion.button>
-          </div>
-
-          {/* Progress bar with glow */}
-          <div className="relative mb-4">
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden relative">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: `${levelProgress}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="h-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-full relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
-                </motion.div>
-              </div>
-              <span className="text-sm font-bold min-w-[3.5rem] text-right bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
-                {levelProgress}%
-              </span>
-            </div>
-          </div>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-4 gap-2 mb-4">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-2 rounded-xl bg-gradient-to-br ${stat.color} bg-opacity-10 border border-white/10`}
-              >
-                <div className="flex items-center gap-1 mb-1">
-                  <div className="text-white/80">{stat.icon}</div>
-                </div>
-                <p className="text-xs font-bold text-white">{stat.value}</p>
-                <p className="text-[10px] text-white/60 truncate">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* View Mode Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {modes.map((mode, index) => (
-              <motion.button
-                key={mode.key}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => !mode.locked && setViewMode(mode.key)}
-                disabled={mode.locked}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all ${
-                  viewMode === mode.key 
-                    ? `bg-gradient-to-r ${mode.color} text-white shadow-lg` 
-                    : mode.locked
-                      ? 'bg-muted/50 text-muted-foreground cursor-not-allowed'
-                      : 'bg-muted hover:bg-muted/80'
-                }`}
-              >
-                {mode.locked ? <Lock className="w-4 h-4" /> : mode.icon}
-                <span className="hidden sm:inline">{mode.label}</span>
-              </motion.button>
-            ))}
-          </div>
+          ))}
         </div>
-      </header>
+      </div>
 
       {/* Toolbar */}
       {viewMode === 'cards' && (

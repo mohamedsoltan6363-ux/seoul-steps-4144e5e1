@@ -12,7 +12,7 @@ import {
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
   Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, 
-  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp
+  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp, Tv
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import koreanCharacter from '@/assets/korean-character.png';
@@ -449,6 +449,7 @@ const Dashboard: React.FC = () => {
               { path: '/grammar', icon: Book, color: 'indigo-500', label: language === 'ar' ? 'القواعد' : '문법' },
               { path: '/pronunciation', icon: Mic, color: 'cyan-500', label: language === 'ar' ? 'النطق' : '발음' },
               { path: '/songs', icon: Music, color: 'fuchsia-500', label: language === 'ar' ? 'الأغاني' : '노래' },
+              { path: '/korean-series', icon: Tv, color: 'rose-500', label: language === 'ar' ? 'المسلسلات' : '드라마' },
               { path: '/reports', icon: BarChart3, color: 'teal-500', label: language === 'ar' ? 'التقارير' : '보고서' },
             ].map((item, index) => (
               <motion.button
