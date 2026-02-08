@@ -28,7 +28,7 @@ const ListeningGame: React.FC<ListeningGameProps> = ({ onBack }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
-  const totalQuestions = 10;
+  const totalQuestions = 50; // Increased from 10 to 50 questions
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];

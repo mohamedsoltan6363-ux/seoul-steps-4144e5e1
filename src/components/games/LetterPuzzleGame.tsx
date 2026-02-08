@@ -18,7 +18,7 @@ const LetterPuzzleGame = ({ onBack }: LetterPuzzleGameProps) => {
 
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
-  const [totalRounds] = useState(8);
+  const [totalRounds] = useState(50); // Increased to 50 rounds
   const [currentWord, setCurrentWord] = useState<{ korean: string; arabic: string } | null>(null);
   const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);

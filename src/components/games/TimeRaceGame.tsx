@@ -26,7 +26,7 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
   const isArabic = language === 'ar';
 
   const [gameStarted, setGameStarted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -34,6 +34,7 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
+  const [totalRounds] = useState(50); // Changed to 50 rounds instead of timed
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const shuffleArray = <T,>(array: T[]): T[] => {
@@ -89,7 +90,7 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
 
   const startGame = () => {
     setGameStarted(true);
-    setTimeLeft(60);
+    setRound(1);
     setScore(0);
     setStreak(0);
     setQuestionsAnswered(0);
@@ -98,34 +99,6 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
     setIsCorrect(null);
     setGameComplete(false);
   };
-
-  useEffect(() => {
-    if (gameStarted && timeLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            setGameComplete(true);
-            setGameStarted(false);
-            if (score >= 100) {
-              confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-              });
-            }
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => {
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-        }
-      };
-    }
-  }, [gameStarted, score]);
 
   const handleAnswer = (answer: string) => {
     if (selectedAnswer) return;
@@ -144,16 +117,20 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
     }
 
     setTimeout(() => {
-      setCurrentQuestion(generateQuestion());
-      setSelectedAnswer(null);
-      setIsCorrect(null);
+      if (round >= totalRounds) {
+        setGameComplete(true);
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } else {
+        setRound(round + 1);
+        setCurrentQuestion(generateQuestion());
+        setSelectedAnswer(null);
+        setIsCorrect(null);
+      }
     }, 500);
-  };
-
-  const getTimeColor = () => {
-    if (timeLeft > 30) return 'text-green-500';
-    if (timeLeft > 10) return 'text-amber-500';
-    return 'text-red-500';
   };
 
   if (gameComplete) {
@@ -170,8 +147,11 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
                 <Trophy className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-                {isArabic ? 'انتهى الوقت!' : '시간 종료!'}
+                {isArabic ? 'ممتاز! أكملت جميع الجولات 🎉' : '훌륭해요! 모든 라운드 완료! 🎉'}
               </h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                {isArabic ? `أكملت ${round} جولة من ${totalRounds}` : `${round}/${totalRounds} 라운드 완료`}
+              </p>
               <div className="grid grid-cols-2 gap-4 my-6">
                 <div className="p-4 rounded-xl bg-primary/10">
                   <p className="text-3xl font-bold text-primary">{score}</p>
@@ -212,12 +192,12 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
                 <Timer className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-4">
-                {isArabic ? 'سباق الوقت' : '시간 경주'}
+                {isArabic ? 'سباق سريع' : '빠른 경주'}
               </h2>
               <p className="text-muted-foreground mb-6">
                 {isArabic 
-                  ? 'أجب على أكبر عدد من الأسئلة في 60 ثانية!'
-                  : '60초 안에 최대한 많은 질문에 답하세요!'}
+                  ? 'أجب على 50 سؤال بسرعة واحصل على أعلى نقاط!'
+                  : '50개의 질문에 빠르게 답하고 점수를 얻으세요!'}
               </p>
               <div className="flex flex-col gap-3">
                 <Button onClick={startGame} size="lg" className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
@@ -244,9 +224,9 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
           <span className="font-bold text-primary">{score}</span>
         </div>
         
-        <div className={`flex items-center gap-2 px-4 py-2 rounded-full bg-card shadow-lg font-mono text-2xl font-bold ${getTimeColor()}`}>
-          <Timer className="w-5 h-5" />
-          {timeLeft}
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card shadow-lg font-mono text-lg font-bold">
+          <span>{isArabic ? 'الجولة' : '라운드'}</span>
+          <span className="text-primary">{round}/{totalRounds}</span>
         </div>
 
         {streak >= 3 && (
@@ -261,8 +241,8 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
         )}
       </div>
 
-      {/* Timer Progress */}
-      <Progress value={(timeLeft / 60) * 100} className="h-2 mb-8" />
+      {/* Progress Bar */}
+      <Progress value={(round / totalRounds) * 100} className="h-2 mb-8" />
 
       {/* Question Card */}
       <AnimatePresence mode="wait">

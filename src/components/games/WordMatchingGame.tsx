@@ -48,7 +48,7 @@ const WordMatchingGame = ({ onBack }: WordMatchingGameProps) => {
 
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
-  const [totalRounds] = useState(10); // Increased to 10 rounds
+  const [totalRounds] = useState(50); // Increased to 50 rounds for endless gameplay
   const [currentPairs, setCurrentPairs] = useState<WordPair[]>([]);
   const [selectedKorean, setSelectedKorean] = useState<string | null>(null);
   const [selectedArabic, setSelectedArabic] = useState<string | null>(null);

@@ -31,6 +31,34 @@ const questions: Question[] = [
   { sentence: '배가 ___', blank: '고파요', arabic: 'أنا جائع', options: ['고파요', '아파요', '불러요', '커요'], correct: '고파요' },
   { sentence: '많이 ___', blank: '드세요', arabic: 'كل كثيراً (تفضل)', options: ['드세요', '가세요', '오세요', '하세요'], correct: '드세요' },
   { sentence: '___가 얼마예요?', blank: '이것', arabic: 'كم سعر هذا؟', options: ['이것', '저것', '그것', '뭐'], correct: '이것' },
+  // Additional questions (المزيد من الأسئلة)
+  { sentence: '___를 좋아해요', blank: '영화', arabic: 'أحب الأفلام', options: ['영화', '책', '음악', '그림'], correct: '영화' },
+  { sentence: '지금 ___예요', blank: '몇시', arabic: 'كم الساعة الآن؟', options: ['몇시', '어디', '뭐', '누가'], correct: '몇시' },
+  { sentence: '___는 어디에 있어요?', blank: '화장실', arabic: 'أين الحمام؟', options: ['화장실', '주방', '침실', '거실'], correct: '화장실' },
+  { sentence: '저는 ___에서 와요', blank: '이집트', arabic: 'أنا من مصر', options: ['이집트', '한국', '미국', '프랑스'], correct: '이집트' },
+  { sentence: '___는 맛있어요', blank: '김치', arabic: 'الكيمتشي لذيذ', options: ['김치', '피자', '버거', '초밥'], correct: '김치' },
+  { sentence: '매일 ___를 해요', blank: '운동', arabic: 'أتمرن كل يوم', options: ['운동', '공부', '일', '쉬기'], correct: '운동' },
+  { sentence: '___는 친구예요', blank: '그사람', arabic: 'هذا الشخص صديقي', options: ['그사람', '내가', '우리', '저'], correct: '그사람' },
+  { sentence: '세계에서 가장 ___', blank: '아름답다', arabic: 'الأجمل في العالم', options: ['아름답다', '크다', '멀다', '비싸다'], correct: '아름답다' },
+  { sentence: '___을 입었어요', blank: '옷', arabic: 'ارتديت ملابس', options: ['옷', '신발', '모자', '시계'], correct: '옷' },
+  { sentence: '___를 배우고 싶어요', blank: '춤', arabic: 'أريد تعلم الرقص', options: ['춤', '노래', '악기', '그리기'], correct: '춤' },
+  { sentence: '___가 그려져 있어요', blank: '꽃', arabic: 'هناك زهور مرسومة', options: ['꽃', '나무', '별', '구름'], correct: '꽃' },
+  { sentence: '___도록 열심히 공부할게요', blank: '열심히', arabic: 'سأدرس بجد', options: ['열심히', '천천히', '빠르게', '조용히'], correct: '열심히' },
+  { sentence: '___이 없어요', blank: '돈', arabic: 'ليس لدي مال', options: ['돈', '시간', '음식', '물'], correct: '돈' },
+  { sentence: '___에 놀러 가요', blank: '공원', arabic: 'أذهب للعب في الحديقة', options: ['공원', '도서관', '병원', '학교'], correct: '공원' },
+  { sentence: '한국 ___를 좋아해요', blank: '문화', arabic: 'أحب الثقافة الكورية', options: ['문화', '날씨', '음악', '사람'], correct: '문화' },
+  { sentence: '___까지 기다려 주세요', blank: '내일', arabic: 'انتظر حتى غداً من فضلك', options: ['내일', '오늘', '어제', '다음주'], correct: '내일' },
+  { sentence: '저는 ___과 함께 가요', blank: '친구', arabic: 'أذهب مع الصديق', options: ['친구', '가족', '선생님', '형'], correct: '친구' },
+  { sentence: '___는 좋은 음식이에요', blank: '밥', arabic: 'الأرز طعام جيد', options: ['밥', '면', '빵', '과자'], correct: '밥' },
+  { sentence: '___를 읽으면 행복해요', blank: '책', arabic: 'أشعر بالسعادة عند قراءة الكتب', options: ['책', '신문', '잡지', '편지'], correct: '책' },
+  { sentence: '한국 ___을 봤어요', blank: '드라마', arabic: 'شاهدت مسلسل كوري', options: ['드라마', '영화', '뮤직비디오', '쇼'], correct: '드라마' },
+  { sentence: '___가 매워요', blank: '음식', arabic: 'الطعام حار جداً', options: ['음식', '차', '주스', '과자'], correct: '음식' },
+  { sentence: '___를 만들고 싶어요', blank: '요리', arabic: 'أريد طهي شيء ما', options: ['요리', '옷', '집', '그림'], correct: '요리' },
+  { sentence: '___가 중요해요', blank: '공부', arabic: 'الدراسة مهمة', options: ['공부', '게임', '수면', '음식'], correct: '공부' },
+  { sentence: '___를 탈 수 있어요', blank: '자동차', arabic: 'يمكنني قيادة السيارة', options: ['자동차', '자전거', '오토바이', '버스'], correct: '자동차' },
+  { sentence: '___는 아침이에요', blank: '지금', arabic: 'الآن صباح', options: ['지금', '어제', '내일', '어제'], correct: '지금' },
+  { sentence: '___가 많았어요', blank: '일', arabic: 'كان لدي الكثير من العمل', options: ['일', '시간', '돈', '사람'], correct: '일' },
+  { sentence: '___와 함께 여행을 가고 싶어요', blank: '가족', arabic: 'أريد السفر مع العائلة', options: ['가족', '친구', '선생님', '이웃'], correct: '가족' },
 ];
 
 const FillBlankGame: React.FC<FillBlankGameProps> = ({ onBack }) => {
@@ -44,6 +72,7 @@ const FillBlankGame: React.FC<FillBlankGameProps> = ({ onBack }) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const totalRounds = 50; // Increased to 50 rounds
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
@@ -90,7 +119,7 @@ const FillBlankGame: React.FC<FillBlankGameProps> = ({ onBack }) => {
     }
 
     setTimeout(() => {
-      if (round >= 10) {
+      if (round >= totalRounds) {
         setGameComplete(true);
         if (score > 60) {
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });

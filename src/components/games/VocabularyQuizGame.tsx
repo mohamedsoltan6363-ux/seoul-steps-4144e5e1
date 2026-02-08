@@ -94,9 +94,9 @@ const VocabularyQuizGame: React.FC<VocabularyQuizGameProps> = ({ onBack }) => {
     }
 
     setTimeout(() => {
-      if (round >= 12) {
+      if (round >= 50) { // Changed from 12 to 50 rounds
         setGameComplete(true);
-        if (score > 100) {
+        if (score > 500) { // Adjusted score threshold
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
       } else {
