@@ -73,7 +73,7 @@ const MobileBottomNav: React.FC = () => {
                 damping: 40,
                 delay: index * 0.04,
               }}
-              className="relative w-full h-20 flex flex-col items-center justify-center gap-1 rounded-xl transition-all duration-150 group"
+              className="relative w-full h-16 flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all duration-150 group"
             >
               {/* Active background */}
               {active && (
@@ -98,12 +98,8 @@ const MobileBottomNav: React.FC = () => {
 
               {/* Label */}
               <motion.span 
-                className="text-xs font-semibold transition-colors duration-200"
-                animate={{
-                  color: active ? 'rgb(37, 99, 235)' : 'rgb(107, 114, 128)',
-                  opacity: 1,
-                }}
-                transition={{ duration: 0.2 }}
+                className="relative z-10 text-xs font-medium transition-colors duration-200"
+                animate={{ opacity: active ? 1 : 0.5 }}
               >
                 {item.label}
               </motion.span>
