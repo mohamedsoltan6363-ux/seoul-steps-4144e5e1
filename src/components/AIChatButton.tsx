@@ -70,7 +70,7 @@ const AIChatButton: React.FC = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-20 md:bottom-6 right-4 z-40 group"
+        className="fixed bottom-28 md:bottom-6 right-4 z-40 group"
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 blur-lg opacity-50 group-hover:opacity-80 transition-opacity animate-pulse" />
         <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-primary via-purple-500 to-pink-500 flex items-center justify-center shadow-xl">

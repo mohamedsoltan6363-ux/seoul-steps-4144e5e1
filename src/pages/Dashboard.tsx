@@ -379,46 +379,147 @@ const Dashboard: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Beautiful Character Illustration Section */}
+        <motion.div 
+          variants={itemVariants}
+          className="relative mb-8 p-8 rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900/10 to-blue-900/10 border border-gradient-to-r from-blue-200/20 to-purple-200/20 backdrop-blur-sm"
+        >
+          {/* Decorative background elements */}
+          <motion.div
+            className="absolute top-0 left-0 w-40 h-40 bg-blue-300/10 rounded-full blur-3xl"
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 5, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-0 w-40 h-40 bg-purple-300/10 rounded-full blur-3xl"
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 6, repeat: Infinity }}
+          />
+
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            {/* Animated Korean Characters */}
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="mb-6 text-center"
+            >
+              <p className="text-sm font-medium text-primary/70 mb-2">
+                {language === 'ar' ? '✨ شخصيات كورية تقليدية' : '✨ 전통적인 한국 캐릭터'}
+              </p>
+            </motion.div>
+
+            {/* Main Character Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 25 }}
+              className="flex flex-col items-center gap-4 mb-6"
+            >
+              <img 
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
+                alt="Korean Characters"
+                className="w-64 h-auto drop-shadow-2xl max-w-full"
+              />
+              
+              {/* Floating particles effect */}
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 bg-blue-400 rounded-full"
+                  animate={{
+                    x: [0, Math.random() * 100 - 50],
+                    y: [0, -Math.random() * 150],
+                    opacity: [1, 0]
+                  }}
+                  transition={{
+                    duration: 2 + Math.random(),
+                    delay: i * 0.2,
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }}
+                />
+              ))}
+            </motion.div>
+
+            {/* Inspirational Text */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="text-center max-w-2xl"
+            >
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                {language === 'ar' ? 'انغمس في ثقافة اللغة الكورية' : '한국 문화에 빠져보세요'}
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                {language === 'ar' 
+                  ? 'تعلم من خلال ألعاب مثيرة وقصص تقليدية وشخصيات ملهمة'
+                  : '흥미로운 게임, 전통 이야기, 영감을 주는 캐릭터를 통해 배우세요'}
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+
         {/* Stats Grid */}
         <motion.div variants={itemVariants} className="grid grid-cols-3 gap-3 mb-6">
           <motion.div 
-            whileHover={{ scale: 1.05, rotate: -1 }}
-            className="stat-card text-center p-4 relative overflow-hidden group cursor-pointer"
+            whileHover={{ scale: 1.08, rotate: -1, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            className="stat-card text-center p-5 relative overflow-hidden group cursor-pointer border border-white/10 backdrop-blur"
           >
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"
             />
-            <Trophy className="w-6 h-6 mx-auto mb-2 text-white/90" />
+            <motion.div
+              animate={{ scale: [1, 1.15, 1], rotate: [0, 10, 0] }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Trophy className="w-6 h-6 mx-auto mb-2 text-amber-300" />
+            </motion.div>
             <motion.p 
               className="text-2xl font-bold text-white"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: "spring", delay: 0.3 }}
+              transition={{ type: "spring", delay: 0.4 }}
             >
               {totalPoints}
             </motion.p>
-            <p className="text-xs text-white/70">{t('totalPoints')}</p>
+            <p className="text-xs text-white/60">{t('totalPoints')}</p>
           </motion.div>
           <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="stat-card stat-card-secondary text-center p-4 relative overflow-hidden group cursor-pointer"
+            whileHover={{ scale: 1.08, rotate: 1, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            className="stat-card stat-card-secondary text-center p-5 relative overflow-hidden group cursor-pointer border border-white/10 backdrop-blur"
           >
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
+              className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"
+            />
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Flame className="w-6 h-6 mx-auto mb-2 text-white/90" />
+              <Flame className="w-6 h-6 mx-auto mb-2 text-orange-300 relative z-10" />
             </motion.div>
-            <p className="text-2xl font-bold text-white">{streakDays}</p>
-            <p className="text-xs text-white/70">{language === 'ar' ? 'أيام متتالية' : '연속'}</p>
+            <p className="text-2xl font-bold text-white relative z-10">{streakDays}</p>
+            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'أيام متتالية' : '연속'}</p>
           </motion.div>
           <motion.div 
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            className="stat-card stat-card-success text-center p-4 relative overflow-hidden group cursor-pointer"
+            whileHover={{ scale: 1.08, rotate: -1, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            className="stat-card stat-card-success text-center p-5 relative overflow-hidden group cursor-pointer border border-white/10 backdrop-blur"
           >
-            <Target className="w-6 h-6 mx-auto mb-2 text-white/90" />
-            <p className="text-2xl font-bold text-white">{totalMemorized}</p>
-            <p className="text-xs text-white/70">{language === 'ar' ? 'تم الحفظ' : '암기'}</p>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"
+            />
+            <motion.div
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Target className="w-6 h-6 mx-auto mb-2 text-emerald-300 relative z-10" />
+            </motion.div>
+            <p className="text-2xl font-bold text-white relative z-10">{totalMemorized}</p>
+            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'تم الحفظ' : '암기'}</p>
           </motion.div>
         </motion.div>
 
