@@ -68,7 +68,47 @@ const ConditionalAIChatButton = () => {
   return <AIChatButton />;
 };
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    const developerMessage = `
+%c
+██████████████████████████████████████████████████████████████████████
+█                                                                    █
+█         %c محمد أيمن %c                                              █
+█                                                                    █
+█             %cتم التطوير بواسطة محمد أيمن%c                             █
+█                                                                    █
+█                %cتاريخ البدء: السابع من يناير%c                        █
+█                %cتاريخ الإنجاز: الثامن من فبراير%c                      █
+█                                                                    █
+█                    %cخطوات سيول - تطبيق تعلم اللغة الكورية%c            █
+█                            %cالإصدار 1.0.0%c                        █
+█                                                                    █
+█                         %cمع أطيب التمنيات بالتعلم الممتع%c            █
+█                                                                    █
+██████████████████████████████████████████████████████████████████████
+`;
+
+    console.log(
+      developerMessage,
+      'background: linear-gradient(90deg, #1e40af 0%, #7c3aed 50%, #ec4899 100%); padding: 15px; font-weight: bold;',
+      'font-size: 48px; font-weight: 900; color: #fff; font-style: italic; text-shadow: 0 0 10px rgba(0,0,0,0.5), 2px 2px 6px rgba(0,0,0,0.4);',
+      '',
+      'font-size: 24px; font-style: italic; color: #fff; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.4);',
+      '',
+      'font-size: 14px; font-style: italic; color: #fbbf24; font-weight: 600;',
+      '',
+      'font-size: 14px; font-style: italic; color: #34d399; font-weight: 600;',
+      '',
+      'font-size: 16px; font-style: italic; color: #a78bfa; font-weight: bold; text-shadow: 0 0 6px rgba(0,0,0,0.3);',
+      '',
+      'font-size: 14px; color: #f87171; font-weight: bold;',
+      '',
+      'font-size: 14px; color: #60a5fa; font-style: italic; font-weight: 600;'
+    );
+  }, []);
+
+  return (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
@@ -114,6 +154,7 @@ const App = () => (
       </LanguageProvider>
     </QueryClientProvider>
   </BrowserRouter>
-);
+  );
+};
 
 export default App;
