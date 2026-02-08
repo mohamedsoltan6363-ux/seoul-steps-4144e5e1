@@ -28,6 +28,26 @@ const sentences: Sentence[] = [
   { id: '8', korean: '오늘 날씨가 좋아요', arabic: 'الطقس جميل اليوم', words: ['오늘', '날씨가', '좋아요'] },
   { id: '9', korean: '배고파요', arabic: 'أنا جائع', words: ['배', '고파', '요'] },
   { id: '10', korean: '집에 가요', arabic: 'أذهب للمنزل', words: ['집에', '가', '요'] },
+  { id: '11', korean: '한국에 가고 싶어요', arabic: 'أريد الذهاب إلى كوريا', words: ['한국에', '가고', '싶어요'] },
+  { id: '12', korean: '한국 음식을 좋아해요', arabic: 'أحب الطعام الكوري', words: ['한국', '음식을', '좋아해요'] },
+  { id: '13', korean: '영화를 보았어요', arabic: 'شاهدت فيلم', words: ['영화를', '보았어요'] },
+  { id: '14', korean: '친구와 만났어요', arabic: 'التقيت بصديق', words: ['친구와', '만났어요'] },
+  { id: '15', korean: '책을 읽고 있어요', arabic: 'أقرأ كتاب', words: ['책을', '읽고', '있어요'] },
+  { id: '16', korean: '지금은 바빠요', arabic: 'أنا مشغول الآن', words: ['지금은', '바빠요'] },
+  { id: '17', korean: '내일 뭐 할 거야?', arabic: 'ماذا ستفعل غداً؟', words: ['내일', '뭐', '할', '거야'] },
+  { id: '18', korean: '도움이 필요해요', arabic: 'أحتاج مساعدة', words: ['도움이', '필요해요'] },
+  { id: '19', korean: '시간이 없어요', arabic: 'ليس لدي وقت', words: ['시간이', '없어요'] },
+  { id: '20', korean: '다시 만나요', arabic: 'نلتقي مرة أخرى', words: ['다시', '만나요'] },
+  { id: '21', korean: '계획을 짰어요', arabic: 'عملت خطة', words: ['계획을', '짰어요'] },
+  { id: '22', korean: '일이 많았어요', arabic: 'كان لدي الكثير من العمل', words: ['일이', '많았어요'] },
+  { id: '23', korean: '휴가를 가요', arabic: 'أأخذ إجازة', words: ['휴가를', '가요'] },
+  { id: '24', korean: '파티에 간다', arabic: 'سأذهب إلى حفلة', words: ['파티에', '간다'] },
+  { id: '25', korean: '선물을 받았어요', arabic: 'تلقيت هدية', words: ['선물을', '받았어요'] },
+  { id: '26', korean: '사진을 찍었어요', arabic: 'التقطت صورة', words: ['사진을', '찍었어요'] },
+  { id: '27', korean: '음악을 들어요', arabic: 'أستمع إلى الموسيقى', words: ['음악을', '들어요'] },
+  { id: '28', korean: '운동을 하고 싶어요', arabic: 'أريد ممارسة الرياضة', words: ['운동을', '하고', '싶어요'] },
+  { id: '29', korean: '옷을 샀어요', arabic: 'اشتريت ملابس', words: ['옷을', '샀어요'] },
+  { id: '30', korean: '날씨가 추워요', arabic: 'الجو بارد', words: ['날씨가', '추워요'] },
 ];
 
 const SentenceBuilderGame: React.FC<SentenceBuilderGameProps> = ({ onBack }) => {
@@ -42,6 +62,7 @@ const SentenceBuilderGame: React.FC<SentenceBuilderGameProps> = ({ onBack }) => 
   const [usedIndices, setUsedIndices] = useState<number[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
+  const totalRounds = 50; // Increased to 50 rounds
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
@@ -101,7 +122,7 @@ const SentenceBuilderGame: React.FC<SentenceBuilderGameProps> = ({ onBack }) => 
       speakKorean(currentSentence.korean);
       
       setTimeout(() => {
-        if (round >= 8) {
+        if (round >= totalRounds) {
           setGameComplete(true);
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         } else {

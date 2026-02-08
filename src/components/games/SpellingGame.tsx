@@ -23,7 +23,7 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ onBack }) => {
   const [score, setScore] = useState(0);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
-  const totalRounds = 8;
+  const totalRounds = 50; // Increased from 8 to 50 rounds
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];

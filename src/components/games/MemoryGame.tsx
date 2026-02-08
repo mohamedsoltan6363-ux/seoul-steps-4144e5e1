@@ -42,7 +42,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   };
 
   const initializeGame = useCallback(() => {
-    const selectedWords = shuffleArray(vocabulary).slice(0, 6);
+    const selectedWords = shuffleArray(vocabulary).slice(0, 12); // Increased from 6 to 12 words
     const gameCards: MemoryCard[] = [];
     
     selectedWords.forEach(word => {

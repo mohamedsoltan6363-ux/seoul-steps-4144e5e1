@@ -40,6 +40,7 @@ const NumberGame: React.FC<NumberGameProps> = ({ onBack }) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
   const [gameMode, setGameMode] = useState<'native' | 'sino'>('native');
+  const totalRounds = 50; // Increased to 50 rounds
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
@@ -87,7 +88,7 @@ const NumberGame: React.FC<NumberGameProps> = ({ onBack }) => {
     }
 
     setTimeout(() => {
-      if (round >= 10) {
+      if (round >= totalRounds) {
         setGameComplete(true);
         if (score > 60) {
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
