@@ -68,7 +68,36 @@ const ConditionalAIChatButton = () => {
   return <AIChatButton />;
 };
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    const developerMessage = `
+%c
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║                  %c محمد أيمن %c                                 ║
+║                                                                ║
+║               %cتم التطوير بواسطة محمد أيمن%c                      ║
+║                                                                ║
+║                 Development Started: January 7                ║
+║                 Development Completed: February 8             ║
+║                                                                ║
+║                   Seoul Steps - Korean Learning               ║
+║                         Version 1.0.0                         ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+`;
+
+    console.log(
+      developerMessage,
+      'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px;',
+      'font-size: 32px; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);',
+      '',
+      'font-size: 18px; font-style: italic; color: #667eea; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);',
+      ''
+    );
+  }, []);
+
+  return (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
@@ -114,6 +143,7 @@ const App = () => (
       </LanguageProvider>
     </QueryClientProvider>
   </BrowserRouter>
-);
+  );
+};
 
 export default App;
