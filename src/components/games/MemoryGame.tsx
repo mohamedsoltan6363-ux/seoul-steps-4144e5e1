@@ -25,12 +25,15 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   const isArabic = language === 'ar';
   
   const [cards, setCards] = useState<MemoryCard[]>([]);
-  const [flippedCards, setFlippedCards] = useState<string[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [time, setTime] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [round, setRound] = useState(1);
+  const [totalScore, setTotalScore] = useState(0);
+  const totalRounds = 50; // 50 rounds for extended gameplay
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];
@@ -88,15 +91,26 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   }, [gameStarted, gameComplete]);
 
   useEffect(() => {
-    if (matchedPairs.length === 6 && matchedPairs.length > 0) {
-      setGameComplete(true);
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+    if (matchedPairs.length === 12 && matchedPairs.length > 0) {
+      const roundScore = Math.max(0, 100 - Math.floor(moves / 2) - Math.floor(time / 10));
+      setTotalScore(prev => prev + roundScore);
+      
+      if (round >= totalRounds) {
+        setGameComplete(true);
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } else {
+        // Reset for next round
+        setTimeout(() => {
+          setRound(round + 1);
+          initializeGame();
+        }, 1500);
+      }
     }
-  }, [matchedPairs]);
+  }, [matchedPairs, round, moves, time]);
 
   useEffect(() => {
     if (flippedCards.length === 2) {
@@ -176,9 +190,9 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
               {isArabic ? <ArrowRight className="w-4 h-4 ml-2" /> : <ArrowLeft className="w-4 h-4 mr-2" />}
               {isArabic ? 'العودة' : '돌아가기'}
             </Button>
-            <Button onClick={initializeGame}>
+            <Button onClick={() => { setRound(1); setTotalScore(0); initializeGame(); }}>
               <RotateCcw className="w-4 h-4 mr-2" />
-              {isArabic ? 'إعادة اللعب' : '다시 하기'}
+              {isArabic ? 'لعب مرة أخرى' : '다시 하기'}
             </Button>
           </div>
         </motion.div>
@@ -205,9 +219,14 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <h2 className="text-xl font-bold text-center mb-6">
-        {isArabic ? 'لعبة الذاكرة' : '메모리 게임'}
-      </h2>
+      <div className="text-center mb-6">
+        <h2 className="text-xl font-bold mb-2">
+          {isArabic ? 'لعبة الذاكرة' : '메모리 게임'}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          {isArabic ? `الجولة ${round} من ${totalRounds} | النقاط: ${totalScore}` : `라운드 ${round}/${totalRounds} | 총점: ${totalScore}점`}
+        </p>
+      </div>
 
       {/* Game Grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-md mx-auto">
