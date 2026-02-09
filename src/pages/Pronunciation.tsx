@@ -25,16 +25,40 @@ const pronunciationLessons = [
       { korean: '감사합니다', romanized: 'gam-sa-ham-ni-da', arabic: 'شكراً' },
       { korean: '죄송합니다', romanized: 'joe-song-ham-ni-da', arabic: 'آسف' },
       { korean: '안녕히 가세요', romanized: 'an-nyeong-hi ga-se-yo', arabic: 'مع السلامة' },
+      { korean: '반갑습니다', romanized: 'ban-gab-seub-ni-da', arabic: 'يسعدني مقابلتك' },
+      { korean: '안녕', romanized: 'an-nyeong', arabic: 'مرحبا (غير رسمي)' },
+      { korean: '좋은 아침입니다', romanized: 'jo-eun a-chim-ip-ni-da', arabic: 'صباح الخير' },
+      { korean: '잘 자요', romanized: 'jal ja-yo', arabic: 'تصبح على خير' },
     ]
   },
   {
-    title: { ar: 'الأرقام', ko: '숫자' },
+    title: { ar: 'الأرقام (1-10)', ko: '숫자 1-10' },
     words: [
       { korean: '하나', romanized: 'ha-na', arabic: 'واحد' },
       { korean: '둘', romanized: 'dul', arabic: 'اثنان' },
       { korean: '셋', romanized: 'set', arabic: 'ثلاثة' },
       { korean: '넷', romanized: 'net', arabic: 'أربعة' },
       { korean: '다섯', romanized: 'da-seot', arabic: 'خمسة' },
+      { korean: '여섯', romanized: 'yeo-seot', arabic: 'ستة' },
+      { korean: '일곱', romanized: 'il-gop', arabic: 'سبعة' },
+      { korean: '여덟', romanized: 'yeo-deol', arabic: 'ثمانية' },
+      { korean: '아홉', romanized: 'a-hob', arabic: 'تسعة' },
+      { korean: '열', romanized: 'yeol', arabic: 'عشرة' },
+    ]
+  },
+  {
+    title: { ar: 'الأرقام (11-20)', ko: '숫자 11-20' },
+    words: [
+      { korean: '열한', romanized: 'yeol-han', arabic: 'حادي عشر' },
+      { korean: '열두', romanized: 'yeol-du', arabic: 'اثنا عشر' },
+      { korean: '열셋', romanized: 'yeol-set', arabic: 'ثلاثة عشر' },
+      { korean: '열넷', romanized: 'yeol-net', arabic: 'أربعة عشر' },
+      { korean: '열다섯', romanized: 'yeol-da-seot', arabic: 'خمسة عشر' },
+      { korean: '열여섯', romanized: 'yeol-yeo-seot', arabic: 'ستة عشر' },
+      { korean: '열일곱', romanized: 'yeol-il-gop', arabic: 'سبعة عشر' },
+      { korean: '열여덟', romanized: 'yeol-yeo-deol', arabic: 'ثمانية عشر' },
+      { korean: '열아홉', romanized: 'yeol-a-hob', arabic: 'تسعة عشر' },
+      { korean: '스무', romanized: 'seu-mu', arabic: 'عشرون' },
     ]
   },
   {
@@ -42,17 +66,89 @@ const pronunciationLessons = [
     words: [
       { korean: '어머니', romanized: 'eo-meo-ni', arabic: 'أم' },
       { korean: '아버지', romanized: 'a-beo-ji', arabic: 'أب' },
-      { korean: '형제', romanized: 'hyeong-je', arabic: 'أخ' },
-      { korean: '자매', romanized: 'ja-mae', arabic: 'أخت' },
+      { korean: '형', romanized: 'hyeong', arabic: 'أخ أكبر' },
+      { korean: '누나', romanized: 'nu-na', arabic: 'أخت أكبر' },
+      { korean: '동생', romanized: 'dong-saeng', arabic: 'أخ/أخت أصغر' },
+      { korean: '할머니', romanized: 'hal-meo-ni', arabic: 'جدة' },
+      { korean: '할아버지', romanized: 'hal-a-beo-ji', arabic: 'جد' },
+      { korean: '친구', romanized: 'chin-gu', arabic: 'صديق' },
     ]
   },
   {
-    title: { ar: 'الطعام', ko: '음식' },
+    title: { ar: 'الطعام الكوري', ko: '한국 음식' },
     words: [
       { korean: '밥', romanized: 'bap', arabic: 'أرز' },
       { korean: '김치', romanized: 'gim-chi', arabic: 'كيمتشي' },
       { korean: '불고기', romanized: 'bul-go-gi', arabic: 'بولغوغي' },
       { korean: '비빔밥', romanized: 'bi-bim-bap', arabic: 'بيبيمباب' },
+      { korean: '국', romanized: 'guk', arabic: 'حساء' },
+      { korean: '찌개', romanized: 'jji-gae', arabic: 'يخنة' },
+      { korean: '계란', romanized: 'gye-ran', arabic: 'بيض' },
+      { korean: '떡', romanized: 'tteok', arabic: 'كعكة أرز' },
+    ]
+  },
+  {
+    title: { ar: 'المشروبات', ko: '음료' },
+    words: [
+      { korean: '물', romanized: 'mul', arabic: 'ماء' },
+      { korean: '커피', romanized: 'keo-pi', arabic: 'قهوة' },
+      { korean: '차', romanized: 'cha', arabic: 'شاي' },
+      { korean: '우유', romanized: 'u-yu', arabic: 'حليب' },
+      { korean: '주스', romanized: 'ju-seu', arabic: 'عصير' },
+      { korean: '소주', romanized: 'so-ju', arabic: 'سوجو' },
+      { korean: '맥주', romanized: 'maek-ju', arabic: 'بيرة' },
+      { korean: '와인', romanized: 'wa-in', arabic: 'نبيذ' },
+    ]
+  },
+  {
+    title: { ar: 'الألوان', ko: '색깔' },
+    words: [
+      { korean: '빨강', romanized: 'bbalgab', arabic: 'أحمر' },
+      { korean: '파랑', romanized: 'pa-rang', arabic: 'أزرق' },
+      { korean: '노랑', romanized: 'no-rang', arabic: 'أصفر' },
+      { korean: '초록', romanized: 'cho-rok', arabic: 'أخضر' },
+      { korean: '검정', romanized: 'geom-jeong', arabic: 'أسود' },
+      { korean: '하양', romanized: 'ha-yang', arabic: 'أبيض' },
+      { korean: '회색', romanized: 'hoe-saek', arabic: 'رمادي' },
+      { korean: '분홍', romanized: 'bun-hong', arabic: 'وردي' },
+    ]
+  },
+  {
+    title: { ar: 'أيام الأسبوع', ko: '요일' },
+    words: [
+      { korean: '월요일', romanized: 'wol-yo-il', arabic: 'الاثنين' },
+      { korean: '화요일', romanized: 'hwa-yo-il', arabic: 'الثلاثاء' },
+      { korean: '수요일', romanized: 'su-yo-il', arabic: 'الأربعاء' },
+      { korean: '목요일', romanized: 'mok-yo-il', arabic: 'الخميس' },
+      { korean: '금요일', romanized: 'geum-yo-il', arabic: 'الجمعة' },
+      { korean: '토요일', romanized: 'to-yo-il', arabic: 'السبت' },
+      { korean: '일요일', romanized: 'il-yo-il', arabic: 'الأحد' },
+    ]
+  },
+  {
+    title: { ar: 'أجزاء الجسم', ko: '신체 부위' },
+    words: [
+      { korean: '머리', romanized: 'meo-ri', arabic: 'رأس' },
+      { korean: '눈', romanized: 'nun', arabic: 'عين' },
+      { korean: '코', romanized: 'ko', arabic: 'أنف' },
+      { korean: '입', romanized: 'ip', arabic: 'فم' },
+      { korean: '귀', romanized: 'gwi', arabic: 'أذن' },
+      { korean: '손', romanized: 'son', arabic: 'يد' },
+      { korean: '발', romanized: 'bal', arabic: 'قدم' },
+      { korean: '다리', romanized: 'da-ri', arabic: 'ساق' },
+    ]
+  },
+  {
+    title: { ar: 'الأماكن', ko: '장소' },
+    words: [
+      { korean: '집', romanized: 'jip', arabic: 'منزل' },
+      { korean: '학교', romanized: 'hak-gyo', arabic: 'مدرسة' },
+      { korean: '회사', romanized: 'hoe-sa', arabic: 'شركة' },
+      { korean: '병원', romanized: 'byeong-won', arabic: 'مستشفى' },
+      { korean: '은행', romanized: 'eun-haeng', arabic: 'بنك' },
+      { korean: '가게', romanized: 'ga-ge', arabic: 'متجر' },
+      { korean: '카페', romanized: 'ka-pe', arabic: 'مقهى' },
+      { korean: '공원', romanized: 'gong-won', arabic: 'حديقة' },
     ]
   }
 ];

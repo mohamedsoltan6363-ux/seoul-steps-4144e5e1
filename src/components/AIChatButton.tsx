@@ -41,14 +41,56 @@ const AIChatButton: React.FC = () => {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setInput(prev => prev + ' [تسجيل صوتي]');
-          console.log('[v0] تم تسجيل الصوت بنجاح');
-        };
-        reader.readAsDataURL(audioBlob);
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         stream.getTracks().forEach(track => track.stop());
+        
+        // استخدام Web Speech API لتحويل الصوت إلى نص
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+          alert(isRTL ? 'المتصفح لا يدعم التعرف على الكلام' : '브라우저가 음성 인식을 지원하지 않습니다');
+          return;
+        }
+        
+        const recognition = new SpeechRecognition();
+        recognition.language = isRTL ? 'ar-SA' : 'ko-KR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        
+        recognition.onstart = () => {
+          console.log('[v0] بدء التعرف على الصوت...');
+        };
+        
+        recognition.onresult = (event: any) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const isFinal = event.results[i].isFinal;
+            transcript += event.results[i][0].transcript;
+            if (isFinal) {
+              console.log('[v0] تم التعرف على:', transcript);
+            }
+          }
+          if (transcript.trim()) {
+            setInput(prev => {
+              if (!prev) return transcript.trim();
+              return prev + ' ' + transcript.trim();
+            });
+          }
+        };
+        
+        recognition.onerror = (event: any) => {
+          console.error('[v0] خطأ:', event.error);
+        };
+        
+        recognition.onend = () => {
+          console.log('[v0] انتهى التعرف على الصوت');
+        };
+        
+        try {
+          recognition.start();
+        } catch (err) {
+          console.log('[v0] جاري معالجة الصوت...');
+        }
       };
 
       mediaRecorder.start();
