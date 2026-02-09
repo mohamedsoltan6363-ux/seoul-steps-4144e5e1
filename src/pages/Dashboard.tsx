@@ -283,58 +283,14 @@ const Dashboard: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Hero Welcome Section - Arabic Hangul Academy */}
+        {/* Hero Welcome Section */}
         <motion.div 
           variants={itemVariants}
-          className="relative mb-8 rounded-3xl overflow-hidden group"
+          className="relative mb-8 p-8 rounded-3xl overflow-hidden group"
           whileHover={{ scale: 1.01 }}
         >
-          {/* Background - Soft Blue Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-cyan-50 to-blue-50" />
-          
-          {/* Decorative Geometric Shapes */}
-          <div className="absolute inset-0 opacity-5">
-            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <pattern id="hexagons" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-                  <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="1" fill="none" />
-                  <path d="M100,30 L160,70 L160,150 L100,190 L40,150 L40,70 Z" stroke="currentColor" strokeWidth="1" fill="none" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#hexagons)" />
-            </svg>
-          </div>
-          
-          {/* Animated Floating Elements */}
-          <motion.div
-            className="absolute top-10 right-20 w-32 h-32 bg-blue-200/30 rounded-full blur-3xl"
-            animate={{ y: [0, 30, 0] }}
-            transition={{ duration: 6, repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute bottom-10 left-10 w-40 h-40 bg-cyan-200/20 rounded-full blur-3xl"
-            animate={{ y: [0, -30, 0] }}
-            transition={{ duration: 7, repeat: Infinity }}
-          />
-          
-          <div className="relative px-8 py-12 md:py-16 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            {/* Left Side - Illustration */}
-            <motion.div 
-              className="hidden md:flex flex-shrink-0 w-full md:w-1/3 items-center justify-center"
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              <motion.div
-                animate={{ y: [-10, 10, -10] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                <img 
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
-                  alt="Arabic Hangul Academy"
-                  className="w-72 h-auto drop-shadow-2xl filter brightness-105"
-                />
-              </motion.div>
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 opacity-90" />
             </motion.div>
 
             {/* Right Side - Content */}
@@ -366,7 +322,7 @@ const Dashboard: React.FC = () => {
               >
                 {language === 'ar' 
                   ? 'اكتشف جمال اللغة الكورية من خلال منهج عصري يجمع بين الأصالة العربية والتقنية الحديثة. انضم إلى آلاف الطلاب الذين بدأوا رحلتهم نحو الإتقان اليوم.'
-                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통��� 한국어의 아름다움을 발견하세요.'}
+                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통����� 한국어의 아름다움을 발견하세요.'}
               </motion.p>
 
               {/* Action Buttons */}

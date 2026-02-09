@@ -248,95 +248,115 @@ const HomePage: React.FC = () => {
             </motion.button>
           </motion.div>
 
-          {/* Flags Section - Positioned at top with premium animations */}
+          {/* Arabic Hangul Academy Hero Section */}
           <motion.div
-            className="w-full flex flex-row items-start justify-center gap-4 sm:gap-6 lg:gap-12 mb-8 lg:mb-16 order-first lg:order-last"
+            className="w-full rounded-3xl overflow-hidden bg-gradient-to-br from-blue-100 via-cyan-50 to-blue-50 p-8 sm:p-12 lg:p-16 mb-8 lg:mb-16 order-first lg:order-last"
             initial={{ opacity: 0, y: -60 }}
             animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : -60 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            {/* Egyptian Flag */}
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              whileHover={{ scale: 1.08 }}
-              initial={{ opacity: 0, x: -60, y: -40 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
-            >
-              <motion.div
-                className="relative"
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <motion.img
-                  src={personEgyptianFlag}
-                  alt="Person with Egyptian Flag"
-                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
-                  initial={{ scale: 0.6, opacity: 0, rotateZ: -15 }}
-                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
-                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-                className="text-center"
-              >
-                <span className="text-2xl sm:text-3xl block">🇪🇬</span>
-              </motion.div>
-            </motion.div>
+            {/* Decorative Geometric Background */}
+            <div className="absolute inset-0 opacity-5">
+              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="hexagons" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                    <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="1" fill="none" />
+                    <path d="M100,30 L160,70 L160,150 L100,190 L40,150 L40,70 Z" stroke="currentColor" strokeWidth="1" fill="none" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#hexagons)" />
+              </svg>
+            </div>
 
-            {/* Decorative element between */}
+            {/* Animated Floating Background Elements */}
             <motion.div
-              className="flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, type: 'spring', stiffness: 100 }}
-            >
-              <div className="hidden lg:block relative">
-                <div className="w-16 h-16 rounded-full border-2 border-blue-300 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  >
-                    <Star className="w-6 h-6 text-blue-500" />
-                  </motion.div>
-                </div>
+              className="absolute top-10 right-20 w-32 h-32 bg-blue-200/30 rounded-full blur-3xl pointer-events-none"
+              animate={{ y: [0, 30, 0] }}
+              transition={{ duration: 6, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute bottom-10 left-10 w-40 h-40 bg-cyan-200/20 rounded-full blur-3xl pointer-events-none"
+              animate={{ y: [0, -30, 0] }}
+              transition={{ duration: 7, repeat: Infinity }}
+            />
+
+            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+              {/* Left Side - Character Illustration */}
+              <motion.div 
+                className="flex-shrink-0 w-full lg:w-1/3 flex items-center justify-center"
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              >
+                <motion.div
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  <img 
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
+                    alt="Arabic Hangul Academy"
+                    className="w-64 h-auto drop-shadow-2xl filter brightness-105"
+                  />
+                </motion.div>
+              </motion.div>
+
+              {/* Right Side - Content */}
+              <div className="flex-1 text-center lg:text-right">
+                <motion.p 
+                  className="text-sm lg:text-base font-medium text-blue-600 mb-4 flex items-center gap-2 justify-center lg:justify-end"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <span className="inline-block w-8 h-0.5 bg-blue-600"></span>
+                  {isRTL ? 'جسر الثقافة' : '문화의 다리'}
+                </motion.p>
+
+                <motion.h2 
+                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-4 leading-tight"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8 }}
+                >
+                  {isRTL ? 'أكاديمية هانغل العربية' : 'Arabic Hangul Academy'}
+                </motion.h2>
+
+                <motion.p 
+                  className="text-base sm:text-lg lg:text-xl text-blue-700/80 mb-8 leading-relaxed"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                >
+                  {isRTL 
+                    ? 'اكتشف جمال اللغة الكورية من خلال منهج عصري يجمع بين الأصالة العربية والتقنية الحديثة. انضم إلى آلاف الطلاب الذين بدأوا رحلتهم نحو الإتقان اليوم.'
+                    : 'Learn Korean with Arabic heritage. Discover the beauty of Korean language through a modern curriculum combining Arabic authenticity with cutting-edge technology.'}
+                </motion.p>
+
+                {/* Stats */}
+                <motion.div 
+                  className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-end items-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">👥</span>
+                    <div>
+                      <span className="text-blue-700 font-semibold block">15K+</span>
+                      <span className="text-blue-600/70 text-xs">{isRTL ? 'طالب نشط' : 'Active Students'}</span>
+                    </div>
+                  </div>
+                  <div className="hidden sm:block w-px h-8 bg-blue-300/50" />
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">⭐</span>
+                    <div>
+                      <span className="text-blue-700 font-semibold block">4.9</span>
+                      <span className="text-blue-600/70 text-xs">{isRTL ? 'تقييم' : 'Rating'}</span>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-
-            {/* Korean Flag */}
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              whileHover={{ scale: 1.08 }}
-              initial={{ opacity: 0, x: 60, y: -40 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
-            >
-              <motion.div
-                className="relative"
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-              >
-                <motion.img
-                  src={personKoreanFlag}
-                  alt="Person with Korean Flag"
-                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
-                  initial={{ scale: 0.6, opacity: 0, rotateZ: 15 }}
-                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
-                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-                className="text-center"
-              >
-                <span className="text-2xl sm:text-3xl block">🇰🇷</span>
-              </motion.div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
 
@@ -363,7 +383,7 @@ const HomePage: React.FC = () => {
               {
                 icon: BookOpen,
                 title: isRTL ? 'دروس تفاعلية' : '대화형 수업',
-                desc: isRTL ? 'تعلم من خلال محتوى تفاعلي مصمم بعناية' : '신중하게 설계된 대화형 콘텐츠를 통해 학습하세요'
+                desc: isRTL ? 'تعلم من خل��ل محتوى تفاعلي مصمم بعناية' : '신중하게 설계된 대화형 콘텐츠를 통해 학습하세요'
               },
               {
                 icon: GraduationCap,
