@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Sparkles, X, Maximize2, Send, Bot, User, Loader2, Volume2 } from 'lucide-react';
+import { MessageCircle, Sparkles, X, Maximize2, Send, Bot, User, Loader2, Volume2, Mic } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,11 +20,51 @@ const AIChatButton: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInput(prev => prev + ' [تسجيل صوتي]');
+          console.log('[v0] تم تسجيل الصوت بنجاح');
+        };
+        reader.readAsDataURL(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('[v0] خطأ في الوصول للميكروفون:', error);
+      alert(isRTL ? 'لم يتمكن من الوصول للميكروفون' : '마이크에 접근할 수 없습니다');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const playKorean = (text: string) => {
     const koreanText = text.match(/[\uAC00-\uD7AF]+/g)?.join(' ') || text;
@@ -203,6 +243,19 @@ const AIChatButton: React.FC = () => {
             {/* Input */}
             <div className="p-2 border-t border-border">
               <div className="flex gap-2 items-center">
+                <motion.button
+                  whileHover={!isRecording ? { scale: 1.05 } : {}}
+                  onClick={isRecording ? stopRecording : startRecording}
+                  animate={isRecording ? { backgroundColor: '#ef4444' } : {}}
+                  className={`p-2 rounded-xl transition-all flex-shrink-0 ${
+                    isRecording 
+                      ? 'bg-red-500 text-white animate-pulse' 
+                      : 'bg-muted hover:bg-muted/80'
+                  }`}
+                  title={isRecording ? (isRTL ? 'إيقاف التسجيل' : '녹음 중지') : (isRTL ? 'ابدأ التسجيل' : '녹음 시작')}
+                >
+                  <Mic className={`w-4 h-4 ${isRecording ? 'text-white' : ''}`} />
+                </motion.button>
                 <input
                   type="text"
                   value={input}

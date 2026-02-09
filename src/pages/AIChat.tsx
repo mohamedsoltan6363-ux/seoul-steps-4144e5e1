@@ -22,7 +22,10 @@ const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const isRTL = language === 'ar';
 
   useEffect(() => {
@@ -32,6 +35,44 @@ const AIChat: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const audioBase64 = reader.result as string;
+          setInput(prev => prev + ' [تسجيل صوتي]');
+          console.log('[v0] تم تسجيل الصوت بنجاح');
+        };
+        reader.readAsDataURL(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('[v0] خطأ في الوصول للميكروفون:', error);
+      alert(isRTL ? 'لم يتمكن من الوصول للميكروفون' : '마이크에 접근할 수 없습니다');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const playKorean = (text: string) => {
     const koreanText = text.match(/[\uAC00-\uD7AF]+/g)?.join(' ') || text;
@@ -256,9 +297,18 @@ const AIChat: React.FC = () => {
       {/* Input */}
       <div className="sticky bottom-0 bg-background border-t border-border p-4">
         <div className="flex gap-2 items-center max-w-2xl mx-auto">
-          <button className="p-3 rounded-xl bg-muted hover:bg-muted/80 transition-colors">
-            <Mic className="w-5 h-5" />
-          </button>
+          <motion.button 
+            onClick={isRecording ? stopRecording : startRecording}
+            animate={isRecording ? { backgroundColor: '#ef4444' } : {}}
+            className={`p-3 rounded-xl transition-all ${
+              isRecording 
+                ? 'bg-red-500 text-white animate-pulse' 
+                : 'bg-muted hover:bg-muted/80'
+            }`}
+            title={isRecording ? (isRTL ? 'إيقاف التسجيل' : '녹음 중지') : (isRTL ? 'ابدأ التسجيل' : '녹음 시작')}
+          >
+            <Mic className={`w-5 h-5 ${isRecording ? 'text-white' : ''}`} />
+          </motion.button>
           <div className="flex-1 relative">
             <input
               type="text"

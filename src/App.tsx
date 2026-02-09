@@ -72,39 +72,55 @@ const App = () => {
   useEffect(() => {
     const developerMessage = `
 %c
-██████████████████████████████████████████████████████████████████████
-█                                                                    █
-█         %c محمد أيمن %c                                              █
-█                                                                    █
-█             %cتم التطوير بواسطة محمد أيمن%c                             █
-█                                                                    █
-█                %cتاريخ البدء: السابع من يناير%c                        █
-█                %cتاريخ الإنجاز: الثامن من فبراير%c                      █
-█                                                                    █
-█                    %cخطوات سيول - تطبيق تعلم اللغة الكورية%c            █
-█                            %cالإصدار 1.0.0%c                        █
-█                                                                    █
-█                         %cمع أطيب التمنيات بالتعلم الممتع%c            █
-█                                                                    █
-██████████████████████████████████████████████████████████████████████
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║                %c 🎓 خطوات سيول - Seoul Steps 🎓 %c                  ║
+║                                                                       ║
+║              %c محمد أيمن - حامل الرؤية والتطوير %c                 ║
+║                                                                       ║
+║             %cتم التطوير بواسطة: محمد أيمن الجميل%c                 ║
+║                                                                       ║
+║              %cتاريخ البدء: 7 يناير 2025%c                           ║
+║              %cتاريخ الإنجاز: 8 فبراير 2025%c                       ║
+║                                                                       ║
+║     🌸 تطبيق تعلم اللغة الكورية بأسلوب تفاعلي وممتع 🌸           ║
+║                                                                       ║
+║                      💻 الإصدار: 1.0.0                              ║
+║                 🚀 تقنيات حديثة: React + TypeScript                ║
+║                 🎨 تصميم: Tailwind CSS + Framer Motion            ║
+║                                                                       ║
+║           مع أطيب التمنيات بتجربة تعليمية رائعة وممتعة              ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
 `;
 
     console.log(
       developerMessage,
-      'background: linear-gradient(90deg, #1e40af 0%, #7c3aed 50%, #ec4899 100%); padding: 15px; font-weight: bold;',
-      'font-size: 48px; font-weight: 900; color: #fff; font-style: italic; text-shadow: 0 0 10px rgba(0,0,0,0.5), 2px 2px 6px rgba(0,0,0,0.4);',
+      'background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ec4899 100%); padding: 20px; border-radius: 10px;',
+      'font-size: 20px; font-weight: 900; color: #fff; text-shadow: 0 0 15px rgba(0,0,0,0.6), 2px 2px 8px rgba(0,0,0,0.5);',
       '',
-      'font-size: 24px; font-style: italic; color: #fff; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.4);',
+      'font-size: 18px; font-style: italic; color: #fff; font-weight: bold; text-shadow: 0 0 12px rgba(0,0,0,0.5);',
       '',
-      'font-size: 14px; font-style: italic; color: #fbbf24; font-weight: 600;',
+      'font-size: 16px; font-style: italic; color: #fbbf24; font-weight: 700; text-shadow: 0 0 10px rgba(0,0,0,0.4);',
       '',
       'font-size: 14px; font-style: italic; color: #34d399; font-weight: 600;',
       '',
-      'font-size: 16px; font-style: italic; color: #a78bfa; font-weight: bold; text-shadow: 0 0 6px rgba(0,0,0,0.3);',
-      '',
-      'font-size: 14px; color: #f87171; font-weight: bold;',
-      '',
-      'font-size: 14px; color: #60a5fa; font-style: italic; font-weight: 600;'
+      'font-size: 14px; font-style: italic; color: #60a5fa; font-weight: 600;'
+    );
+
+    console.log(
+      '%c🎨 المميزات الرائعة:',
+      'font-size: 16px; color: #667eea; font-weight: bold;'
+    );
+
+    console.log(
+      '%c✨ 10 ألعاب تعليمية مثيرة\n🎤 تمارين نطق متقدمة مع تسجيل صوت\n💬 شات ذكي مع الذكاء الاصطناعي\n📖 قصص كورية تقليدية\n🎵 موسيقى وأغاني\n⭐ نظام إنجازات وتحفيز\n🌍 واجهة متعددة اللغات',
+      'font-size: 13px; color: #764ba2; font-weight: 600; white-space: pre; line-height: 1.8;'
+    );
+
+    console.log(
+      '%c📱 الصورة الكرتونية الجميلة في الصفحة الرئيسية: https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png',
+      'font-size: 12px; color: #ec4899; font-style: italic;'
     );
   }, []);
 
