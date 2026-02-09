@@ -366,7 +366,7 @@ const Dashboard: React.FC = () => {
               >
                 {language === 'ar' 
                   ? 'اكتشف جمال اللغة الكورية من خلال منهج عصري يجمع بين الأصالة العربية والتقنية الحديثة. انضم إلى آلاف الطلاب الذين بدأوا رحلتهم نحو الإتقان اليوم.'
-                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통해 한국어의 아름다움을 발견하세요.'}
+                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통��� 한국어의 아름다움을 발견하세요.'}
               </motion.p>
 
               {/* Action Buttons */}
@@ -416,37 +416,6 @@ const Dashboard: React.FC = () => {
                   <span className="text-blue-600/70 text-sm">{language === 'ar' ? 'تقييم' : '평점'}</span>
                 </div>
               </motion.div>
-            </div>
-          </div>
-        </motion.div>
-                  className="inline-block ml-2"
-                >
-                  👋
-                </motion.span>
-              </motion.h1>
-              <motion.p 
-                className="text-white/90 text-sm mb-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                {language === 'ar' 
-                  ? `🎯 لقد حفظت ${totalMemorized} من ${totalItems} عنصر - أحسنت!` 
-                  : `🎯 ${totalItems}개 중 ${totalMemorized}개 암기 완료 - 잘하고 있어요!`}
-              </motion.p>
-              <div className="relative h-3 bg-white/20 rounded-full overflow-hidden max-w-sm">
-                <motion.div 
-                  className="h-full bg-white rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${totalItems > 0 ? (totalMemorized / totalItems) * 100 : 0}%` }}
-                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
-                />
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                />
-              </div>
             </div>
           </div>
         </motion.div>
