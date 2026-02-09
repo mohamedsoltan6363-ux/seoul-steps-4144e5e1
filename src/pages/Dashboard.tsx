@@ -12,7 +12,7 @@ import {
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
   Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, 
-  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp, Tv
+  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp, Tv, Users
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import koreanCharacter from '@/assets/korean-character.png';
@@ -283,70 +283,142 @@ const Dashboard: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Hero Welcome Section */}
+        {/* Hero Welcome Section - Arabic Hangul Academy */}
         <motion.div 
           variants={itemVariants}
-          className="relative mb-8 p-8 rounded-3xl overflow-hidden group"
+          className="relative mb-8 rounded-3xl overflow-hidden group"
           whileHover={{ scale: 1.01 }}
         >
-          {/* Animated Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 opacity-90" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" />
+          {/* Background - Soft Blue Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-cyan-50 to-blue-50" />
           
-          {/* Floating Shapes */}
+          {/* Decorative Geometric Shapes */}
+          <div className="absolute inset-0 opacity-5">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="hexagons" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                  <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="1" fill="none" />
+                  <path d="M100,30 L160,70 L160,150 L100,190 L40,150 L40,70 Z" stroke="currentColor" strokeWidth="1" fill="none" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#hexagons)" />
+            </svg>
+          </div>
+          
+          {/* Animated Floating Elements */}
           <motion.div
-            className="absolute top-4 right-20 w-20 h-20 bg-white/10 rounded-full"
-            animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
+            className="absolute top-10 right-20 w-32 h-32 bg-blue-200/30 rounded-full blur-3xl"
+            animate={{ y: [0, 30, 0] }}
             transition={{ duration: 6, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-4 right-40 w-12 h-12 bg-white/10 rounded-lg"
-            animate={{ y: [10, -10, 10], rotate: [0, -180, -360] }}
-            transition={{ duration: 5, repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute top-1/2 right-10 w-8 h-8 bg-white/20 rounded-full"
-            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute bottom-10 left-10 w-40 h-40 bg-cyan-200/20 rounded-full blur-3xl"
+            animate={{ y: [0, -30, 0] }}
+            transition={{ duration: 7, repeat: Infinity }}
           />
           
-          <div className="relative flex items-center gap-6">
-            <div className="hidden sm:block">
-              <motion.img 
-                src={koreanCharacter} 
-                alt="Korean Character" 
-                className="w-36 h-auto drop-shadow-2xl"
-                animate={{ 
-                  y: [-5, 5, -5],
-                  rotate: [-2, 2, -2]
-                }}
+          <div className="relative px-8 py-12 md:py-16 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Left Side - Illustration */}
+            <motion.div 
+              className="hidden md:flex flex-shrink-0 w-full md:w-1/3 items-center justify-center"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              <motion.div
+                animate={{ y: [-10, 10, -10] }}
                 transition={{ duration: 4, repeat: Infinity }}
-              />
-            </div>
-            <div className="flex-1">
-              <motion.div 
-                className="flex items-center gap-2 mb-2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
               >
-                <p className="text-white/80 text-sm">{greeting}</p>
-                <span className="text-white/50 text-xs">•</span>
-                <span className="text-white/70 text-xs flex items-center gap-1">
-                  <Heart className="w-3 h-3 text-rose-300 fill-rose-300" />
-                  {language === 'ar' ? 'أهلاً بك في منصتي!' : '내 플랫폼에 오신 것을 환영합니다!'}
-                </span>
+                <img 
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
+                  alt="Arabic Hangul Academy"
+                  className="w-72 h-auto drop-shadow-2xl filter brightness-105"
+                />
               </motion.div>
+            </motion.div>
+
+            {/* Right Side - Content */}
+            <div className="flex-1 text-center md:text-right">
+              <motion.p 
+                className="text-sm md:text-base font-medium text-blue-600 mb-3 flex items-center gap-2 justify-center md:justify-end"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <span className="inline-block w-8 h-0.5 bg-blue-600"></span>
+                {language === 'ar' ? 'جسر الثقافة' : '문화의 다리'}
+              </motion.p>
+
               <motion.h1 
-                className="text-3xl md:text-4xl font-bold text-white mb-3"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900 mb-4 leading-tight"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+              >
+                {language === 'ar' ? 'تعلم الكورية برموح عربية' : '아랍 정신으로 한국어 배우기'}
+              </motion.h1>
+
+              <motion.p 
+                className="text-lg md:text-xl text-blue-700/80 mb-8 leading-relaxed max-w-2xl"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+              >
+                {language === 'ar' 
+                  ? 'اكتشف جمال اللغة الكورية من خلال منهج عصري يجمع بين الأصالة العربية والتقنية الحديثة. انضم إلى آلاف الطلاب الذين بدأوا رحلتهم نحو الإتقان اليوم.'
+                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통해 한국어의 아름다움을 발견하세요.'}
+              </motion.p>
+
+              {/* Action Buttons */}
+              <motion.div 
+                className="flex flex-col md:flex-row gap-4 justify-center md:justify-end items-center"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(29, 78, 216, 0.3)' }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/lessons')}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full flex items-center gap-2 hover:shadow-lg transition-all"
+                >
+                  <Rocket className="w-5 h-5" />
+                  {language === 'ar' ? 'ابدأ رحلتك المجانية' : '무료로 시작하기'}
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/lessons')}
+                  className="px-8 py-3 border-2 border-blue-600 text-blue-600 font-semibold rounded-full flex items-center gap-2 hover:bg-blue-50 transition-all"
+                >
+                  <BookOpen className="w-5 h-5" />
+                  {language === 'ar' ? 'تصفح الدورات' : '코스 둘러보기'}
+                </motion.button>
+              </motion.div>
+
+              {/* Stats */}
+              <motion.div 
+                className="flex flex-col md:flex-row gap-6 mt-10 justify-center md:justify-end items-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 1 }}
               >
-                {language === 'ar' ? 'مرحباً بك!' : '환영합니다!'} 
-                <motion.span
-                  animate={{ rotate: [0, 20, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-blue-600" />
+                  <span className="text-blue-700 font-semibold">15K+</span>
+                  <span className="text-blue-600/70 text-sm">{language === 'ar' ? 'طالب نشط' : '활성 학생'}</span>
+                </div>
+                <div className="hidden md:block w-px h-8 bg-blue-300/50" />
+                <div className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  <span className="text-blue-700 font-semibold">4.9</span>
+                  <span className="text-blue-600/70 text-sm">{language === 'ar' ? 'تقييم' : '평점'}</span>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
                   className="inline-block ml-2"
                 >
                   👋
