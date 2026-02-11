@@ -30,6 +30,7 @@ import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
 import KoreanSeries from "./pages/KoreanSeries";
+import AdminDashboard from "./pages/AdminDashboard";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
@@ -97,6 +98,7 @@ const App = () => {
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/explore" element={<Explore />} />
                   <Route path="/learn/:level" element={<Learn />} />
                   <Route path="/review" element={<Review />} />

@@ -136,9 +136,15 @@ const HomePage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-4"
+          className="flex items-center gap-3"
         >
           <LanguageSwitcher />
+          <button
+            onClick={() => navigate('/admin')}
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-100/50 backdrop-blur-sm border border-amber-200 text-amber-700 text-sm font-medium hover:bg-amber-100/70 transition-all"
+          >
+            {isRTL ? 'لوحة التحكم' : '관리자'}
+          </button>
           <button
             onClick={() => navigate('/auth')}
             className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800/10 backdrop-blur-sm border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-800/20 transition-all"
