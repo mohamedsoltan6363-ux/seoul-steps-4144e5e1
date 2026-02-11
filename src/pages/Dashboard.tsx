@@ -379,29 +379,6 @@ const Dashboard: React.FC = () => {
           </div>
         </motion.div>
 
-              {/* Stats */}
-              <motion.div 
-                className="flex flex-col md:flex-row gap-6 mt-10 justify-center md:justify-end items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
-              >
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-blue-600" />
-                  <span className="text-blue-700 font-semibold">15K+</span>
-                  <span className="text-blue-600/70 text-sm">{language === 'ar' ? 'طالب نشط' : '활성 학생'}</span>
-                </div>
-                <div className="hidden md:block w-px h-8 bg-blue-300/50" />
-                <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                  <span className="text-blue-700 font-semibold">4.9</span>
-                  <span className="text-blue-600/70 text-sm">{language === 'ar' ? 'تقييم' : '평점'}</span>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Beautiful Character Illustration Section */}
         <motion.div 
           variants={itemVariants}
