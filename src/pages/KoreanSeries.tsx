@@ -44,7 +44,7 @@ const KoreanSeries: React.FC = () => {
         ? 'تعلم العبارات والمحادثات الأساسية المستخدمة في الحياة اليومية الكورية'
         : '한국 일상생활에서 사용되는 기본 표현과 대화를 배우세요',
       thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
-      videoId: '0l6HmEF6nQQ',
+      videoId: 'Ddn4MGaS3N8',
       duration: '15:30',
       rating: 4.8,
       episodes: 24,
@@ -59,7 +59,7 @@ const KoreanSeries: React.FC = () => {
         ? 'شاهد مقاطع من المسلسلات الكورية الشهيرة مع ترجمة عربية وكورية'
         : '인기 한국 드라마 클립을 아랍어와 한국어 자막과 함께 시청하세요',
       thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
-      videoId: '3P1CnWI62Ik',
+      videoId: 'T0O9xcTKUfg',
       duration: '22:45',
       rating: 4.9,
       episodes: 16,
@@ -74,7 +74,7 @@ const KoreanSeries: React.FC = () => {
         ? 'تعلم النطق الصحيح للحروف والكلمات الكورية من متحدثين أصليين'
         : '원어민과 함께 한글과 단어의 올바른 발음을 배우세요',
       thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
-      videoId: 'YTprR3Ud9HA',
+      videoId: '1mTsuLuHw70',
       duration: '18:20',
       rating: 4.7,
       episodes: 12,
@@ -89,7 +89,7 @@ const KoreanSeries: React.FC = () => {
         ? 'استكشف الثقافة والتقاليد الكورية من خلال فيديوهات تعليمية ممتعة'
         : '재미있는 교육 영상을 통해 한국 문화와 전통을 탐험하세요',
       thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
-      videoId: 'kV8v2GKC8WA',
+      videoId: 'v4OmkZHPjpA',
       duration: '25:10',
       rating: 4.6,
       episodes: 20,
@@ -104,7 +104,7 @@ const KoreanSeries: React.FC = () => {
         ? 'محادثات متقدمة للمتعلمين ذوي المستوى المتوسط والمتقدم'
         : '중급 및 고급 학습자를 위한 고급 대화',
       thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
-      videoId: '2N8urTqTxhw',
+      videoId: 'tYzMGcUty6s',
       duration: '30:00',
       rating: 4.5,
       episodes: 15,
@@ -119,7 +119,7 @@ const KoreanSeries: React.FC = () => {
         ? 'مشاهد مختارة من أشهر المسلسلات الكورية مع شرح اللغة'
         : '인기 한국 드라마의 선별된 장면과 언어 설명',
       thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
-      videoId: 'GTIFZBsd4mk',
+      videoId: 'V2hlQkVsHwE',
       duration: '28:15',
       rating: 4.9,
       episodes: 30,
@@ -321,17 +321,28 @@ const KoreanSeries: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Video Player */}
-              <div className="relative aspect-video bg-black">
+              <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
                 <iframe
-                  src={`https://www.youtube.com/embed/${selectedSeries.videoId}?autoplay=1&rel=0`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  key={selectedSeries.videoId}
+                  src={`https://www.youtube.com/embed/${selectedSeries.videoId}?autoplay=1&rel=0&controls=1&modestbranding=1`}
+                  className="w-full h-full absolute inset-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   allowFullScreen
                   title={selectedSeries.title}
+                  frameBorder="0"
+                  loading="lazy"
+                  style={{ 
+                    border: 'none',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%'
+                  }}
                 />
                 <button
                   onClick={() => setSelectedSeries(null)}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-20"
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>
