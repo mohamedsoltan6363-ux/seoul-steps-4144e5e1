@@ -379,66 +379,6 @@ const Dashboard: React.FC = () => {
           </div>
         </motion.div>
 
-            {/* Right Side - Content */}
-            <div className="flex-1 text-center md:text-right">
-              <motion.p 
-                className="text-sm md:text-base font-medium text-blue-600 mb-3 flex items-center gap-2 justify-center md:justify-end"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <span className="inline-block w-8 h-0.5 bg-blue-600"></span>
-                {language === 'ar' ? 'جسر الثقافة' : '문화의 다리'}
-              </motion.p>
-
-              <motion.h1 
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900 mb-4 leading-tight"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-              >
-                {language === 'ar' ? 'تعلم الكورية برموح عربية' : '아랍 정신으로 한국어 배우기'}
-              </motion.h1>
-
-              <motion.p 
-                className="text-lg md:text-xl text-blue-700/80 mb-8 leading-relaxed max-w-2xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-              >
-                {language === 'ar' 
-                  ? 'اكتشف جمال اللغة الكورية من خلال منهج عصري يجمع بين الأصالة العربية والتقنية الحديثة. انضم إلى آلاف الطلاب الذين بدأوا رحلتهم نحو الإتقان اليوم.'
-                  : '현대 기술과 아랍의 정통성이 어우러진 혁신적인 방법을 통����� 한국어의 아름다움을 발견하세요.'}
-              </motion.p>
-
-              {/* Action Buttons */}
-              <motion.div 
-                className="flex flex-col md:flex-row gap-4 justify-center md:justify-end items-center"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(29, 78, 216, 0.3)' }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/lessons')}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full flex items-center gap-2 hover:shadow-lg transition-all"
-                >
-                  <Rocket className="w-5 h-5" />
-                  {language === 'ar' ? 'ابدأ رحلتك المجانية' : '무료로 시작하기'}
-                </motion.button>
-                
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/lessons')}
-                  className="px-8 py-3 border-2 border-blue-600 text-blue-600 font-semibold rounded-full flex items-center gap-2 hover:bg-blue-50 transition-all"
-                >
-                  <BookOpen className="w-5 h-5" />
-                  {language === 'ar' ? 'تصفح الدورات' : '코스 둘러보기'}
-                </motion.button>
-              </motion.div>
-
               {/* Stats */}
               <motion.div 
                 className="flex flex-col md:flex-row gap-6 mt-10 justify-center md:justify-end items-center"
