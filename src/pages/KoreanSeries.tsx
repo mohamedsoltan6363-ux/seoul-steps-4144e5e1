@@ -38,91 +38,166 @@ const KoreanSeries: React.FC = () => {
   const seriesList: KoreanSeriesItem[] = [
     {
       id: '1',
-      title: isRTL ? 'تعلم الكورية - المحادثات اليومية' : 'Learn Korean - Daily Conversations',
-      titleKr: '한국어 배우기 - 일상 대화',
+      title: isRTL ? 'الدرس الأول - تعلم الحروف' : 'Lesson 1 - Learn Hangul',
+      titleKr: '첫 번째 수업 - 한글 배우기',
       description: isRTL 
-        ? 'تعلم العبارات والمحادثات الأساسية المستخدمة في الحياة اليومية الكورية'
-        : '한국 일상생활에서 사용되는 기본 표현과 대화를 배우세요',
+        ? 'تعلم الحروف الكورية الأساسية خطوة بخطوة'
+        : '한국어 기본 글자를 단계별로 배우세요',
       thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
-      videoId: 'Ddn4MGaS3N8',
-      duration: '15:30',
-      rating: 4.8,
-      episodes: 24,
+      videoId: 'OzNzgcrHcwk',
+      duration: '12:34',
+      rating: 4.9,
+      episodes: 1,
       category: 'learning',
       difficulty: 'beginner'
     },
     {
       id: '2',
-      title: isRTL ? 'مسلسل كوري مترجم - مستوى مبتدئ' : 'Korean Drama - Beginner Level',
-      titleKr: '한국 드라마 - 초급',
+      title: isRTL ? 'الدرس الثاني - التحية والتعريف' : 'Lesson 2 - Greetings',
+      titleKr: '두 번째 수업 - 인사 배우기',
       description: isRTL 
-        ? 'شاهد مقاطع من المسلسلات الكورية الشهيرة مع ترجمة عربية وكورية'
-        : '인기 한국 드라마 클립을 아랍어와 한국어 자막과 함께 시청하세요',
+        ? 'تعلم كيفية التحية والتعريف عن نفسك'
+        : '인사와 자기소개 배우기',
       thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
-      videoId: 'T0O9xcTKUfg',
-      duration: '22:45',
-      rating: 4.9,
-      episodes: 16,
-      category: 'drama',
+      videoId: 'rNfx7J34htU',
+      duration: '14:22',
+      rating: 4.8,
+      episodes: 1,
+      category: 'learning',
       difficulty: 'beginner'
     },
     {
       id: '3',
-      title: isRTL ? 'نطق اللغة الكورية' : 'Korean Pronunciation',
-      titleKr: '한국어 발음',
+      title: isRTL ? 'الدرس الثالث - الأرقام الكورية' : 'Lesson 3 - Korean Numbers',
+      titleKr: '세 번째 수업 - 한국 숫자',
       description: isRTL 
-        ? 'تعلم النطق الصحيح للحروف والكلمات الكورية من متحدثين أصليين'
-        : '원어민과 함께 한글과 단어의 올바른 발음을 배우세요',
+        ? 'تعلم الأرقام والأعداد باللغة الكورية'
+        : '한국 숫자와 개수 배우기',
       thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
-      videoId: '1mTsuLuHw70',
-      duration: '18:20',
+      videoId: 'uPpbyQHj8bs',
+      duration: '15:45',
       rating: 4.7,
-      episodes: 12,
+      episodes: 1,
       category: 'learning',
       difficulty: 'beginner'
     },
     {
       id: '4',
-      title: isRTL ? 'الثقافة الكورية' : 'Korean Culture',
-      titleKr: '한국 문화',
+      title: isRTL ? 'الدرس الرابع - العائلة والعلاقات' : 'Lesson 4 - Family Members',
+      titleKr: '네 번째 수업 - 가족 관계',
       description: isRTL 
-        ? 'استكشف الثقافة والتقاليد الكورية من خلال فيديوهات تعليمية ممتعة'
-        : '재미있는 교육 영상을 통해 한국 문화와 전통을 탐험하세요',
+        ? 'تعلم أسماء أفراد العائلة بالكورية'
+        : '가족 관계와 호칭 배우기',
       thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
-      videoId: 'v4OmkZHPjpA',
-      duration: '25:10',
-      rating: 4.6,
-      episodes: 20,
+      videoId: 'xhMg3lMA7vc',
+      duration: '16:20',
+      rating: 4.8,
+      episodes: 1,
+      category: 'learning',
+      difficulty: 'beginner'
+    },
+    {
+      id: '5',
+      title: isRTL ? 'الدرس الخامس - الطعام والشراب' : 'Lesson 5 - Food and Drinks',
+      titleKr: '다섯 번째 수업 - 음식과 음료',
+      description: isRTL 
+        ? 'تعلم أسماء الأطعمة والمشروبات الشهيرة'
+        : '한국 음식과 음료 배우기',
+      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
+      videoId: 'lsjbl8wsqWA',
+      duration: '17:05',
+      rating: 4.9,
+      episodes: 1,
+      category: 'learning',
+      difficulty: 'beginner'
+    },
+    {
+      id: '6',
+      title: isRTL ? 'الدرس السادس - الأماكن والعنوان' : 'Lesson 6 - Places and Directions',
+      titleKr: '여섯 번째 수업 - 장소와 방향',
+      description: isRTL 
+        ? 'تعلم أسماء الأماكن والاتجاهات'
+        : '장소와 길 찾기 배우기',
+      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
+      videoId: 'AbYQ8QuZCuE',
+      duration: '18:15',
+      rating: 4.8,
+      episodes: 1,
+      category: 'learning',
+      difficulty: 'intermediate'
+    },
+    {
+      id: '7',
+      title: isRTL ? 'الدرس السابع - التسوق والمال' : 'Lesson 7 - Shopping and Money',
+      titleKr: '일곱 번째 수업 - 쇼핑과 돈',
+      description: isRTL 
+        ? 'تعلم كيفية التسوق والتعامل مع المال'
+        : '쇼핑과 거래 배우기',
+      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
+      videoId: '0gu76QYgyI0',
+      duration: '19:30',
+      rating: 4.7,
+      episodes: 1,
+      category: 'learning',
+      difficulty: 'intermediate'
+    },
+    {
+      id: '8',
+      title: isRTL ? 'الدرس الثامن - الوقت والتواريخ' : 'Lesson 8 - Time and Dates',
+      titleKr: '여덟 번째 수업 - 시간과 날짜',
+      description: isRTL 
+        ? 'تعلم كيفية التحدث عن الوقت والتواريخ'
+        : '시간, 요일, 날짜 배우기',
+      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
+      videoId: 'eVkJEERljtU',
+      duration: '20:10',
+      rating: 4.8,
+      episodes: 1,
+      category: 'learning',
+      difficulty: 'intermediate'
+    },
+    {
+      id: '9',
+      title: isRTL ? 'محادثة يومية - في الكافيه' : 'Real Conversation - At a Café',
+      titleKr: '실제 대화 - 카페에서',
+      description: isRTL 
+        ? 'اسمع محادثة حقيقية في مقهى كوري'
+        : '카페에서의 실제 대화 청취',
+      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
+      videoId: 'IDwILxXqS2A',
+      duration: '12:45',
+      rating: 4.9,
+      episodes: 1,
+      category: 'conversation',
+      difficulty: 'beginner'
+    },
+    {
+      id: '10',
+      title: isRTL ? 'ثقافة كورية - المهرجانات التقليدية' : 'Korean Culture - Traditional Festivals',
+      titleKr: '한국 문화 - 전통 축제',
+      description: isRTL 
+        ? 'استكشف المهرجانات والاحتفالات الكورية التقليدية'
+        : '한국의 전통 축제와 문화 발견',
+      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
+      videoId: 'uzzjmWb4qKg',
+      duration: '21:35',
+      rating: 4.8,
+      episodes: 1,
       category: 'culture',
       difficulty: 'intermediate'
     },
     {
-      id: '5',
-      title: isRTL ? 'محادثات متقدمة' : 'Advanced Conversations',
-      titleKr: '고급 대화',
+      id: '11',
+      title: isRTL ? 'K-Drama الشهيرة - لمحة سريعة' : 'Popular K-Drama Overview',
+      titleKr: '유명한 K-드라마 소개',
       description: isRTL 
-        ? 'محادثات متقدمة للمتعلمين ذوي المستوى المتوسط والمتقدم'
-        : '중급 및 고급 학습자를 위한 고급 대화',
-      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
-      videoId: 'tYzMGcUty6s',
-      duration: '30:00',
-      rating: 4.5,
-      episodes: 15,
-      category: 'conversation',
-      difficulty: 'advanced'
-    },
-    {
-      id: '6',
-      title: isRTL ? 'K-Drama مقاطع مترجمة' : 'K-Drama Translated Clips',
-      titleKr: 'K-드라마 번역 클립',
-      description: isRTL 
-        ? 'مشاهد مختارة من أشهر المسلسلات الكورية مع شرح اللغة'
-        : '인기 한국 드라마의 선별된 장면과 언어 설명',
+        ? 'اكتشف أشهر المسلسلات الكورية والدراما الحديثة'
+        : '한국 드라마와 방송 프로그램 소개',
       thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
-      videoId: 'V2hlQkVsHwE',
-      duration: '28:15',
+      videoId: 'gA1iRGsyRuk',
+      duration: '23:20',
       rating: 4.9,
-      episodes: 30,
+      episodes: 1,
       category: 'drama',
       difficulty: 'intermediate'
     },

@@ -1,358 +1,354 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { motion } from 'framer-motion';
 import { 
-  BarChart3, Users, TrendingUp, Eye, Award, BookOpen, Zap, 
-  Settings, LogOut, Menu, X, Home, PieChart, LineChart, Activity 
+  BarChart3, Users, TrendingUp, Activity, Home, Menu, X, 
+  LogOut, BookOpen, Award, Zap, Clock, Target
 } from 'lucide-react';
-import UserAnalytics from '@/components/admin/UserAnalytics';
-import LevelsManagement from '@/components/admin/LevelsManagement';
-import TestsManagement from '@/components/admin/TestsManagement';
-import RewardsManagement from '@/components/admin/RewardsManagement';
+
+interface DashboardStats {
+  totalUsers: number;
+  activeToday: number;
+  totalLessonsCompleted: number;
+  averageStreak: number;
+  topUser?: { name: string; points: number };
+  usersByLevel: Record<number, number>;
+}
 
 const AdminDashboard: React.FC = () => {
-  const { language } = useLanguage();
   const navigate = useNavigate();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-
+  const { language } = useLanguage();
+  const { user, signOut } = useAuth();
   const isRTL = language === 'ar';
+  
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    activeToday: 0,
+    totalLessonsCompleted: 0,
+    averageStreak: 0,
+    usersByLevel: {}
+  });
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
 
-  const stats = [
-    {
-      id: 'users',
-      label: isRTL ? 'إجمالي المستخدمين' : '총 사용자',
-      value: '2,547',
-      icon: Users,
-      color: 'blue',
-      change: '+12%',
-      trend: 'up'
-    },
-    {
-      id: 'active-today',
-      label: isRTL ? 'نشط اليوم' : '오늘 활동',
-      value: '487',
-      icon: Activity,
-      color: 'green',
-      change: '+8%',
-      trend: 'up'
-    },
-    {
-      id: 'views',
-      label: isRTL ? 'إجمالي المشاهدات' : '총 조회수',
-      value: '45.2K',
-      icon: Eye,
-      color: 'purple',
-      change: '+24%',
-      trend: 'up'
-    },
-    {
-      id: 'revenue',
-      label: isRTL ? 'الإجماليات' : '총액',
-      value: '$12,540',
-      icon: TrendingUp,
-      color: 'amber',
-      change: '+15%',
-      trend: 'up'
-    },
-  ];
+  useEffect(() => {
+    if (!user) navigate('/auth');
+    else fetchDashboardData();
+  }, [user, navigate]);
 
-  const menuItems = [
-    {
-      id: 'overview',
-      label: isRTL ? 'نظرة عامة' : '개요',
-      icon: BarChart3,
-      badge: null
-    },
-    {
-      id: 'users',
-      label: isRTL ? 'المستخدمون' : '사용자',
-      icon: Users,
-      badge: 'new'
-    },
-    {
-      id: 'levels',
-      label: isRTL ? 'المستويات' : '레벨',
-      icon: Zap,
-      badge: null
-    },
-    {
-      id: 'tests',
-      label: isRTL ? 'الاختبارات' : '테스트',
-      icon: BookOpen,
-      badge: null
-    },
-    {
-      id: 'rewards',
-      label: isRTL ? 'المكافآت' : '보상',
-      icon: Award,
-      badge: null
-    },
-    {
-      id: 'analytics',
-      label: isRTL ? 'الإحصائيات' : '분석',
-      icon: LineChart,
-      badge: null
-    },
-    {
-      id: 'settings',
-      label: isRTL ? 'الإعدادات' : '설정',
-      icon: Settings,
-      badge: null
-    },
-  ];
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
 
-  const colorMap = {
-    blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-600', icon: 'text-blue-500' },
-    green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-600', icon: 'text-green-500' },
-    purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-600', icon: 'text-purple-500' },
-    amber: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-600', icon: 'text-amber-500' },
+      // Fetch all users and their stats
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, full_name, total_points, current_level, streak_days, created_at');
+
+      if (profilesError) throw profilesError;
+
+      // Fetch lesson progress for all users
+      const { data: lessonData, error: lessonError } = await supabase
+        .from('lesson_progress')
+        .select('user_id, is_memorized, updated_at');
+
+      if (lessonError) throw lessonError;
+
+      // Calculate stats
+      const totalUsers = profilesData?.length || 0;
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      const activeToday = profilesData?.filter(p => {
+        if (!p.created_at) return false;
+        const created = new Date(p.created_at);
+        const createdDay = new Date(created.getFullYear(), created.getMonth(), created.getDate());
+        return createdDay.getTime() === today.getTime();
+      }).length || 0;
+
+      const totalLessonsCompleted = lessonData?.filter(l => l.is_memorized).length || 0;
+
+      const usersByLevel: Record<number, number> = {};
+      profilesData?.forEach(p => {
+        const level = p.current_level || 1;
+        usersByLevel[level] = (usersByLevel[level] || 0) + 1;
+      });
+
+      const averageStreak = profilesData && profilesData.length > 0
+        ? Math.round(
+            profilesData.reduce((sum, p) => sum + (p.streak_days || 0), 0) / profilesData.length
+          )
+        : 0;
+
+      const topUser = profilesData && profilesData.length > 0
+        ? profilesData.sort((a, b) => (b.total_points || 0) - (a.total_points || 0))[0]
+        : undefined;
+
+      setStats({
+        totalUsers,
+        activeToday,
+        totalLessonsCompleted,
+        averageStreak,
+        topUser: topUser ? { name: topUser.full_name || 'Unknown', points: topUser.total_points || 0 } : undefined,
+        usersByLevel
+      });
+
+      // Fetch all users for display
+      setAllUsers(profilesData || []);
+
+      // Fetch recent activity
+      const recentData = lessonData?.sort((a, b) => 
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      ).slice(0, 10) || [];
+      setRecentActivity(recentData);
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
+  const StatCard = ({ icon: Icon, label, value, color }: any) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`bg-gradient-to-br ${color} p-6 rounded-xl border border-opacity-20 border-white`}
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-white/70 text-sm mb-2">{label}</p>
+          <p className="text-3xl font-bold text-white">{value}</p>
+        </div>
+        <Icon className="w-12 h-12 text-white/30" />
+      </div>
+    </motion.div>
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary mb-4"></div>
+          <p>{isRTL ? 'جاري التحميل...' : '로드 중...'}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`flex h-screen bg-slate-900 ${isRTL ? 'flex-row-reverse' : ''}`}>
+    <div className="min-h-screen bg-slate-900 text-white" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Sidebar */}
       <motion.div
-        className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-slate-800 border-r border-slate-700 transition-all duration-300 flex flex-col`}
+        initial={{ x: -300 }}
+        animate={{ x: 0 }}
+        className={`fixed ${isRTL ? 'right-0' : 'left-0'} top-0 w-64 h-screen bg-slate-800 border-r border-slate-700 p-6 flex flex-col transition-all duration-300 z-50 ${
+          !sidebarOpen ? 'hidden' : ''
+        }`}
       >
-        {/* Logo */}
-        <div className="p-4 flex items-center justify-between border-b border-slate-700">
-          <motion.div
-            initial={false}
-            animate={{ opacity: isSidebarOpen ? 1 : 0, width: isSidebarOpen ? 'auto' : 0 }}
-            className="flex items-center gap-3"
-          >
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600 to-amber-500 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
-            </div>
-            <span className="text-white font-bold text-lg">Admin</span>
-          </motion.div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <Menu className="w-5 h-5 text-slate-400" />
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            {isRTL ? 'لوحة التحكم' : '대시보드'}
+          </h1>
+          <button onClick={() => setSidebarOpen(false)} className="md:hidden">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Menu Items */}
-        <nav className="flex-1 overflow-y-auto py-4">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
-                  activeTab === item.id
-                    ? 'bg-amber-600/20 text-amber-500 border-l-2 border-amber-500'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-                }`}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                <motion.span
-                  initial={false}
-                  animate={{ opacity: isSidebarOpen ? 1 : 0, width: isSidebarOpen ? 'auto' : 0 }}
-                  className="overflow-hidden whitespace-nowrap"
-                >
-                  {item.label}
-                </motion.span>
-                {item.badge && isSidebarOpen && (
-                  <span className="ml-auto text-xs bg-red-500 text-white px-2 py-1 rounded">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        <nav className="flex-1 space-y-4">
+          {[
+            { id: 'overview', label: isRTL ? 'نظرة عامة' : '개요', icon: BarChart3 },
+            { id: 'users', label: isRTL ? 'المستخدمون' : '사용자', icon: Users },
+            { id: 'activity', label: isRTL ? 'النشاط' : '활동', icon: Activity },
+          ].map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                activeTab === id
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600'
+                  : 'hover:bg-slate-700'
+              }`}
+            >
+              <Icon className="w-5 h-5" />
+              {label}
+            </button>
+          ))}
         </nav>
 
-        {/* Logout Button */}
-        <div className="p-4 border-t border-slate-700">
-          <button
-            onClick={() => navigate('/')}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-colors"
-          >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            <motion.span
-              initial={false}
-              animate={{ opacity: isSidebarOpen ? 1 : 0, width: isSidebarOpen ? 'auto' : 0 }}
-              className="overflow-hidden whitespace-nowrap"
-            >
-              {isRTL ? 'العودة' : '돌아가기'}
-            </motion.span>
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-red-600/20 hover:bg-red-600/30 transition-all"
+        >
+          <LogOut className="w-5 h-5" />
+          {isRTL ? 'تسجيل الخروج' : '로그아웃'}
+        </button>
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <div className="bg-slate-800 border-b border-slate-700 px-8 py-4 flex justify-between items-center">
-          <h1 className="text-white text-2xl font-bold">{isRTL ? 'لوحة التحكم' : '관리자 대시보드'}</h1>
+      <div className={`${sidebarOpen ? (isRTL ? 'pr-64' : 'pl-64') : ''} transition-all duration-300`}>
+        {/* Header */}
+        <div className="bg-slate-800 border-b border-slate-700 p-6 flex items-center justify-between sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <span className="text-slate-400 text-sm">
-              {new Date().toLocaleDateString(isRTL ? 'ar-EG' : 'ko-KR')}
-            </span>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-slate-700 rounded-lg"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <h2 className="text-2xl font-bold">{isRTL ? 'لوحة تحكم النظام' : '시스템 관리'}</h2>
           </div>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all"
+          >
+            <Home className="w-5 h-5" />
+            {isRTL ? 'العودة' : '돌아가기'}
+          </button>
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-8">
-            {activeTab === 'overview' && (
+        <div className="p-8">
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <h3 className="text-xl font-bold mb-6">{isRTL ? 'الإحصائيات الرئيسية' : '주요 통계'}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <StatCard
+                  icon={Users}
+                  label={isRTL ? 'إجمالي المستخدمين' : '전체 사용자'}
+                  value={stats.totalUsers}
+                  color="from-blue-600 to-blue-800"
+                />
+                <StatCard
+                  icon={Activity}
+                  label={isRTL ? 'نشط اليوم' : '오늘 활성'}
+                  value={stats.activeToday}
+                  color="from-green-600 to-green-800"
+                />
+                <StatCard
+                  icon={BookOpen}
+                  label={isRTL ? 'الدروس المكتملة' : '완료된 레슨'}
+                  value={stats.totalLessonsCompleted}
+                  color="from-purple-600 to-purple-800"
+                />
+                <StatCard
+                  icon={Award}
+                  label={isRTL ? 'متوسط التتابع' : '평균 스트릭'}
+                  value={`${stats.averageStreak} ${isRTL ? 'يوم' : '일'}`}
+                  color="from-orange-600 to-orange-800"
+                />
+              </div>
+
+              {/* Users by Level */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="space-y-8"
+                className="bg-slate-800 rounded-xl p-6 border border-slate-700"
               >
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {stats.map((stat) => {
-                    const Icon = stat.icon;
-                    const colors = colorMap[stat.color as keyof typeof colorMap];
-                    return (
-                      <motion.div
-                        key={stat.id}
-                        whileHover={{ y: -4 }}
-                        className={`${colors.bg} ${colors.border} border rounded-lg p-6 cursor-pointer`}
-                      >
-                        <div className="flex justify-between items-start mb-4">
-                          <Icon className={`${colors.icon} w-8 h-8`} />
-                          <span className="text-sm font-semibold text-green-600">
-                            {stat.change}
-                          </span>
-                        </div>
-                        <p className="text-slate-600 text-sm mb-2">{stat.label}</p>
-                        <p className={`${colors.text} text-3xl font-bold`}>{stat.value}</p>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-
-                {/* Charts Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Users Chart */}
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    className="bg-slate-800 border border-slate-700 rounded-lg p-6"
-                  >
-                    <h3 className="text-white text-lg font-semibold mb-4">
-                      {isRTL ? 'نمو المستخدمين' : '사용자 성장'}
-                    </h3>
-                    <div className="h-64 bg-slate-700/50 rounded flex items-center justify-center text-slate-400">
-                      <span>{isRTL ? 'رسم بياني' : '차트 로드 중'}</span>
+                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                  <Target className="w-5 h-5" />
+                  {isRTL ? 'المستخدمون حسب المستوى' : '레벨별 사용자'}
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[1, 2, 3, 4, 5, 6].map(level => (
+                    <div key={level} className="bg-slate-700/50 p-4 rounded-lg text-center">
+                      <p className="text-sm text-white/70 mb-2">{isRTL ? 'المستوى' : 'レベル'} {level}</p>
+                      <p className="text-2xl font-bold text-blue-400">{stats.usersByLevel[level] || 0}</p>
                     </div>
-                  </motion.div>
-
-                  {/* Activity Chart */}
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    className="bg-slate-800 border border-slate-700 rounded-lg p-6"
-                  >
-                    <h3 className="text-white text-lg font-semibold mb-4">
-                      {isRTL ? 'النشاط اليومي' : '일일 활동'}
-                    </h3>
-                    <div className="h-64 bg-slate-700/50 rounded flex items-center justify-center text-slate-400">
-                      <span>{isRTL ? 'رسم بياني' : '차트 로드 중'}</span>
-                    </div>
-                  </motion.div>
+                  ))}
                 </div>
+              </motion.div>
 
-                {/* Recent Activity */}
+              {/* Top User */}
+              {stats.topUser && (
                 <motion.div
-                  whileHover={{ y: -4 }}
-                  className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-slate-800 rounded-xl p-6 border border-slate-700 mt-6"
                 >
-                  <h3 className="text-white text-lg font-semibold mb-4">
-                    {isRTL ? 'النشاط الأخير' : '최근 활동'}
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-yellow-500" />
+                    {isRTL ? 'أفضل مستخدم' : '상위 사용자'}
                   </h3>
-                  <div className="space-y-4">
-                    {[
-                      { user: 'أحمد علي', action: isRTL ? 'سجل دخول' : '로그인', time: '2 دقائق' },
-                      { user: 'فاطمة محمد', action: isRTL ? 'أنهى الدرس' : '수업 완료', time: '5 دقائق' },
-                      { user: 'محمود إبراهيم', action: isRTL ? 'اجتياز الاختبار' : '테스트 통과', time: '10 دقائق' },
-                    ].map((activity, i) => (
-                      <div key={i} className="flex justify-between items-center py-3 border-b border-slate-700/50 last:border-0">
-                        <div>
-                          <p className="text-white font-medium">{activity.user}</p>
-                          <p className="text-slate-400 text-sm">{activity.action}</p>
-                        </div>
-                        <span className="text-slate-500 text-sm">{activity.time}</span>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-between">
+                    <p className="text-xl">{stats.topUser.name}</p>
+                    <p className="text-2xl font-bold text-yellow-500">{stats.topUser.points} {isRTL ? 'نقطة' : '포인트'}</p>
                   </div>
                 </motion.div>
-              </motion.div>
-            )}
+              )}
+            </motion.div>
+          )}
 
-            {/* Users Tab */}
-            {activeTab === 'users' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <UserAnalytics />
-              </motion.div>
-            )}
+          {/* Users Tab */}
+          {activeTab === 'users' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <h3 className="text-xl font-bold mb-6">{isRTL ? 'قائمة المستخدمين' : '사용자 목록'}</h3>
+              <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-700">
+                      <tr>
+                        <th className="px-6 py-3 text-left">{isRTL ? 'الاسم' : '이름'}</th>
+                        <th className="px-6 py-3 text-left">{isRTL ? 'المستوى' : '레벨'}</th>
+                        <th className="px-6 py-3 text-left">{isRTL ? 'النقاط' : '포인트'}</th>
+                        <th className="px-6 py-3 text-left">{isRTL ? 'التتابع' : '스트릭'}</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-700">
+                      {allUsers.slice(0, 20).map((user, idx) => (
+                        <tr key={idx} className="hover:bg-slate-700/50 transition-all">
+                          <td className="px-6 py-3">{user.full_name || 'Unknown'}</td>
+                          <td className="px-6 py-3">{user.current_level || 1}</td>
+                          <td className="px-6 py-3 font-bold text-blue-400">{user.total_points || 0}</td>
+                          <td className="px-6 py-3">{user.streak_days || 0} {isRTL ? 'يوم' : '일'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
-            {/* Levels Tab */}
-            {activeTab === 'levels' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <LevelsManagement />
-              </motion.div>
-            )}
-
-            {/* Tests Tab */}
-            {activeTab === 'tests' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <TestsManagement />
-              </motion.div>
-            )}
-
-            {/* Rewards Tab */}
-            {activeTab === 'rewards' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <RewardsManagement />
-              </motion.div>
-            )}
-
-            {/* Analytics Tab */}
-            {activeTab === 'analytics' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center"
-              >
-                <p className="text-slate-400 text-lg">
-                  {isRTL ? 'رسوم بيانية متقدمة قيد الإنشاء' : '고급 분석 차트 준비 중'}
-                </p>
-              </motion.div>
-            )}
-
-            {/* Settings Tab */}
-            {activeTab === 'settings' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center"
-              >
-                <p className="text-slate-400 text-lg">
-                  {isRTL ? 'إعدادات النظام قيد الإنشاء' : '시스템 설정 준비 중'}
-                </p>
-              </motion.div>
-            )}
-          </div>
+          {/* Activity Tab */}
+          {activeTab === 'activity' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <h3 className="text-xl font-bold mb-6">{isRTL ? 'النشاط الأخير' : '최근 활동'}</h3>
+              <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 space-y-4">
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((activity, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-all">
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-yellow-500" />
+                        <div>
+                          <p className="font-semibold">{isRTL ? 'مستخدم' : '사용자'} #{activity.user_id?.slice(0, 8)}</p>
+                          <p className="text-xs text-white/50">{new Date(activity.updated_at).toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="px-3 py-1 bg-green-600/20 text-green-400 rounded text-sm">
+                        {activity.is_memorized ? (isRTL ? 'تم الحفظ' : '암기 완료') : (isRTL ? 'قيد المراجعة' : '검토 중')}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-white/50 text-center py-8">{isRTL ? 'لا توجد أنشطة حديثة' : '최근 활동 없음'}</p>
+                )}
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </div>
