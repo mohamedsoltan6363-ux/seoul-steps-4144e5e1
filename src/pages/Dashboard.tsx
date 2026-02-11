@@ -291,7 +291,93 @@ const Dashboard: React.FC = () => {
         >
           {/* Animated Gradient Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 opacity-90" />
-            </motion.div>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" />
+          
+          {/* Floating Shapes */}
+          <motion.div
+            className="absolute top-4 right-20 w-20 h-20 bg-white/10 rounded-full"
+            animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
+            transition={{ duration: 6, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-4 right-40 w-12 h-12 bg-white/10 rounded-lg"
+            animate={{ y: [10, -10, 10], rotate: [0, -180, -360] }}
+            transition={{ duration: 5, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute top-1/2 right-10 w-8 h-8 bg-white/20 rounded-full"
+            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+          
+          <div className="relative flex items-center gap-6">
+            <div className="hidden sm:block">
+              <motion.img 
+                src={koreanCharacter} 
+                alt="Korean Character" 
+                className="w-36 h-auto drop-shadow-2xl"
+                animate={{ 
+                  y: [-5, 5, -5],
+                  rotate: [-2, 2, -2]
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+            </div>
+            <div className="flex-1">
+              <motion.div 
+                className="flex items-center gap-2 mb-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <p className="text-white/80 text-sm">{greeting}</p>
+                <span className="text-white/50 text-xs">•</span>
+                <span className="text-white/70 text-xs flex items-center gap-1">
+                  <Heart className="w-3 h-3 text-rose-300 fill-rose-300" />
+                  {language === 'ar' ? 'أهلاً بك في منصتي!' : '내 플랫폼에 오신 것을 환영합니다!'}
+                </span>
+              </motion.div>
+              <motion.h1 
+                className="text-3xl md:text-4xl font-bold text-white mb-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                {language === 'ar' ? 'مرحباً بك!' : '환영합니다!'} 
+                <motion.span
+                  animate={{ rotate: [0, 20, 0] }}
+                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                  className="inline-block ml-2"
+                >
+                  👋
+                </motion.span>
+              </motion.h1>
+              <motion.p 
+                className="text-white/90 text-sm mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {language === 'ar' 
+                  ? `🎯 لقد حفظت ${totalMemorized} من ${totalItems} عنصر - أحسنت!` 
+                  : `🎯 ${totalItems}개 중 ${totalMemorized}개 암기 완료 - 잘하고 있어요!`}
+              </motion.p>
+              <div className="relative h-3 bg-white/20 rounded-full overflow-hidden max-w-sm">
+                <motion.div 
+                  className="h-full bg-white rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${totalItems > 0 ? (totalMemorized / totalItems) * 100 : 0}%` }}
+                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
+                />
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
             {/* Right Side - Content */}
             <div className="flex-1 text-center md:text-right">
