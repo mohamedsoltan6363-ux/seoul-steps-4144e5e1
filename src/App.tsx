@@ -30,6 +30,7 @@ import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
 import KoreanSeries from "./pages/KoreanSeries";
+import Lessons from "./pages/Lessons";
 import AdminDashboard from "./pages/AdminDashboard";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
@@ -62,7 +63,7 @@ const ScrollToTop = () => {
 // Show AI Chat button only on dashboard pages
 const ConditionalAIChatButton = () => {
   const { pathname } = useLocation();
-  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
+  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series', '/lessons'];
   
   if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
   
@@ -115,6 +116,7 @@ const App = () => {
                   <Route path="/pronunciation" element={<Pronunciation />} />
                   <Route path="/songs" element={<Songs />} />
                   <Route path="/korean-series" element={<KoreanSeries />} />
+                  <Route path="/lessons" element={<Lessons />} />
                   <Route path="/reports" element={<Reports />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

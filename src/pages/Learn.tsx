@@ -194,6 +194,11 @@ const Learn: React.FC = () => {
     { key: 'quiz' as ViewMode, icon: <GraduationCap className="w-4 h-4" />, label: language === 'ar' ? 'اختبار' : '시험', locked: !isQuizUnlocked, color: 'from-indigo-500 to-violet-500' },
   ];
 
+  // Lessons button handler
+  const handleLessonsClick = () => {
+    navigate('/lessons');
+  };
+
   // Level info cards
   const levelInfo = {
     1: { title: language === 'ar' ? 'الحروف الكورية' : '한글', subtitle: language === 'ar' ? 'تعلم الأساسيات' : '기초 배우기', total: consonants.length + vowels.length },
@@ -774,7 +779,7 @@ const Learn: React.FC = () => {
 
       {/* View Mode Tabs */}
       <div className="sticky top-[72px] z-30 bg-background/95 backdrop-blur-lg border-b border-border/50 px-4 py-2">
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
           {modes.map((mode, index) => (
             <motion.button
               key={mode.key}
@@ -797,6 +802,23 @@ const Learn: React.FC = () => {
               <span className="hidden sm:inline">{mode.label}</span>
             </motion.button>
           ))}
+          
+          {/* Lessons Button Separator and Button */}
+          <div className="hidden sm:flex items-center gap-2 ml-auto">
+            <div className="w-px h-6 bg-border/30" />
+            <motion.button
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLessonsClick}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg hover:shadow-xl"
+            >
+              <Video className="w-4 h-4" />
+              <span>{language === 'ar' ? 'الدروس' : '수업'}</span>
+            </motion.button>
+          </div>
         </div>
       </div>
 

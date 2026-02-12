@@ -155,7 +155,7 @@ const Games = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-sky-50 to-blue-50 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-sky-50 to-blue-50 overflow-x-hidden pb-20 md:pb-0">
       <AnimatePresence mode="wait">
         {currentGame === 'menu' ? (
           <motion.div
