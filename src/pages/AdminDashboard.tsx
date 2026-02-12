@@ -38,9 +38,8 @@ const AdminDashboard: React.FC = () => {
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
 
   useEffect(() => {
-    if (!user) navigate('/auth');
-    else fetchDashboardData();
-  }, [user, navigate]);
+    fetchDashboardData();
+  }, []);
 
   const fetchDashboardData = async () => {
     try {

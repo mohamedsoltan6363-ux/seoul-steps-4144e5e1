@@ -237,21 +237,39 @@ const HomePage: React.FC = () => {
               ))}
             </motion.div>
 
-            {/* CTA Button */}
-            <motion.button
-              onClick={handleStart}
-              className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/50 overflow-hidden transition-all"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
+            {/* CTA Buttons Container */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1 }}
             >
-              <span className="relative flex items-center justify-center gap-2">
-                {isRTL ? 'ابدأ الآن' : '시작하기'}
-                <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${isRTL ? 'rotate-180' : ''}`} />
-              </span>
-            </motion.button>
+              {/* Start Learning Button */}
+              <motion.button
+                onClick={handleStart}
+                className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/50 overflow-hidden transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="relative flex items-center justify-center gap-2">
+                  {isRTL ? 'ابدأ الآن' : '시작하기'}
+                  <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${isRTL ? 'rotate-180' : ''}`} />
+                </span>
+              </motion.button>
+
+              {/* Admin Dashboard Button */}
+              <motion.button
+                onClick={() => navigate('/admin')}
+                className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/50 overflow-hidden transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="relative flex items-center justify-center gap-2">
+                  {isRTL ? 'لوحة التحكم' : '관리자 대시보드'}
+                  <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${isRTL ? 'rotate-180' : ''}`} />
+                </span>
+              </motion.button>
+            </motion.div>
           </motion.div>
 
           {/* Arabic Hangul Academy Hero Section */}
@@ -501,7 +519,7 @@ const HomePage: React.FC = () => {
                 viewport={{ once: true }}
               >
                 {isRTL
-                  ? 'انضم إلى آلاف المتعلمين حول العالم وتعلم اللغة الكورية بطريقة ممتعة وفعالة'
+                  ? 'انضم إلى آلاف المتعلمين حول العالم وتعلم اللغة ال��ورية بطريقة ممتعة وفعالة'
                   : '전 세계 수천 명의 학습자와 함께 재미있고 효과적인 방식으로 한국어를 배우세요'}
               </motion.p>
 
