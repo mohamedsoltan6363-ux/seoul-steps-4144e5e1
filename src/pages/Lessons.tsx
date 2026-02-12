@@ -42,7 +42,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'تعلم الحروف الساكنة الكورية (자음) بشكل تفصيلي مع النطق الصحيح والأمثلة العملية'
         : '한국 자음을 발음과 함께 배우세요. 모든 자음의 올바른 발음을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
       videoId: 'Nc-0FTYbQ0Y',
       duration: '12:34',
       rating: 4.9,
@@ -57,7 +57,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'تعلم الحروف المتحركة الكورية (모음) وكيفية نطقها بشكل صحيح مع ممارسة عملية'
         : '한국 모음을 단계별로 배우고 올바르게 발음하는 방법을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
       videoId: '11Z4UJpKtGI',
       duration: '14:22',
       rating: 4.8,
@@ -72,7 +72,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'كيفية قراءة المقاطع الكورية بجمع الحروف الساكنة والمتحركة معاً'
         : '자음과 모음을 조합하여 한글 음절을 읽는 방법을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
       videoId: 'OkuYvvdD5Fs',
       duration: '15:45',
       rating: 4.7,
@@ -87,7 +87,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'تعلم قراءة الكلمات الكورية كاملة والأساليب الصحيحة للنطق والتشكيل'
         : '기본 한글 단어를 읽고 정확한 발음을 배우는 연습입니다',
-      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
       videoId: 'jjcjCu3iVb0',
       duration: '16:20',
       rating: 4.8,
@@ -102,7 +102,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'شرح مفصل لقواعد النطق الكورية والتشديد والنبرات الصوتية'
         : '한국어 발음 규칙과 음절 강조에 대해 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=400&h=225&fit=crop',
       videoId: '6vaHtRbF5A8',
       duration: '17:05',
       rating: 4.9,
@@ -117,7 +117,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'تعلم نظام الأرقام الكوري (الأرقام العربية الكورية والصينية الكورية)'
         : '한국의 숫자 시스템 (고유어와 한자어)을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1515534775068-088395c4f407?w=400&h=225&fit=crop',
       videoId: 'uMOC41HWoIs',
       duration: '18:15',
       rating: 4.8,
@@ -132,7 +132,7 @@ const Lessons: React.FC = () => {
       description: isRTL 
         ? 'تعلم التحيات والعبارات الأساسية في المحادثات اليومية الكورية'
         : '일상 한국어 회화의 기본 인사와 표현을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
       videoId: 'WV0iFNR8r-U',
       duration: '19:30',
       rating: 4.7,
@@ -142,57 +142,57 @@ const Lessons: React.FC = () => {
     },
     {
       id: '8',
-      title: isRTL ? 'الدرس الثامن - مستويات الاحترام' : 'Lesson 8 - Formal & Informal',
-      titleKr: '여덟 번째 수업 - 존댓말과 반말',
+      title: isRTL ? 'الدرس الثامن - التحيات والعبارات' : 'Lesson 8 - Greetings & Phrases',
+      titleKr: '여덟 번째 수업 - 인사말과 표현',
       description: isRTL 
-        ? 'شرح الفروقات بين اللغة الرسمية والودية في الكورية والسياقات المناسبة'
-        : '한국어의 존댓말(존경), 반말(친구) 사용법을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
+        ? 'تعلم التحيات المختلفة والعبارات اللطيفة في المحادثات اليومية'
+        : '다양한 상황에서 사용하는 한국어 인사와 표현을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=400&h=225&fit=crop',
       videoId: 'Fnq2jtdShkk',
       duration: '20:10',
       rating: 4.8,
       episodes: 1,
-      category: 'intermediate',
-      difficulty: 'intermediate'
+      category: 'conversation',
+      difficulty: 'beginner'
     },
     {
       id: '9',
-      title: isRTL ? 'الدرس التاسع - الزمن الماضي' : 'Lesson 9 - Past Tense',
-      titleKr: '아홉 번째 수업 - 과거형',
+      title: isRTL ? 'الدرس التاسع - الأسئلة والإجابات' : 'Lesson 9 - Questions & Answers',
+      titleKr: '아홉 번째 수업 - 질문과 답변',
       description: isRTL 
-        ? 'شرح تفصيلي لصيغة الماضي البسيط والمستمر في اللغة الكورية'
-        : '한국어 과거형 동사 변화와 사용법을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
+        ? 'تعلم كيفية طرح الأسئلة بالكورية والرد عليها في محادثات يومية'
+        : '한국어로 질문하고 답하는 방법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
       videoId: 'OkPIwufe8us',
-      duration: '12:45',
+      duration: '21:35',
       rating: 4.9,
       episodes: 1,
-      category: 'intermediate',
+      category: 'conversation',
       difficulty: 'intermediate'
     },
     {
       id: '10',
-      title: isRTL ? 'الدرس العاشر - الزمن المستقبل' : 'Lesson 10 - Future Tense',
-      titleKr: '열 번째 수업 - 미래형',
+      title: isRTL ? 'الدرس العاشر - الأفعال الأساسية' : 'Lesson 10 - Basic Verbs',
+      titleKr: '열 번째 수업 - 기초 동사',
       description: isRTL 
-        ? 'تعلم صيغة المستقبل والنوايا والخطط في اللغة الكورية'
-        : '한국어 미래형 동사 변화와 미래 계획 표현을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
+        ? 'تعلم الأفعال الأساسية الكورية وكيفية استخدامها في الجمل'
+        : '기본 한국어 동사의 활용과 사용법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
       videoId: 'OJ0aD3tsRpY',
-      duration: '21:35',
+      duration: '22:45',
       rating: 4.8,
       episodes: 1,
-      category: 'intermediate',
+      category: 'grammar',
       difficulty: 'intermediate'
     },
     {
       id: '11',
-      title: isRTL ? 'الدرس الحادي عشر - الأسئلة والإجابات' : 'Lesson 11 - Questions & Answers',
-      titleKr: '열한 번째 수업 - 질문과 대답',
+      title: isRTL ? 'الدرس الحادي عشر - المضامين التفاعلية' : 'Lesson 11 - Interactive Practice',
+      titleKr: '열한 번째 수업 - 상호작용 연습',
       description: isRTL 
-        ? 'كيفية طرح الأسئلة والإجابة عليها في الكورية مع الأدوات المناسبة'
-        : '한국어로 질문하는 방법과 자연스러운 대답을 배웁니다',
-      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
+        ? 'تطبيق عملي شامل لكل ما تم تعلمه مع ممارسة تفاعلية'
+        : '지금까지 배운 내용을 실제로 연습하고 활용합니다',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
       videoId: 'gA1iRGsyRuk',
       duration: '23:20',
       rating: 4.9,
