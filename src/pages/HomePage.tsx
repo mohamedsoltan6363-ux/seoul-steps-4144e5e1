@@ -118,17 +118,18 @@ const HomePage: React.FC = () => {
               className="hidden md:flex items-center gap-8"
             >
               {[
-                { label: isRTL ? 'عن النظام' : '시스템 정보', icon: Info },
-                { label: isRTL ? 'الدروس' : '레슨', icon: BookOpen },
-                { label: isRTL ? 'الألعاب' : '게임', icon: Gamepad2 },
-                { label: isRTL ? 'عن المبرمج' : '개발자', icon: User },
+                { label: isRTL ? 'عن النظام' : 'システム', icon: Info, path: '/about-system' },
+                { label: isRTL ? 'الدروس' : 'レッスン', icon: BookOpen, path: '/lessons-info' },
+                { label: isRTL ? 'الألعاب' : 'ゲーム', icon: Gamepad2, path: '/games-info' },
+                { label: isRTL ? 'عن المبرمج' : '開発者', icon: User, path: '/developer' },
               ].map((item, idx) => {
                 const Icon = item.icon;
                 return (
                   <motion.button
                     key={idx}
                     whileHover={{ y: -2 }}
-                    className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+                    onClick={() => navigate(item.path)}
+                    className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-blue-600 transition-colors group cursor-pointer"
                   >
                     <Icon className="w-4 h-4" />
                     {item.label}
@@ -302,6 +303,55 @@ const HomePage: React.FC = () => {
                   </div>
                 </motion.div>
               </div>
+            </motion.div>
+          </div>
+
+          {/* Character Images - Bottom of Hero */}
+          <div className="absolute bottom-0 left-0 right-0 h-48 flex items-end justify-center gap-12 px-4 pointer-events-none">
+            {/* Egyptian Flag Image - Left */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className={`relative ${isRTL ? 'order-2' : 'order-1'}`}
+            >
+              <motion.img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/face_swap_egyptian_flag_mirrored_1-removebg-preview-MNDdurpGtaLMKBafGvSV2AEHhfT6Tm.png"
+                alt="Egyptian Flag Character"
+                className="h-40 object-contain drop-shadow-2xl"
+                animate={{
+                  y: [0, -15, 0],
+                  rotate: [0, -2, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
+            </motion.div>
+
+            {/* Korean Flag Image - Right */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className={`relative ${isRTL ? 'order-1' : 'order-2'}`}
+            >
+              <motion.img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/face_swap_korean_flag_1__1_-removebg-preview%20%281%29-j2BrfggTfr00iZE1WbJxiPurkKMhgJ.png"
+                alt="Korean Flag Character"
+                className="h-40 object-contain drop-shadow-2xl"
+                animate={{
+                  y: [0, 15, 0],
+                  rotate: [0, 2, 0],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
             </motion.div>
           </div>
         </section>

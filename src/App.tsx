@@ -34,6 +34,10 @@ import Lessons from "./pages/Lessons";
 import AdminDashboard from "./pages/AdminDashboard";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
+import AboutSystem from "./pages/AboutSystem";
+import LessonsInfo from "./pages/LessonsInfo";
+import GamesInfo from "./pages/GamesInfo";
+import DeveloperInfo from "./pages/DeveloperInfo";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -118,6 +122,10 @@ const App = () => {
                   <Route path="/korean-series" element={<KoreanSeries />} />
                   <Route path="/lessons" element={<Lessons />} />
                   <Route path="/reports" element={<Reports />} />
+                  <Route path="/about-system" element={<AboutSystem />} />
+                  <Route path="/lessons-info" element={<LessonsInfo />} />
+                  <Route path="/games-info" element={<GamesInfo />} />
+                  <Route path="/developer" element={<DeveloperInfo />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <MobileBottomNav />
