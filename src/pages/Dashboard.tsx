@@ -235,24 +235,25 @@ const Dashboard: React.FC = () => {
       >
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <motion.div 
-            className="flex items-center gap-3"
+            className="flex items-center gap-2 sm:gap-3"
             whileHover={{ scale: 1.02 }}
           >
-            <span className="font-korean text-2xl font-bold text-gradient">한국어</span>
-            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+            <span className="font-korean text-xl sm:text-2xl font-bold text-gradient">한국어</span>
+            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium hidden sm:inline">
               {language === 'ar' ? 'تعلم' : '배우기'}
             </span>
           </motion.div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguageSwitcher />
             <NotificationPanel />
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/reports')} 
-              className="p-2.5 rounded-xl hover:bg-primary/10 transition-all duration-300 relative group"
+              className="p-2 rounded-lg hover:bg-primary/10 transition-all duration-300 relative group"
+              title={language === 'ar' ? 'التقارير' : '보고서'}
             >
-              <BarChart3 className="w-5 h-5 text-primary" />
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-card px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                 {language === 'ar' ? 'التقارير' : '보고서'}
               </span>
@@ -261,7 +262,7 @@ const Dashboard: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/profile')} 
-              className="p-2.5 rounded-xl hover:bg-muted transition-all duration-300"
+              className="p-2 rounded-lg hover:bg-muted transition-all duration-300"
             >
               <User className="w-5 h-5" />
             </motion.button>
@@ -514,7 +515,7 @@ const Dashboard: React.FC = () => {
               <Flame className="w-6 h-6 mx-auto mb-2 text-orange-300 relative z-10" />
             </motion.div>
             <p className="text-2xl font-bold text-white relative z-10">{streakDays}</p>
-            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'أيام متتالية' : '연속'}</p>
+            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'أيام متتا��ية' : '연속'}</p>
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.08, rotate: -1, y: -5 }}
