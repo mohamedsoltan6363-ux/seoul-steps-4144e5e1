@@ -8,16 +8,10 @@ const LanguageSwitcher: React.FC = () => {
   return (
     <button
       onClick={() => setLanguage(language === 'ar' ? 'ko' : 'ar')}
-      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary transition-all duration-300 group"
+      className="flex items-center justify-center p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-300/30 hover:border-blue-400/60 hover:from-blue-500/20 hover:to-purple-500/20 transition-all duration-300 group shadow-sm hover:shadow-md"
+      title={language === 'ar' ? 'تبديل اللغة' : '언어 전환'}
     >
-      <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-      <span className="font-semibold text-sm">
-        {language === 'ar' ? (
-          <span className="font-korean">한국어</span>
-        ) : (
-          <span>العربية</span>
-        )}
-      </span>
+      <Globe className="w-4 h-4 text-blue-500 group-hover:text-blue-600 transition-colors" />
     </button>
   );
 };

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Play, Clock, Star, Film, Tv, Heart, Share2, Bookmark, X } from 'lucide-react';
+import { ArrowLeft, Play, Clock, Star, BookOpen, Heart, Share2, Bookmark, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface KoreanSeriesItem {
+interface LessonItem {
   id: string;
   title: string;
   titleKr: string;
@@ -19,193 +19,192 @@ interface KoreanSeriesItem {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
 
-const KoreanSeries: React.FC = () => {
+const Lessons: React.FC = () => {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const isRTL = language === 'ar';
-  const [selectedSeries, setSelectedSeries] = useState<KoreanSeriesItem | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const categories = [
     { id: 'all', label: isRTL ? 'الكل' : '전체' },
-    { id: 'drama', label: isRTL ? 'دراما' : '드라마' },
-    { id: 'learning', label: isRTL ? 'تعليمي' : '학습' },
-    { id: 'conversation', label: isRTL ? 'محادثات' : '대화' },
-    { id: 'culture', label: isRTL ? 'ثقافة' : '문화' },
+    { id: 'hangul', label: isRTL ? 'الحروف' : '한글' },
+    { id: 'basics', label: isRTL ? 'أساسيات' : '기초' },
+    { id: 'intermediate', label: isRTL ? 'متوسط' : '중급' },
   ];
 
-  const seriesList: KoreanSeriesItem[] = [
+  const lessonsList: LessonItem[] = [
     {
       id: '1',
-      title: isRTL ? 'دراما الحب والوفاء' : 'Love & Loyalty K-Drama',
-      titleKr: '사랑과 충성',
+      title: isRTL ? 'الدرس الأول - الحروف الساكنة' : 'Lesson 1 - Korean Consonants',
+      titleKr: '첫 번째 수업 - 자음',
       description: isRTL 
-        ? 'قصة حب مثيرة بين شابين في مدينة سيول، مليئة بالمشاعر والدراما الحقيقية التي تعكس الحياة الكورية الحديثة'
-        : '서울에서의 두 청년의 가슴 아픈 사랑 이야기, 진정한 감정과 현대 한국 드라마로 가득합니다',
-      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
-      videoId: 'OzNzgcrHcwk',
+        ? 'تعلم الحروف الساكنة الكورية (자음) بشكل تفصيلي مع النطق الصحيح والأمثلة العملية'
+        : '한국 자음을 발음과 함께 배우세요. 모든 자음의 올바른 발음을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
+      videoId: 'Nc-0FTYbQ0Y',
       duration: '12:34',
       rating: 4.9,
-      episodes: 16,
-      category: 'drama',
+      episodes: 1,
+      category: 'hangul',
       difficulty: 'beginner'
     },
     {
       id: '2',
-      title: isRTL ? 'حياة الموظفين' : 'Corporate Life Series',
-      titleKr: '직장 생활',
+      title: isRTL ? 'الدرس الثاني - الحروف المتحركة' : 'Lesson 2 - Korean Vowels',
+      titleKr: '두 번째 수업 - 모음',
       description: isRTL 
-        ? 'سلسلة تتابع حياة موظفي شركة كبرى كورية، تصور التحديات والعلاقات المعقدة في بيئة العمل الكورية'
-        : '한국 대기업의 직원들의 일상 생활, 업무 및 인간관계를 생생하게 보여줍니다',
-      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
-      videoId: 'rNfx7J34htU',
+        ? 'تعلم الحروف المتحركة الكورية (모음) وكيفية نطقها بشكل صحيح مع ممارسة عملية'
+        : '한국 모음을 단계별로 배우고 올바르게 발음하는 방법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
+      videoId: '11Z4UJpKtGI',
       duration: '14:22',
       rating: 4.8,
-      episodes: 20,
-      category: 'drama',
-      difficulty: 'intermediate'
+      episodes: 1,
+      category: 'hangul',
+      difficulty: 'beginner'
     },
     {
       id: '3',
-      title: isRTL ? 'عائلة في الريف' : 'Family in the Countryside',
-      titleKr: '시골 가족',
+      title: isRTL ? 'الدرس الثالث - قراءة المقاطع' : 'Lesson 3 - Reading Syllables',
+      titleKr: '세 번째 수업 - 음절 읽기',
       description: isRTL 
-        ? 'دراما دافئة عن عائلة تعيش في القرى الكورية، تحكي قصص الحب والتضحية والعائلة بطريقة إنسانية مؤثرة'
-        : '한국 시골의 따뜻한 가족 이야기, 사랑과 희생 그리고 가족의 소중함을 그려냅니다',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
-      videoId: 'uPpbyQHj8bs',
+        ? 'كيفية قراءة المقاطع الكورية بجمع الحروف الساكنة والمتحركة معاً'
+        : '자음과 모음을 조합하여 한글 음절을 읽는 방법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
+      videoId: 'OkuYvvdD5Fs',
       duration: '15:45',
       rating: 4.7,
-      episodes: 24,
-      category: 'drama',
+      episodes: 1,
+      category: 'hangul',
       difficulty: 'beginner'
     },
     {
       id: '4',
-      title: isRTL ? 'المحاماة والعدالة' : 'Law and Justice',
-      titleKr: '법과 정의',
+      title: isRTL ? 'الدرس الرابع - قراءة الكلمات' : 'Lesson 4 - Reading Words',
+      titleKr: '네 번째 수업 - 단어 읽기',
       description: isRTL 
-        ? 'مسلسل توتري عن محاميين شجعان يقفون ضد الفساد والظلم في النظام القانوني الكوري'
-        : '한국 법정 드라마, 부정과 불의에 맞서는 용감한 변호사들의 이야기',
-      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
-      videoId: 'xhMg3lMA7vc',
+        ? 'تعلم قراءة الكلمات الكورية كاملة والأساليب الصحيحة للنطق والتشكيل'
+        : '기본 한글 단어를 읽고 정확한 발음을 배우는 연습입니다',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
+      videoId: 'jjcjCu3iVb0',
       duration: '16:20',
       rating: 4.8,
-      episodes: 18,
-      category: 'drama',
-      difficulty: 'intermediate'
+      episodes: 1,
+      category: 'hangul',
+      difficulty: 'beginner'
     },
     {
       id: '5',
-      title: isRTL ? 'رحلة عبر الزمن' : 'Journey Through Time',
-      titleKr: '시간 여행',
+      title: isRTL ? 'الدرس الخامس - النطق والتشديد' : 'Lesson 5 - Pronunciation & Stress',
+      titleKr: '다섯 번째 수업 - 발음과 강조',
       description: isRTL 
-        ? 'مسلسل خيال علمي مثير يتابع شابين يحاولان تغيير مسار التاريخ من خلال رحلة عبر الزمن'
-        : '시간 여행을 통해 역사를 바꾸려는 두 청년의 신나는 판타지 드라마',
-      thumbnail: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=225&fit=crop',
-      videoId: 'lsjbl8wsqWA',
+        ? 'شرح مفصل لقواعد النطق الكورية والتشديد والنبرات الصوتية'
+        : '한국어 발음 규칙과 음절 강조에 대해 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=400&h=225&fit=crop',
+      videoId: '6vaHtRbF5A8',
       duration: '17:05',
       rating: 4.9,
-      episodes: 16,
-      category: 'drama',
-      difficulty: 'intermediate'
+      episodes: 1,
+      category: 'basics',
+      difficulty: 'beginner'
     },
     {
       id: '6',
-      title: isRTL ? 'النزل والضيافة' : 'Inn & Hospitality',
-      titleKr: '여관과 환대',
+      title: isRTL ? 'الدرس السادس - الأرقام الكورية' : 'Lesson 6 - Korean Numbers',
+      titleKr: '여섯 번째 수업 - 한국 숫자',
       description: isRTL 
-        ? 'قصة دافئة تدور حول نزل تقليدي كوري وأصحابه الطيبين، يرحبون بالضيوف بدفء وحنان'
-        : '전통 한국 여관의 따뜻한 이야기, 주인들의 성실함과 진심으로 손님들을 맞습니다',
-      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
-      videoId: 'AbYQ8QuZCuE',
+        ? 'تعلم نظام الأرقام الكوري (الأرقام العربية الكورية والصينية الكورية)'
+        : '한국의 숫자 시스템 (고유어와 한자어)을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1515534775068-088395c4f407?w=400&h=225&fit=crop',
+      videoId: 'uMOC41HWoIs',
       duration: '18:15',
       rating: 4.8,
-      episodes: 22,
-      category: 'drama',
+      episodes: 1,
+      category: 'basics',
       difficulty: 'beginner'
     },
     {
       id: '7',
-      title: isRTL ? 'حلم الفنان' : 'Artist\'s Dream',
-      titleKr: '예술가의 꿈',
+      title: isRTL ? 'الدرس السابع - المحادثات الأساسية' : 'Lesson 7 - Basic Conversations',
+      titleKr: '일곱 번째 수업 - 기초 회화',
       description: isRTL 
-        ? 'مسلسل ملهم عن شاب طموح يسعى لتحقيق حلمه بأن يصبح فنان في صناعة الترفيه الكورية المعقدة'
-        : '한국 엔터테인먼트 산업에서 꿈을 추구하는 젊은 예술가의 감동적인 이야기',
-      thumbnail: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=225&fit=crop',
-      videoId: '0gu76QYgyI0',
+        ? 'تعلم التحيات والعبارات الأساسية في المحادثات اليومية الكورية'
+        : '일상 한국어 회화의 기본 인사와 표현을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
+      videoId: 'WV0iFNR8r-U',
       duration: '19:30',
       rating: 4.7,
-      episodes: 20,
-      category: 'drama',
-      difficulty: 'intermediate'
-    },
-    {
-      id: '8',
-      title: isRTL ? 'الطب والحنان' : 'Medicine & Compassion',
-      titleKr: '의료와 연민',
-      description: isRTL 
-        ? 'دراما إنسانية تتابع أطباء متفانين يساعدون المرضى بعطف وحكمة في مستشفى عام كوري'
-        : '한국 종합병원의 의사들과 환자들의 감동적인 만남과 치유의 이야기',
-      thumbnail: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=225&fit=crop',
-      videoId: 'eVkJEERljtU',
-      duration: '20:10',
-      rating: 4.8,
-      episodes: 18,
-      category: 'drama',
-      difficulty: 'intermediate'
-    },
-    {
-      id: '9',
-      title: isRTL ? 'مقهى الحنين' : 'Nostalgia Café',
-      titleKr: '향수의 카페',
-      description: isRTL 
-        ? 'قصة رومانسية خفيفة تدور حول مقهى صغير يجمع بين الأشخاص ويخلق ذكريات جميلة لا تنسى'
-        : '작은 카페를 통해 만나는 사람들의 달콤한 사랑 이야기와 추억',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
-      videoId: 'IDwILxXqS2A',
-      duration: '12:45',
-      rating: 4.9,
-      episodes: 16,
-      category: 'romance',
+      episodes: 1,
+      category: 'basics',
       difficulty: 'beginner'
     },
     {
-      id: '10',
-      title: isRTL ? 'مهرجان الربيع' : 'Spring Festival Celebration',
-      titleKr: '봄축제',
+      id: '8',
+      title: isRTL ? 'الدرس الثامن - التحيات والعبارات' : 'Lesson 8 - Greetings & Phrases',
+      titleKr: '여덟 번째 수업 - 인사말과 표현',
       description: isRTL 
-        ? 'سلسلة عن مهرجان الربيع الكوري التقليدي، تُظهر العادات والثقافة الكورية الأصيلة والاحتفالات العائلية'
-        : '한국의 전통 봄 축제, 가족들의 만남과 한국 문화의 아름다움을 보여줍니다',
-      thumbnail: 'https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=400&h=225&fit=crop',
-      videoId: 'uzzjmWb4qKg',
-      duration: '21:35',
+        ? 'تعلم التحيات المختلفة والعبارات اللطيفة في المحادثات اليومية'
+        : '다양한 상황에서 사용하는 한국어 인사와 표현을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=400&h=225&fit=crop',
+      videoId: 'Fnq2jtdShkk',
+      duration: '20:10',
       rating: 4.8,
-      episodes: 12,
-      category: 'cultural',
+      episodes: 1,
+      category: 'conversation',
+      difficulty: 'beginner'
+    },
+    {
+      id: '9',
+      title: isRTL ? 'الدرس التاسع - الأسئلة والإجابات' : 'Lesson 9 - Questions & Answers',
+      titleKr: '아홉 번째 수업 - 질문과 답변',
+      description: isRTL 
+        ? 'تعلم كيفية طرح الأسئلة بالكورية والرد عليها في محادثات يومية'
+        : '한국어로 질문하고 답하는 방법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
+      videoId: 'OkPIwufe8us',
+      duration: '21:35',
+      rating: 4.9,
+      episodes: 1,
+      category: 'conversation',
+      difficulty: 'intermediate'
+    },
+    {
+      id: '10',
+      title: isRTL ? 'الدرس العاشر - الأفعال الأساسية' : 'Lesson 10 - Basic Verbs',
+      titleKr: '열 번째 수업 - 기초 동사',
+      description: isRTL 
+        ? 'تعلم الأفعال الأساسية الكورية وكيفية استخدامها في الجمل'
+        : '기본 한국어 동사의 활용과 사용법을 배웁니다',
+      thumbnail: 'https://images.unsplash.com/photo-1456953453510-21fc8c91d9b7?w=400&h=225&fit=crop',
+      videoId: 'OJ0aD3tsRpY',
+      duration: '22:45',
+      rating: 4.8,
+      episodes: 1,
+      category: 'grammar',
       difficulty: 'intermediate'
     },
     {
       id: '11',
-      title: isRTL ? 'كلاسيكيات الدراما الكورية' : 'K-Drama Classics',
-      titleKr: 'K-드라마 명작',
+      title: isRTL ? 'الدرس الحادي عشر - المضامين التفاعلية' : 'Lesson 11 - Interactive Practice',
+      titleKr: '열한 번째 수업 - 상호작용 연습',
       description: isRTL 
-        ? 'مجموعة مختارة من أفضل مشاهد المسلسلات الكورية الكلاسيكية، تجسد العمق الدرامي والمشاعر الإنسانية'
-        : '한국 드라마의 명작들, 감동적인 장면과 인간의 진정한 감정을 담아낸 클래식',
-      thumbnail: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop',
+        ? 'تطبيق عملي شامل لكل ما تم تعلمه مع ممارسة تفاعلية'
+        : '지금까지 배운 내용을 실제로 연습하고 활용합니다',
+      thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=225&fit=crop',
       videoId: 'gA1iRGsyRuk',
       duration: '23:20',
       rating: 4.9,
-      episodes: 20,
-      category: 'drama',
+      episodes: 1,
+      category: 'intermediate',
       difficulty: 'intermediate'
     },
   ];
 
-  const filteredSeries = activeCategory === 'all' 
-    ? seriesList 
-    : seriesList.filter(s => s.category === activeCategory);
+  const filteredLessons = activeCategory === 'all' 
+    ? lessonsList 
+    : lessonsList.filter(l => l.category === activeCategory);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => 
@@ -253,9 +252,9 @@ const KoreanSeries: React.FC = () => {
             {isRTL ? 'العودة' : '돌아가기'}
           </Button>
           <div className="flex items-center gap-2">
-            <Tv className="w-6 h-6 text-primary" />
+            <BookOpen className="w-6 h-6 text-primary" />
             <h1 className="text-lg font-bold">
-              {isRTL ? 'المسلسلات الكورية' : '한국 드라마'}
+              {isRTL ? 'الدروس التعليمية' : '학습 동영상'}
             </h1>
           </div>
           <div className="w-20" />
@@ -267,23 +266,23 @@ const KoreanSeries: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 p-8"
+          className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 p-8"
         >
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
-              <Film className="w-5 h-5 text-white/80" />
+              <BookOpen className="w-5 h-5 text-white/80" />
               <span className="text-white/80 text-sm">
-                {isRTL ? 'تعلم من خلال المشاهدة' : '시청하며 배우기'}
+                {isRTL ? 'تعلم من البداية' : '기초부터 시작'}
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              {isRTL ? 'تعلم الكورية من المسلسلات' : '드라마로 한국어 배우기'}
+              {isRTL ? 'دروس اللغة الكورية التعليمية' : '한국어 학습 동영상'}
             </h2>
             <p className="text-white/80 max-w-xl">
               {isRTL 
-                ? 'شاهد مقاطع فيديو تعليمية من المسلسلات الكورية مع ترجمة عربية وكورية'
-                : '아랍어와 한국어 자막이 있는 한국 드라마 교육 클립을 시청하세요'}
+                ? 'دروس تعليمية شاملة لتعلم اللغة الكورية من الصفر، مع شرح تفصيلي وأمثلة عملية'
+                : '한국어를 체계적으로 배우는 교육 동영상, 기초부터 중급 수준까지'}
             </p>
           </div>
         </motion.div>
@@ -307,23 +306,23 @@ const KoreanSeries: React.FC = () => {
           ))}
         </div>
 
-        {/* Series Grid */}
+        {/* Lessons Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSeries.map((series, index) => (
+          {filteredLessons.map((lesson, index) => (
             <motion.div
-              key={series.id}
+              key={lesson.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className="group cursor-pointer"
-              onClick={() => setSelectedSeries(series)}
+              onClick={() => setSelectedLesson(lesson)}
             >
               <div className="relative rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all hover:shadow-xl">
                 {/* Thumbnail */}
                 <div className="relative aspect-video overflow-hidden">
                   <img 
-                    src={series.thumbnail} 
-                    alt={series.title}
+                    src={lesson.thumbnail} 
+                    alt={lesson.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -341,34 +340,34 @@ const KoreanSeries: React.FC = () => {
                   {/* Duration */}
                   <div className="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-black/70 text-white text-xs flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {series.duration}
+                    {lesson.duration}
                   </div>
 
                   {/* Favorite */}
                   <button
-                    onClick={(e) => { e.stopPropagation(); toggleFavorite(series.id); }}
+                    onClick={(e) => { e.stopPropagation(); toggleFavorite(lesson.id); }}
                     className="absolute top-3 right-3 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
                   >
-                    <Heart className={`w-4 h-4 ${favorites.includes(series.id) ? 'text-red-500 fill-red-500' : 'text-white'}`} />
+                    <Heart className={`w-4 h-4 ${favorites.includes(lesson.id) ? 'text-red-500 fill-red-500' : 'text-white'}`} />
                   </button>
 
                   {/* Difficulty */}
-                  <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-medium ${getDifficultyColor(series.difficulty)}`}>
-                    {getDifficultyLabel(series.difficulty)}
+                  <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-medium ${getDifficultyColor(lesson.difficulty)}`}>
+                    {getDifficultyLabel(lesson.difficulty)}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-4">
-                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{series.title}</h3>
-                  <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{series.description}</p>
+                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{lesson.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{lesson.description}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                      <span className="text-sm font-medium">{series.rating}</span>
+                      <span className="text-sm font-medium">{lesson.rating}</span>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                      {series.episodes} {isRTL ? 'حلقة' : '에피소드'}
+                      {isRTL ? 'درس' : '수업'}
                     </span>
                   </div>
                 </div>
@@ -378,15 +377,15 @@ const KoreanSeries: React.FC = () => {
         </div>
       </main>
 
-      {/* Video Modal - using YouTube embed with proper URL */}
+      {/* Video Modal */}
       <AnimatePresence>
-        {selectedSeries && (
+        {selectedLesson && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setSelectedSeries(null)}
+            onClick={() => setSelectedLesson(null)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -398,12 +397,12 @@ const KoreanSeries: React.FC = () => {
               {/* Video Player */}
               <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
                 <iframe
-                  key={selectedSeries.videoId}
-                  src={`https://www.youtube.com/embed/${selectedSeries.videoId}?autoplay=1&rel=0&controls=1&modestbranding=1`}
+                  key={selectedLesson.videoId}
+                  src={`https://www.youtube.com/embed/${selectedLesson.videoId}?autoplay=1&rel=0&controls=1&modestbranding=1`}
                   className="w-full h-full absolute inset-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   allowFullScreen
-                  title={selectedSeries.title}
+                  title={selectedLesson.title}
                   frameBorder="0"
                   loading="lazy"
                   style={{ 
@@ -416,7 +415,7 @@ const KoreanSeries: React.FC = () => {
                   }}
                 />
                 <button
-                  onClick={() => setSelectedSeries(null)}
+                  onClick={() => setSelectedLesson(null)}
                   className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-20"
                 >
                   <X className="w-5 h-5 text-white" />
@@ -427,8 +426,8 @@ const KoreanSeries: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-xl font-bold mb-1">{selectedSeries.title}</h2>
-                    <p className="text-sm text-primary font-korean">{selectedSeries.titleKr}</p>
+                    <h2 className="text-xl font-bold mb-1">{selectedLesson.title}</h2>
+                    <p className="text-sm text-primary font-korean">{selectedLesson.titleKr}</p>
                   </div>
                   <div className="flex gap-2">
                     <button className="p-2 rounded-xl bg-muted hover:bg-muted/80">
@@ -439,18 +438,18 @@ const KoreanSeries: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                <p className="text-muted-foreground text-sm">{selectedSeries.description}</p>
+                <p className="text-muted-foreground text-sm">{selectedLesson.description}</p>
                 
                 <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="font-medium">{selectedSeries.rating}</span>
+                    <span className="font-medium">{selectedLesson.rating}</span>
                   </div>
                   <span className="text-muted-foreground">•</span>
-                  <span className="text-sm">{selectedSeries.episodes} {isRTL ? 'حلقة' : '에피소드'}</span>
+                  <span className="text-sm">{isRTL ? 'درس تعليمي' : '교육용 동영상'}</span>
                   <span className="text-muted-foreground">•</span>
-                  <span className={`px-2 py-0.5 rounded-lg text-xs ${getDifficultyColor(selectedSeries.difficulty)}`}>
-                    {getDifficultyLabel(selectedSeries.difficulty)}
+                  <span className={`px-2 py-0.5 rounded-lg text-xs ${getDifficultyColor(selectedLesson.difficulty)}`}>
+                    {getDifficultyLabel(selectedLesson.difficulty)}
                   </span>
                 </div>
               </div>
@@ -462,4 +461,4 @@ const KoreanSeries: React.FC = () => {
   );
 };
 
-export default KoreanSeries;
+export default Lessons;

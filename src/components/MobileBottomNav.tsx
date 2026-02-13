@@ -9,8 +9,8 @@ const MobileBottomNav: React.FC = () => {
   const location = useLocation();
   const { language } = useLanguage();
 
-  // Hide on level pages (learn routes) and onboarding
-  const hiddenPaths = ['/learn', '/onboarding', '/auth'];
+  // Hide on level pages (learn routes), onboarding, auth, and admin
+  const hiddenPaths = ['/learn', '/onboarding', '/auth', '/admin'];
   const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path)) || location.pathname === '/';
 
   if (shouldHide) return null;

@@ -12,7 +12,7 @@ import {
   BookOpen, MessageSquare, GraduationCap, User, LogOut, Trophy, 
   Flame, Star, Play, Lock, Check, Sparkles, Target, ChevronRight,
   Layers, Award, Gamepad2, Book, Zap, Crown, FileText, BookOpen as BookStory, 
-  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp, Tv
+  Mic, Music, Bell, BarChart3, Rocket, Heart, TrendingUp, Tv, Users
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import koreanCharacter from '@/assets/korean-character.png';
@@ -235,24 +235,25 @@ const Dashboard: React.FC = () => {
       >
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <motion.div 
-            className="flex items-center gap-3"
+            className="flex items-center gap-2 sm:gap-3"
             whileHover={{ scale: 1.02 }}
           >
-            <span className="font-korean text-2xl font-bold text-gradient">한국어</span>
-            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+            <span className="font-korean text-xl sm:text-2xl font-bold text-gradient">한국어</span>
+            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium hidden sm:inline">
               {language === 'ar' ? 'تعلم' : '배우기'}
             </span>
           </motion.div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguageSwitcher />
             <NotificationPanel />
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/reports')} 
-              className="p-2.5 rounded-xl hover:bg-primary/10 transition-all duration-300 relative group"
+              className="p-2 rounded-lg hover:bg-primary/10 transition-all duration-300 relative group"
+              title={language === 'ar' ? 'التقارير' : '보고서'}
             >
-              <BarChart3 className="w-5 h-5 text-primary" />
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-card px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                 {language === 'ar' ? 'التقارير' : '보고서'}
               </span>
@@ -261,7 +262,7 @@ const Dashboard: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/profile')} 
-              className="p-2.5 rounded-xl hover:bg-muted transition-all duration-300"
+              className="p-2 rounded-lg hover:bg-muted transition-all duration-300"
             >
               <User className="w-5 h-5" />
             </motion.button>
@@ -382,61 +383,73 @@ const Dashboard: React.FC = () => {
         {/* Beautiful Character Illustration Section */}
         <motion.div 
           variants={itemVariants}
-          className="relative mb-8 p-8 rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900/10 to-blue-900/10 border border-gradient-to-r from-blue-200/20 to-purple-200/20 backdrop-blur-sm"
+          className="relative mb-8 p-8 rounded-3xl overflow-visible bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-pink-600/10 border border-white/20 backdrop-blur-md"
         >
           {/* Decorative background elements */}
           <motion.div
-            className="absolute top-0 left-0 w-40 h-40 bg-blue-300/10 rounded-full blur-3xl"
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 5, repeat: Infinity }}
+            className="absolute top-10 left-10 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"
+            animate={{ y: [0, 40, 0], x: [0, 20, 0] }}
+            transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-0 right-0 w-40 h-40 bg-purple-300/10 rounded-full blur-3xl"
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 6, repeat: Infinity }}
+            className="absolute bottom-10 right-10 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"
+            animate={{ y: [0, -40, 0], x: [0, -20, 0] }}
+            transition={{ duration: 10, repeat: Infinity }}
           />
 
-          <div className="relative z-10 flex flex-col items-center justify-center">
-            {/* Animated Korean Characters */}
+          <div className="relative z-10 flex flex-col items-center justify-center gap-6">
+            {/* Animated Korean Characters Label */}
             <motion.div
-              initial={{ opacity: 0, y: -30 }}
+              initial={{ opacity: 0, y: -40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="mb-6 text-center"
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-center"
             >
-              <p className="text-sm font-medium text-primary/70 mb-2">
-                {language === 'ar' ? '✨ شخصيات كورية تقليدية' : '✨ 전통적인 한국 캐릭터'}
+              <p className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {language === 'ar' ? '✨ شخصيات كورية تقليدية ✨' : '✨ 전통 한국 캐릭터 ✨'}
               </p>
             </motion.div>
 
-            {/* Main Character Image */}
+            {/* Main Character Image - Improved */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              initial={{ opacity: 0, scale: 0.7, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 25 }}
-              className="flex flex-col items-center gap-4 mb-6"
+              transition={{ delay: 0.4, type: "spring", stiffness: 150, damping: 20 }}
+              className="relative flex items-center justify-center"
             >
-              <img 
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
-                alt="Korean Characters"
-                className="w-64 h-auto drop-shadow-2xl max-w-full"
-              />
+              {/* Glow effect around image */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 rounded-3xl blur-2xl" />
               
-              {/* Floating particles effect */}
-              {[...Array(5)].map((_, i) => (
+              {/* Image container */}
+              <div className="relative z-20">
+                <img 
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
+                  alt="Korean Characters Hanbok"
+                  className="w-80 h-auto drop-shadow-2xl filter brightness-110 relative z-20"
+                  onLoad={() => console.log('[v0] صورة الشخصيات الكورية تم تحميلها بنجاح')}
+                  onError={() => console.error('[v0] خطأ في تحميل صورة الشخصيات')}
+                />
+              </div>
+              
+              {/* Animated floating particles around image */}
+              {[...Array(8)].map((_, i) => (
                 <motion.div
-                  key={i}
-                  className="absolute w-2 h-2 bg-blue-400 rounded-full"
+                  key={`particle-${i}`}
+                  className="absolute w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full shadow-lg"
+                  style={{
+                    left: `${Math.cos((i / 8) * Math.PI * 2) * 150 + 150}px`,
+                    top: `${Math.sin((i / 8) * Math.PI * 2) * 150 + 150}px`,
+                  }}
                   animate={{
-                    x: [0, Math.random() * 100 - 50],
-                    y: [0, -Math.random() * 150],
-                    opacity: [1, 0]
+                    scale: [1, 1.5, 1],
+                    opacity: [0.6, 1, 0.6],
+                    x: [0, Math.cos((i / 8) * Math.PI * 2) * 30, 0],
+                    y: [0, Math.sin((i / 8) * Math.PI * 2) * 30, 0],
                   }}
                   transition={{
-                    duration: 2 + Math.random(),
-                    delay: i * 0.2,
+                    duration: 3 + Math.random() * 2,
+                    delay: i * 0.15,
                     repeat: Infinity,
-                    repeatDelay: 1
                   }}
                 />
               ))}
@@ -444,18 +457,18 @@ const Dashboard: React.FC = () => {
 
             {/* Inspirational Text */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-center max-w-2xl"
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="text-center max-w-2xl relative z-10"
             >
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                {language === 'ar' ? 'انغمس في ثقافة اللغة الكورية' : '한국 문화에 빠져보세요'}
+              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">
+                {language === 'ar' ? '🌸 انغمس في ثقافة اللغة الكورية 🌸' : '🌸 한국 문화에 빠져보세요 🌸'}
               </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-white/80 text-sm md:text-base leading-relaxed">
                 {language === 'ar' 
-                  ? 'تعلم من خلال ألعاب مثيرة وقصص تقليدية وشخصيات ملهمة'
-                  : '흥미로운 게임, 전통 이야기, 영감을 주는 캐릭터를 통해 배우세요'}
+                  ? 'تعلم من خلال ألعاب مثيرة وقصص تقليدية وشخصيات ملهمة ترتدي الملابس الكورية التقليدية الجميلة'
+                  : '흥미로운 게임, 전통 이야기, 그리고 아름다운 한복을 입은 캐릭터를 통해 배우세요'}
               </p>
             </motion.div>
           </div>
@@ -502,7 +515,7 @@ const Dashboard: React.FC = () => {
               <Flame className="w-6 h-6 mx-auto mb-2 text-orange-300 relative z-10" />
             </motion.div>
             <p className="text-2xl font-bold text-white relative z-10">{streakDays}</p>
-            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'أيام متتالية' : '연속'}</p>
+            <p className="text-xs text-white/60 relative z-10">{language === 'ar' ? 'أيام متتا��ية' : '연속'}</p>
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.08, rotate: -1, y: -5 }}

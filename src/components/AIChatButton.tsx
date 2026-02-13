@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Sparkles, X, Maximize2, Send, Bot, User, Loader2, Volume2 } from 'lucide-react';
+import { MessageCircle, Sparkles, X, Maximize2, Send, Bot, User, Loader2, Volume2, Mic } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,11 +20,93 @@ const AIChatButton: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        stream.getTracks().forEach(track => track.stop());
+        
+        // استخدام Web Speech API لتحويل الصوت إلى نص
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+          alert(isRTL ? 'المتصفح لا يدعم التعرف على الكلام' : '브라우저가 음성 인식을 지원하지 않습니다');
+          return;
+        }
+        
+        const recognition = new SpeechRecognition();
+        recognition.language = isRTL ? 'ar-SA' : 'ko-KR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        
+        recognition.onstart = () => {
+          console.log('[v0] بدء التعرف على الصوت...');
+        };
+        
+        recognition.onresult = (event: any) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const isFinal = event.results[i].isFinal;
+            transcript += event.results[i][0].transcript;
+            if (isFinal) {
+              console.log('[v0] تم التعرف على:', transcript);
+            }
+          }
+          if (transcript.trim()) {
+            setInput(prev => {
+              if (!prev) return transcript.trim();
+              return prev + ' ' + transcript.trim();
+            });
+          }
+        };
+        
+        recognition.onerror = (event: any) => {
+          console.error('[v0] خطأ:', event.error);
+        };
+        
+        recognition.onend = () => {
+          console.log('[v0] انتهى التعرف على الصوت');
+        };
+        
+        try {
+          recognition.start();
+        } catch (err) {
+          console.log('[v0] جاري معالجة الصوت...');
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('[v0] خطأ في الوصول للميكروفون:', error);
+      alert(isRTL ? 'لم يتمكن من الوصول للميكروفون' : '마이크에 접근할 수 없습니다');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const playKorean = (text: string) => {
     const koreanText = text.match(/[\uAC00-\uD7AF]+/g)?.join(' ') || text;
@@ -203,6 +285,19 @@ const AIChatButton: React.FC = () => {
             {/* Input */}
             <div className="p-2 border-t border-border">
               <div className="flex gap-2 items-center">
+                <motion.button
+                  whileHover={!isRecording ? { scale: 1.05 } : {}}
+                  onClick={isRecording ? stopRecording : startRecording}
+                  animate={isRecording ? { backgroundColor: '#ef4444' } : {}}
+                  className={`p-2 rounded-xl transition-all flex-shrink-0 ${
+                    isRecording 
+                      ? 'bg-red-500 text-white animate-pulse' 
+                      : 'bg-muted hover:bg-muted/80'
+                  }`}
+                  title={isRecording ? (isRTL ? 'إيقاف التسجيل' : '녹음 중지') : (isRTL ? 'ابدأ التسجيل' : '녹음 시작')}
+                >
+                  <Mic className={`w-4 h-4 ${isRecording ? 'text-white' : ''}`} />
+                </motion.button>
                 <input
                   type="text"
                   value={input}

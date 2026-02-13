@@ -30,8 +30,14 @@ import Grammar from "./pages/Grammar";
 import Pronunciation from "./pages/Pronunciation";
 import Songs from "./pages/Songs";
 import KoreanSeries from "./pages/KoreanSeries";
+import Lessons from "./pages/Lessons";
+import AdminDashboard from "./pages/AdminDashboard";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
+import AboutSystem from "./pages/AboutSystem";
+import LessonsInfo from "./pages/LessonsInfo";
+import GamesInfo from "./pages/GamesInfo";
+import DeveloperInfo from "./pages/DeveloperInfo";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -61,7 +67,7 @@ const ScrollToTop = () => {
 // Show AI Chat button only on dashboard pages
 const ConditionalAIChatButton = () => {
   const { pathname } = useLocation();
-  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
+  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series', '/lessons'];
   
   if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
   
@@ -70,41 +76,12 @@ const ConditionalAIChatButton = () => {
 
 const App = () => {
   useEffect(() => {
-    const developerMessage = `
-%c
-██████████████████████████████████████████████████████████████████████
-█                                                                    █
-█         %c محمد أيمن %c                                              █
-█                                                                    █
-█             %cتم التطوير بواسطة محمد أيمن%c                             █
-█                                                                    █
-█                %cتاريخ البدء: السابع من يناير%c                        █
-█                %cتاريخ الإنجاز: الثامن من فبراير%c                      █
-█                                                                    █
-█                    %cخطوات سيول - تطبيق تعلم اللغة الكورية%c            █
-█                            %cالإصدار 1.0.0%c                        █
-█                                                                    █
-█                         %cمع أطيب التمنيات بالتعلم الممتع%c            █
-█                                                                    █
-██████████████████████████████████████████████████████████████████████
-`;
-
+    const message = '%c مرحباً أيها المبرمج\n%cتم التطوير بواسطة محمد أيمن';
+    
     console.log(
-      developerMessage,
-      'background: linear-gradient(90deg, #1e40af 0%, #7c3aed 50%, #ec4899 100%); padding: 15px; font-weight: bold;',
-      'font-size: 48px; font-weight: 900; color: #fff; font-style: italic; text-shadow: 0 0 10px rgba(0,0,0,0.5), 2px 2px 6px rgba(0,0,0,0.4);',
-      '',
-      'font-size: 24px; font-style: italic; color: #fff; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.4);',
-      '',
-      'font-size: 14px; font-style: italic; color: #fbbf24; font-weight: 600;',
-      '',
-      'font-size: 14px; font-style: italic; color: #34d399; font-weight: 600;',
-      '',
-      'font-size: 16px; font-style: italic; color: #a78bfa; font-weight: bold; text-shadow: 0 0 6px rgba(0,0,0,0.3);',
-      '',
-      'font-size: 14px; color: #f87171; font-weight: bold;',
-      '',
-      'font-size: 14px; color: #60a5fa; font-style: italic; font-weight: 600;'
+      message,
+      'font-size: 32px; font-weight: 900; font-style: italic; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ec4899 100%); color: #fff; padding: 15px 30px; border-radius: 8px; text-shadow: 0 0 10px rgba(0,0,0,0.4);',
+      'font-size: 14px; font-style: italic; color: #667eea; font-weight: 600;'
     );
   }, []);
 
@@ -126,6 +103,7 @@ const App = () => {
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/explore" element={<Explore />} />
                   <Route path="/learn/:level" element={<Learn />} />
                   <Route path="/review" element={<Review />} />
@@ -142,7 +120,12 @@ const App = () => {
                   <Route path="/pronunciation" element={<Pronunciation />} />
                   <Route path="/songs" element={<Songs />} />
                   <Route path="/korean-series" element={<KoreanSeries />} />
+                  <Route path="/lessons" element={<Lessons />} />
                   <Route path="/reports" element={<Reports />} />
+                  <Route path="/about-system" element={<AboutSystem />} />
+                  <Route path="/lessons-info" element={<LessonsInfo />} />
+                  <Route path="/games-info" element={<GamesInfo />} />
+                  <Route path="/developer" element={<DeveloperInfo />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <MobileBottomNav />
