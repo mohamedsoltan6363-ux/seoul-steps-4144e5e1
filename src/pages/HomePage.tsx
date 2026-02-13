@@ -306,54 +306,61 @@ const HomePage: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Character Images - Bottom of Hero */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 flex items-end justify-center gap-12 px-4 pointer-events-none">
-            {/* Egyptian Flag Image - Left */}
+          {/* Character Images - Bottom of Hero - FIXED */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.7 }}
+            className="absolute bottom-0 left-0 right-0 h-64 flex items-end justify-center gap-20 px-4 pointer-events-auto"
+          >
+            {/* Egyptian Flag Image - Left Side */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className={`relative ${isRTL ? 'order-2' : 'order-1'}`}
+              initial={{ opacity: 0, y: 60, x: -40 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
+              transition={{ duration: 1, delay: 0.9, type: 'spring', stiffness: 100 }}
+              className="relative"
             >
               <motion.img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/face_swap_egyptian_flag_mirrored_1-removebg-preview-MNDdurpGtaLMKBafGvSV2AEHhfT6Tm.png"
-                alt="Egyptian Flag Character"
-                className="h-40 object-contain drop-shadow-2xl"
+                alt="Egyptian Flag"
+                className="h-56 md:h-64 object-contain drop-shadow-2xl filter brightness-110"
                 animate={{
-                  y: [0, -15, 0],
-                  rotate: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
-            </motion.div>
-
-            {/* Korean Flag Image - Right */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1 }}
-              className={`relative ${isRTL ? 'order-1' : 'order-2'}`}
-            >
-              <motion.img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/face_swap_korean_flag_1__1_-removebg-preview%20%281%29-j2BrfggTfr00iZE1WbJxiPurkKMhgJ.png"
-                alt="Korean Flag Character"
-                className="h-40 object-contain drop-shadow-2xl"
-                animate={{
-                  y: [0, 15, 0],
-                  rotate: [0, 2, 0],
+                  y: [0, -20, 0],
+                  rotate: [-3, 0, -3],
                 }}
                 transition={{
                   duration: 5,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
+                whileHover={{ scale: 1.05 }}
               />
             </motion.div>
-          </div>
+
+            {/* Korean Flag Image - Right Side */}
+            <motion.div
+              initial={{ opacity: 0, y: 60, x: 40 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
+              transition={{ duration: 1, delay: 1.1, type: 'spring', stiffness: 100 }}
+              className="relative"
+            >
+              <motion.img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/face_swap_korean_flag_1__1_-removebg-preview%20%281%29-j2BrfggTfr00iZE1WbJxiPurkKMhgJ.png"
+                alt="Korean Flag"
+                className="h-56 md:h-64 object-contain drop-shadow-2xl filter brightness-110"
+                animate={{
+                  y: [0, 20, 0],
+                  rotate: [3, 0, 3],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                whileHover={{ scale: 1.05 }}
+              />
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* Personal Images Section */}
