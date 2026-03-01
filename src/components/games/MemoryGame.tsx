@@ -25,7 +25,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   const isArabic = language === 'ar';
   
   const [cards, setCards] = useState<MemoryCard[]>([]);
-  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [time, setTime] = useState(0);
@@ -91,7 +91,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   }, [gameStarted, gameComplete]);
 
   useEffect(() => {
-    if (matchedPairs.length === 12 && matchedPairs.length > 0) {
+    if (matchedPairs.length === cards.length / 2 && matchedPairs.length > 0) {
       const roundScore = Math.max(0, 100 - Math.floor(moves / 2) - Math.floor(time / 10));
       setTotalScore(prev => prev + roundScore);
       
@@ -114,9 +114,8 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
 
   useEffect(() => {
     if (flippedCards.length === 2) {
-      const [first, second] = flippedCards;
-      const firstCard = cards.find(c => c.id === first);
-      const secondCard = cards.find(c => c.id === second);
+      const firstCard = cards.find(c => c.id === flippedCards[0]);
+      const secondCard = cards.find(c => c.id === flippedCards[1]);
 
       if (firstCard && secondCard && firstCard.pairId === secondCard.pairId) {
         setTimeout(() => {
@@ -141,7 +140,8 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   const handleCardClick = (cardId: string) => {
     if (flippedCards.length >= 2) return;
     if (flippedCards.includes(cardId)) return;
-    if (cards.find(c => c.id === cardId)?.isMatched) return;
+    const card = cards.find(c => c.id === cardId);
+    if (!card || card.isMatched) return;
 
     setFlippedCards(prev => [...prev, cardId]);
     setMoves(prev => prev + 1);

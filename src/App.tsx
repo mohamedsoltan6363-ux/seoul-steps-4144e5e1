@@ -32,6 +32,7 @@ import Songs from "./pages/Songs";
 import KoreanSeries from "./pages/KoreanSeries";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
+import LevelLessons from "./pages/LevelLessons";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -128,6 +129,7 @@ const App = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/explore" element={<Explore />} />
                   <Route path="/learn/:level" element={<Learn />} />
+                  <Route path="/learn/:level/lessons" element={<LevelLessons />} />
                   <Route path="/review" element={<Review />} />
                   <Route path="/games" element={<Games />} />
                   <Route path="/profile" element={<Profile />} />
