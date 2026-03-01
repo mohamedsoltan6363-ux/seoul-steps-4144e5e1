@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Gamepad2, User, Trophy, Compass } from 'lucide-react';
+import { Home, Gamepad2, User, Trophy, Compass, Film } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const MobileBottomNav: React.FC = () => {
@@ -9,7 +9,7 @@ const MobileBottomNav: React.FC = () => {
   const location = useLocation();
   const { language } = useLanguage();
 
-  // Hide on level pages (learn routes) and onboarding
+  // Hide on level pages (learn routes), onboarding, auth, homepage
   const hiddenPaths = ['/learn', '/onboarding', '/auth'];
   const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path)) || location.pathname === '/';
 
@@ -27,9 +27,9 @@ const MobileBottomNav: React.FC = () => {
       label: language === 'ar' ? 'الألعاب' : '게임',
     },
     { 
-      path: '/leaderboard', 
-      icon: Trophy, 
-      label: language === 'ar' ? 'المتصدرين' : '순위',
+      path: '/korean-series', 
+      icon: Film, 
+      label: language === 'ar' ? 'المسلسلات' : '드라마',
     },
     { 
       path: '/explore', 

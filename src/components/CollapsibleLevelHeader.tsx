@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, ArrowLeft, BookOpen, Target, CheckCircle, TrendingUp, Clock, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft, BookOpen, Target, CheckCircle, TrendingUp, Clock, Sparkles, PlayCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useNavigate } from 'react-router-dom';
 
@@ -94,13 +94,24 @@ const CollapsibleLevelHeader: React.FC<CollapsibleLevelHeaderProps> = ({
             </div>
           </div>
 
-          {/* Quick Stats & Toggle */}
-          <div className="flex items-center gap-3">
+          {/* Quick Stats & Actions */}
+          <div className="flex items-center gap-2">
             {/* Quick Progress Badge */}
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span className="text-xs font-medium text-primary">{levelProgress}%</span>
             </div>
+
+            {/* Lessons Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate(`/learn/${levelNum}/lessons`)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium shadow-lg shadow-amber-500/20"
+            >
+              <PlayCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">{isRTL ? 'الدروس' : '수업'}</span>
+            </motion.button>
 
             {/* Toggle Button */}
             <motion.button
