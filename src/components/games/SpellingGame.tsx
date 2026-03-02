@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { vocabulary } from '@/data/koreanData';
+import { getVocabularyPool, shuffleArray as shufflePool } from '@/components/games/gameContentPool';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, RotateCcw, Trophy, Sparkles, Check, X, Volume2 } from 'lucide-react';
@@ -15,7 +15,7 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ onBack }) => {
   const { language } = useLanguage();
   const isArabic = language === 'ar';
 
-  const [currentWord, setCurrentWord] = useState<typeof vocabulary[0] | null>(null);
+  const [currentWord, setCurrentWord] = useState<{ korean: string; arabic: string; romanized?: string } | null>(null);
   const [scrambledLetters, setScrambledLetters] = useState<string[]>([]);
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [usedIndices, setUsedIndices] = useState<number[]>([]);
@@ -25,22 +25,14 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ onBack }) => {
   const [gameComplete, setGameComplete] = useState(false);
   const totalRounds = 50; // Increased from 8 to 50 rounds
 
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
-
   const generateRound = useCallback(() => {
-    const shortWords = vocabulary.filter(v => v.korean.length <= 4 && v.korean.length >= 2);
-    const word = shuffleArray(shortWords)[0];
+    const pool = getVocabularyPool();
+    const shortWords = pool.filter(v => v.korean.length <= 4 && v.korean.length >= 2);
+    const word = shufflePool(shortWords)[0];
     const letters = word.korean.split('');
     
-    setCurrentWord(word);
-    setScrambledLetters(shuffleArray(letters));
+    setCurrentWord(word as any);
+    setScrambledLetters(shufflePool(letters));
     setSelectedLetters([]);
     setUsedIndices([]);
     setIsCorrect(null);

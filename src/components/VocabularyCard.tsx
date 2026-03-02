@@ -63,6 +63,9 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
 }) => {
   const { language, t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [listenCount, setListenCount] = useState(0);
+  const requiredListens = 10;
+  const canMemorize = listenCount >= requiredListens;
   
   const colors = categoryColors[category] || { bg: 'bg-gray-100', text: 'text-gray-700', gradient: 'from-gray-400 to-gray-500' };
 
@@ -72,7 +75,10 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
     const utterance = new SpeechSynthesisUtterance(korean);
     utterance.lang = 'ko-KR';
     utterance.rate = 0.7;
-    utterance.onend = () => setIsPlaying(false);
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setListenCount(prev => prev + 1);
+    };
     speechSynthesis.speak(utterance);
   };
 
@@ -130,10 +136,13 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
 
         <button
           onClick={(e) => { e.stopPropagation(); onToggleMemorized(); }}
+          disabled={!isMemorized && !canMemorize}
           className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-300
             ${isMemorized 
               ? 'bg-korean-green text-white shadow-lg' 
-              : 'bg-muted hover:bg-korean-green hover:text-white'
+              : canMemorize
+              ? 'bg-muted hover:bg-korean-green hover:text-white'
+              : 'bg-muted/50 text-muted-foreground cursor-not-allowed opacity-60'
             }`}
         >
           {isMemorized ? (
@@ -144,7 +153,9 @@ const VocabularyCard: React.FC<VocabularyCardProps> = ({
           ) : (
             <>
               <RotateCcw className="w-4 h-4" />
-              <span className="text-sm font-medium">{t('notMemorized')}</span>
+              <span className="text-sm font-medium">
+                {canMemorize ? t('notMemorized') : `${listenCount}/${requiredListens}`}
+              </span>
             </>
           )}
         </button>

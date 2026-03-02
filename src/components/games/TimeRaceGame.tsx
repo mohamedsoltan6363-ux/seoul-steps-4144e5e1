@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRight, ArrowLeft, Trophy, RotateCcw, Sparkles, Timer, Play, Zap } from 'lucide-react';
-import { vocabulary, consonants, vowels } from '@/data/koreanData';
+import { getAllGameContent, getLetterPool, getVocabularyPool, shuffleArray as shufflePool } from '@/components/games/gameContentPool';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -37,52 +37,40 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
   const [totalRounds] = useState(50); // Changed to 50 rounds instead of timed
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
   const generateQuestion = useCallback((): Question => {
     const types: QuestionType[] = ['vocab_to_arabic', 'arabic_to_vocab', 'letter_to_arabic'];
     const type = types[Math.floor(Math.random() * types.length)];
 
     if (type === 'letter_to_arabic') {
-      const allLetters = [...consonants, ...vowels];
-      const shuffled = shuffleArray(allLetters);
+      const letters = getLetterPool();
+      const shuffled = shufflePool(letters);
       const correct = shuffled[0];
       const wrongOptions = shuffled.slice(1, 4).map(l => l.arabic);
-      const options = shuffleArray([correct.arabic, ...wrongOptions]);
-
       return {
         type,
         question: correct.korean,
         correctAnswer: correct.arabic,
-        options
+        options: shufflePool([correct.arabic, ...wrongOptions]) as string[]
       };
     } else {
-      const shuffled = shuffleArray(vocabulary);
+      const vocabPool = getVocabularyPool();
+      const shuffled = shufflePool(vocabPool);
       const correct = shuffled[0];
       const wrongOptions = shuffled.slice(1, 4);
 
       if (type === 'vocab_to_arabic') {
-        const options = shuffleArray([correct.arabic, ...wrongOptions.map(w => w.arabic)]);
         return {
           type,
           question: correct.korean,
           correctAnswer: correct.arabic,
-          options
+          options: shufflePool([correct.arabic, ...wrongOptions.map(w => w.arabic)]) as string[]
         };
       } else {
-        const options = shuffleArray([correct.korean, ...wrongOptions.map(w => w.korean)]);
         return {
           type,
           question: correct.arabic,
           correctAnswer: correct.korean,
-          options
+          options: shufflePool([correct.korean, ...wrongOptions.map(w => w.korean)]) as string[]
         };
       }
     }
