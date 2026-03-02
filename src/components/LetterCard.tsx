@@ -21,6 +21,9 @@ const LetterCard: React.FC<LetterCardProps> = ({
 }) => {
   const { language } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [listenCount, setListenCount] = useState(0);
+  const requiredListens = 10;
+  const canMemorize = listenCount >= requiredListens;
 
   const playAudio = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,7 +31,10 @@ const LetterCard: React.FC<LetterCardProps> = ({
     const utterance = new SpeechSynthesisUtterance(audioText);
     utterance.lang = 'ko-KR';
     utterance.rate = 0.8;
-    utterance.onend = () => setIsPlaying(false);
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setListenCount(prev => prev + 1);
+    };
     speechSynthesis.speak(utterance);
   };
 
@@ -78,12 +84,20 @@ const LetterCard: React.FC<LetterCardProps> = ({
           <span className="font-medium">{language === 'ar' ? 'استمع' : '듣기'}</span>
         </button>
 
+        {!isMemorized && !canMemorize && (
+          <div className="w-full text-center text-[10px] text-muted-foreground mb-1">
+            {language === 'ar' ? `استمع ${listenCount}/${requiredListens}` : `듣기 ${listenCount}/${requiredListens}`}
+          </div>
+        )}
         <button
           onClick={(e) => { e.stopPropagation(); onToggleMemorized(); }}
+          disabled={!isMemorized && !canMemorize}
           className={`w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg text-xs transition-all duration-300
             ${isMemorized 
               ? 'bg-korean-green text-white' 
-              : 'bg-muted hover:bg-korean-green hover:text-white'
+              : canMemorize
+              ? 'bg-muted hover:bg-korean-green hover:text-white'
+              : 'bg-muted/50 text-muted-foreground cursor-not-allowed opacity-60'
             }`}
         >
           {isMemorized ? (

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRight, ArrowLeft, Trophy, RotateCcw, Sparkles, HelpCircle, Lightbulb } from 'lucide-react';
-import { vocabulary } from '@/data/koreanData';
+import { getVocabularyPool, shuffleArray as shufflePool } from '@/components/games/gameContentPool';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -27,32 +27,18 @@ const LetterPuzzleGame = ({ onBack }: LetterPuzzleGameProps) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [gameComplete, setGameComplete] = useState(false);
 
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  // Get words with 2-4 characters for puzzle
-  const getShortWords = useCallback(() => {
-    return vocabulary.filter(v => v.korean.length >= 2 && v.korean.length <= 4);
-  }, []);
-
   const generateRound = useCallback(() => {
-    const shortWords = getShortWords();
-    const randomWord = shortWords[Math.floor(Math.random() * shortWords.length)];
+    const pool = getVocabularyPool().filter(v => v.korean.length >= 2 && v.korean.length <= 4);
+    const randomWord = shufflePool(pool)[0];
     const letters = randomWord.korean.split('');
     
     setCurrentWord({ korean: randomWord.korean, arabic: randomWord.arabic });
-    setShuffledLetters(shuffleArray(letters));
+    setShuffledLetters(shufflePool(letters));
     setSelectedLetters([]);
     setUsedIndices([]);
     setShowHint(false);
     setIsCorrect(null);
-  }, [getShortWords]);
+  }, []);
 
   useEffect(() => {
     generateRound();

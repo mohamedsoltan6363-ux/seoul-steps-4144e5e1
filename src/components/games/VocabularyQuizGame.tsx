@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Volume2, Trophy, Zap, CheckCircle, XCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion } from 'framer-motion';
-import { vocabulary } from '@/data/koreanData';
+import { getAllGameContent, shuffleArray as shufflePool } from '@/components/games/gameContentPool';
 import confetti from 'canvas-confetti';
 
 interface VocabularyQuizGameProps {
@@ -31,25 +31,16 @@ const VocabularyQuizGame: React.FC<VocabularyQuizGameProps> = ({ onBack }) => {
   const [gameComplete, setGameComplete] = useState(false);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
 
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
   const generateQuestion = useCallback(() => {
+    const pool = getAllGameContent();
     const type = Math.random() > 0.5 ? 'korean-to-arabic' : 'arabic-to-korean';
-    const correctWord = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+    const shuffled = shufflePool(pool);
+    const correctWord = shuffled[0];
     
     const numOptions = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 4 : 5;
-    const wrongAnswers = shuffleArray(
-      vocabulary.filter(w => w.id !== correctWord.id)
-    ).slice(0, numOptions - 1);
+    const wrongAnswers = shuffled.slice(1, numOptions);
 
-    const options = shuffleArray([
+    const options = shufflePool([
       type === 'korean-to-arabic' ? correctWord.arabic : correctWord.korean,
       ...wrongAnswers.map(w => type === 'korean-to-arabic' ? w.arabic : w.korean)
     ]);
@@ -57,7 +48,7 @@ const VocabularyQuizGame: React.FC<VocabularyQuizGameProps> = ({ onBack }) => {
     setQuestion({
       korean: type === 'korean-to-arabic' ? correctWord.korean : correctWord.arabic,
       correct: type === 'korean-to-arabic' ? correctWord.arabic : correctWord.korean,
-      options,
+      options: options as string[],
       type
     });
     setSelectedAnswer(null);

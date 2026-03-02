@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { vocabulary, basicSentences } from '@/data/koreanData';
+import { getAllGameContent, shuffleArray } from '@/components/games/gameContentPool';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, Volume2, RotateCcw, Trophy, Headphones } from 'lucide-react';
@@ -30,17 +30,8 @@ const ListeningGame: React.FC<ListeningGameProps> = ({ onBack }) => {
   const [gameComplete, setGameComplete] = useState(false);
   const totalQuestions = 50; // Increased from 10 to 50 questions
 
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
-
   const generateQuestion = useCallback((): Question => {
-    const allItems = [...vocabulary, ...basicSentences];
+    const allItems = getAllGameContent();
     const shuffled = shuffleArray(allItems);
     const correct = shuffled[0];
     const wrongOptions = shuffled.slice(1, 4).map(item => item.arabic);
