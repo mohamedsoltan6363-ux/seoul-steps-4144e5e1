@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { vocabulary } from '@/data/koreanData';
+import { getVocabularyPool, shuffleArray as shufflePool } from '@/components/games/gameContentPool';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, RotateCcw, Trophy, Timer } from 'lucide-react';
@@ -45,7 +45,8 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   };
 
   const initializeGame = useCallback(() => {
-    const selectedWords = shuffleArray(vocabulary).slice(0, 12); // Increased from 6 to 12 words
+    const pool = getVocabularyPool();
+    const selectedWords = shufflePool(pool).slice(0, 8);
     const gameCards: MemoryCard[] = [];
     
     selectedWords.forEach(word => {

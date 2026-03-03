@@ -171,7 +171,7 @@ const FillBlankGame: React.FC<FillBlankGameProps> = ({ onBack }) => {
             {isArabic ? 'العودة' : '돌아가기'}
           </Button>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{round}/10</span>
+            <span className="text-sm text-muted-foreground">{round}/{totalRounds}</span>
             <span className="px-3 py-1 bg-primary/10 rounded-full text-primary font-bold">
               {score}
             </span>
@@ -183,7 +183,7 @@ const FillBlankGame: React.FC<FillBlankGameProps> = ({ onBack }) => {
           <motion.div
             className="h-full bg-gradient-to-r from-teal-500 to-emerald-500"
             initial={{ width: 0 }}
-            animate={{ width: `${(round / 10) * 100}%` }}
+            animate={{ width: `${(round / totalRounds) * 100}%` }}
           />
         </div>
 
