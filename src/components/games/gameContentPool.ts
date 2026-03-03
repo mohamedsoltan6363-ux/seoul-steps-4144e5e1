@@ -107,6 +107,62 @@ const extraVocabulary: GameItem[] = [
   { id: 'ev-60', korean: '행복', arabic: 'سعادة', type: 'vocabulary' },
 ];
 
+// More vocabulary - emotions, adjectives, verbs
+const extraVocabulary2: GameItem[] = [
+  { id: 'ev2-1', korean: '기쁘다', arabic: 'سعيد', type: 'vocabulary' },
+  { id: 'ev2-2', korean: '슬프다', arabic: 'حزين', type: 'vocabulary' },
+  { id: 'ev2-3', korean: '화나다', arabic: 'غاضب', type: 'vocabulary' },
+  { id: 'ev2-4', korean: '무섭다', arabic: 'خائف', type: 'vocabulary' },
+  { id: 'ev2-5', korean: '피곤하다', arabic: 'متعب', type: 'vocabulary' },
+  { id: 'ev2-6', korean: '배고프다', arabic: 'جائع', type: 'vocabulary' },
+  { id: 'ev2-7', korean: '목마르다', arabic: 'عطشان', type: 'vocabulary' },
+  { id: 'ev2-8', korean: '아프다', arabic: 'مريض', type: 'vocabulary' },
+  { id: 'ev2-9', korean: '예쁘다', arabic: 'جميل', type: 'vocabulary' },
+  { id: 'ev2-10', korean: '맛있다', arabic: 'لذيذ', type: 'vocabulary' },
+  { id: 'ev2-11', korean: '크다', arabic: 'كبير', type: 'vocabulary' },
+  { id: 'ev2-12', korean: '작다', arabic: 'صغير', type: 'vocabulary' },
+  { id: 'ev2-13', korean: '빠르다', arabic: 'سريع', type: 'vocabulary' },
+  { id: 'ev2-14', korean: '느리다', arabic: 'بطيء', type: 'vocabulary' },
+  { id: 'ev2-15', korean: '높다', arabic: 'عالي', type: 'vocabulary' },
+  { id: 'ev2-16', korean: '낮다', arabic: 'منخفض', type: 'vocabulary' },
+  { id: 'ev2-17', korean: '멀다', arabic: 'بعيد', type: 'vocabulary' },
+  { id: 'ev2-18', korean: '가깝다', arabic: 'قريب', type: 'vocabulary' },
+  { id: 'ev2-19', korean: '쉽다', arabic: 'سهل', type: 'vocabulary' },
+  { id: 'ev2-20', korean: '어렵다', arabic: 'صعب', type: 'vocabulary' },
+  // Verbs
+  { id: 'ev2-21', korean: '먹다', arabic: 'يأكل', type: 'vocabulary' },
+  { id: 'ev2-22', korean: '마시다', arabic: 'يشرب', type: 'vocabulary' },
+  { id: 'ev2-23', korean: '자다', arabic: 'ينام', type: 'vocabulary' },
+  { id: 'ev2-24', korean: '일어나다', arabic: 'يستيقظ', type: 'vocabulary' },
+  { id: 'ev2-25', korean: '걷다', arabic: 'يمشي', type: 'vocabulary' },
+  { id: 'ev2-26', korean: '달리다', arabic: 'يركض', type: 'vocabulary' },
+  { id: 'ev2-27', korean: '읽다', arabic: 'يقرأ', type: 'vocabulary' },
+  { id: 'ev2-28', korean: '쓰다', arabic: 'يكتب', type: 'vocabulary' },
+  { id: 'ev2-29', korean: '듣다', arabic: 'يسمع', type: 'vocabulary' },
+  { id: 'ev2-30', korean: '보다', arabic: 'يرى', type: 'vocabulary' },
+  { id: 'ev2-31', korean: '말하다', arabic: 'يتكلم', type: 'vocabulary' },
+  { id: 'ev2-32', korean: '사다', arabic: 'يشتري', type: 'vocabulary' },
+  { id: 'ev2-33', korean: '팔다', arabic: 'يبيع', type: 'vocabulary' },
+  { id: 'ev2-34', korean: '가르치다', arabic: 'يعلّم', type: 'vocabulary' },
+  { id: 'ev2-35', korean: '배우다', arabic: 'يتعلم', type: 'vocabulary' },
+  { id: 'ev2-36', korean: '만나다', arabic: 'يقابل', type: 'vocabulary' },
+  { id: 'ev2-37', korean: '기다리다', arabic: 'ينتظر', type: 'vocabulary' },
+  { id: 'ev2-38', korean: '시작하다', arabic: 'يبدأ', type: 'vocabulary' },
+  { id: 'ev2-39', korean: '끝나다', arabic: 'ينتهي', type: 'vocabulary' },
+  { id: 'ev2-40', korean: '도착하다', arabic: 'يصل', type: 'vocabulary' },
+  // Time
+  { id: 'ev2-41', korean: '오늘', arabic: 'اليوم', type: 'vocabulary' },
+  { id: 'ev2-42', korean: '내일', arabic: 'غداً', type: 'vocabulary' },
+  { id: 'ev2-43', korean: '어제', arabic: 'أمس', type: 'vocabulary' },
+  { id: 'ev2-44', korean: '아침', arabic: 'صباح', type: 'vocabulary' },
+  { id: 'ev2-45', korean: '점심', arabic: 'ظهر', type: 'vocabulary' },
+  { id: 'ev2-46', korean: '저녁', arabic: 'مساء', type: 'vocabulary' },
+  { id: 'ev2-47', korean: '월요일', arabic: 'الاثنين', type: 'vocabulary' },
+  { id: 'ev2-48', korean: '화요일', arabic: 'الثلاثاء', type: 'vocabulary' },
+  { id: 'ev2-49', korean: '수요일', arabic: 'الأربعاء', type: 'vocabulary' },
+  { id: 'ev2-50', korean: '목요일', arabic: 'الخميس', type: 'vocabulary' },
+];
+
 // Extra sentences
 const extraSentences: GameItem[] = [
   { id: 'es-1', korean: '오늘 뭐 했어요?', arabic: 'ماذا فعلت اليوم؟', type: 'sentence' },
@@ -139,6 +195,27 @@ const extraSentences: GameItem[] = [
   { id: 'es-28', korean: '한국에서 왔어요', arabic: 'جئت من كوريا', type: 'sentence' },
   { id: 'es-29', korean: '저는 이집트 사람이에요', arabic: 'أنا مصري', type: 'sentence' },
   { id: 'es-30', korean: '한국어를 배우고 있어요', arabic: 'أنا أتعلم الكورية', type: 'sentence' },
+  // Advanced conversation sentences
+  { id: 'es-31', korean: '이 근처에 맛집 있어요?', arabic: 'هل يوجد مطعم لذيذ قريب من هنا؟', type: 'sentence' },
+  { id: 'es-32', korean: '한국에 얼마나 있었어요?', arabic: 'كم مدة بقائك في كوريا؟', type: 'sentence' },
+  { id: 'es-33', korean: '취미가 뭐예요?', arabic: 'ما هوايتك؟', type: 'sentence' },
+  { id: 'es-34', korean: '주말에 보통 뭐 해요?', arabic: 'ماذا تفعل عادة في عطلة نهاية الأسبوع؟', type: 'sentence' },
+  { id: 'es-35', korean: '한국 음식 중에 뭐가 제일 좋아요?', arabic: 'ما أكثر طعام كوري تحبه؟', type: 'sentence' },
+  { id: 'es-36', korean: '연락처 알려 주세요', arabic: 'أعطني رقمك من فضلك', type: 'sentence' },
+  { id: 'es-37', korean: '이따 봐요', arabic: 'أراك لاحقاً', type: 'sentence' },
+  { id: 'es-38', korean: '무슨 일이에요?', arabic: 'ماذا حدث؟', type: 'sentence' },
+  { id: 'es-39', korean: '괜찮아요?', arabic: 'هل أنت بخير؟', type: 'sentence' },
+  { id: 'es-40', korean: '걱정하지 마세요', arabic: 'لا تقلق', type: 'sentence' },
+  { id: 'es-41', korean: '같이 가요', arabic: 'لنذهب معاً', type: 'sentence' },
+  { id: 'es-42', korean: '오래간만이에요', arabic: 'لم أرك منذ وقت طويل', type: 'sentence' },
+  { id: 'es-43', korean: '좋은 하루 보내세요', arabic: 'أتمنى لك يوماً سعيداً', type: 'sentence' },
+  { id: 'es-44', korean: '잘 자요', arabic: 'تصبح على خير', type: 'sentence' },
+  { id: 'es-45', korean: '배달 주문할게요', arabic: 'سأطلب توصيل', type: 'sentence' },
+  { id: 'es-46', korean: '이 옷 어때요?', arabic: 'كيف ترى هذه الملابس؟', type: 'sentence' },
+  { id: 'es-47', korean: '한국 드라마 좋아해요?', arabic: 'هل تحب المسلسلات الكورية؟', type: 'sentence' },
+  { id: 'es-48', korean: '저는 K-pop을 좋아해요', arabic: 'أنا أحب كي بوب', type: 'sentence' },
+  { id: 'es-49', korean: '어떤 음악 좋아해요?', arabic: 'أي نوع موسيقى تحب؟', type: 'sentence' },
+  { id: 'es-50', korean: '정말 감사합니다', arabic: 'شكراً جزيلاً حقاً', type: 'sentence' },
 ];
 
 /** Get ALL content as GameItem[] */
@@ -158,7 +235,7 @@ export function getAllGameContent(): GameItem[] {
 
   // Extra vocabulary
   items.push(...extraVocabulary);
-
+  items.push(...extraVocabulary2);
   // Sentences from all levels
   basicSentences.forEach(s => items.push({ id: `bs-${s.id}`, korean: s.korean, arabic: s.arabic, romanized: s.romanized, type: 'sentence' }));
   advancedSentences.forEach(s => items.push({ id: `as-${s.id}`, korean: s.korean, arabic: s.arabic, romanized: s.romanized, type: 'sentence' }));

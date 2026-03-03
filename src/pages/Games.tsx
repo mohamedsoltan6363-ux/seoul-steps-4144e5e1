@@ -35,7 +35,8 @@ const Games = () => {
       gradient: 'from-pink-500 to-rose-500',
       bgGlow: 'bg-pink-500/20',
       difficulty: isArabic ? 'متوسط' : '중간',
-      color: 'pink'
+      emoji: '🔗',
+      illustration: '🇰🇷 ↔ 🇪🇬',
     },
     {
       id: 'puzzle',
@@ -46,18 +47,20 @@ const Games = () => {
       gradient: 'from-violet-500 to-purple-500',
       bgGlow: 'bg-violet-500/20',
       difficulty: isArabic ? 'سهل' : '쉬움',
-      color: 'violet'
+      emoji: '🧩',
+      illustration: 'ㄱ ㄴ ㄷ',
     },
     {
       id: 'race',
       icon: Timer,
-      title: isArabic ? 'سباق سريع' : '빠른 경주',
-      description: isArabic ? 'أجب على 50 سؤال بسرعة واحصل على أعلى نقاط' : '50개의 문제에 빠르게 답하세요',
+      title: isArabic ? 'سباق الوقت' : '타임 레이스',
+      description: isArabic ? 'أجب بسرعة واحصل على أعلى نقاط' : '빠르게 답하고 최고 점수를 얻으세요',
       longDescription: isArabic ? 'تحدي سريع لاختبار معرفتك' : '속도와 지식을 테스트하세요',
       gradient: 'from-amber-500 to-orange-500',
       bgGlow: 'bg-amber-500/20',
       difficulty: isArabic ? 'صعب' : '어려움',
-      color: 'amber'
+      emoji: '⏱️',
+      illustration: '🏃‍♂️💨',
     },
     {
       id: 'memory',
@@ -68,7 +71,8 @@ const Games = () => {
       gradient: 'from-cyan-500 to-blue-500',
       bgGlow: 'bg-cyan-500/20',
       difficulty: isArabic ? 'متوسط' : '중간',
-      color: 'cyan'
+      emoji: '🧠',
+      illustration: '❓ ❓ ❓',
     },
     {
       id: 'listening',
@@ -79,7 +83,8 @@ const Games = () => {
       gradient: 'from-purple-500 to-fuchsia-500',
       bgGlow: 'bg-purple-500/20',
       difficulty: isArabic ? 'متوسط' : '중간',
-      color: 'purple'
+      emoji: '🎧',
+      illustration: '🔊 → 👂',
     },
     {
       id: 'spelling',
@@ -90,7 +95,8 @@ const Games = () => {
       gradient: 'from-emerald-500 to-teal-500',
       bgGlow: 'bg-emerald-500/20',
       difficulty: isArabic ? 'سهل' : '쉬움',
-      color: 'emerald'
+      emoji: '✨',
+      illustration: '한 → 한국',
     },
     {
       id: 'sentence',
@@ -101,7 +107,8 @@ const Games = () => {
       gradient: 'from-indigo-500 to-blue-500',
       bgGlow: 'bg-indigo-500/20',
       difficulty: isArabic ? 'صعب' : '어려움',
-      color: 'indigo'
+      emoji: '💬',
+      illustration: '📝 문장',
     },
     {
       id: 'vocab',
@@ -112,18 +119,20 @@ const Games = () => {
       gradient: 'from-sky-500 to-cyan-500',
       bgGlow: 'bg-sky-500/20',
       difficulty: isArabic ? 'متوسط' : '중간',
-      color: 'sky'
+      emoji: '📚',
+      illustration: '가 나 다',
     },
     {
       id: 'numbers',
       icon: Calculator,
       title: isArabic ? 'الأرقام الكورية' : '숫자 게임',
-      description: isArabic ? 'تعلم وتمرن على الأرقام الكورية' : '한국어 숫자를 배우세요',
+      description: isArabic ? 'تعلم الأرقام الكورية والصينية' : '한국어 숫자를 배우세요',
       longDescription: isArabic ? '50 جولة من الأرقام الكورية والصينية' : '50개의 숫자 학습',
       gradient: 'from-yellow-500 to-amber-500',
       bgGlow: 'bg-yellow-500/20',
       difficulty: isArabic ? 'سهل' : '쉬움',
-      color: 'yellow'
+      emoji: '🔢',
+      illustration: '하나 둘 셋',
     },
     {
       id: 'fillblank',
@@ -134,7 +143,8 @@ const Games = () => {
       gradient: 'from-teal-500 to-green-500',
       bgGlow: 'bg-teal-500/20',
       difficulty: isArabic ? 'متوسط' : '중간',
-      color: 'teal'
+      emoji: '🕳️',
+      illustration: '___을 채우세요',
     },
   ];
 
@@ -241,79 +251,65 @@ const Games = () => {
               </div>
 
               {/* Games Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 max-w-7xl mx-auto">
                 {games.map((game, index) => (
                   <motion.div
                     key={game.id}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.06, duration: 0.5 }}
+                    transition={{ delay: index * 0.05, duration: 0.5 }}
                     className="group h-full"
                   >
                     <Card
-                      className="relative overflow-hidden cursor-pointer border-0 shadow-md hover:shadow-2xl transition-all duration-300 h-full bg-white group-hover:bg-white backdrop-blur-sm"
+                      className="relative overflow-hidden cursor-pointer border-0 shadow-md hover:shadow-2xl transition-all duration-500 h-full bg-card"
                       onClick={() => setCurrentGame(game.id as GameType)}
                     >
-                      {/* Background Glow Effect */}
-                      <motion.div
-                        className={`absolute inset-0 ${game.bgGlow} opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl`}
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                      />
-
-                      {/* Gradient Top Border */}
-                      <div
-                        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${game.gradient}`}
-                      />
-
-                      <CardContent className="relative p-6 h-full flex flex-col">
-                        {/* Icon Container */}
-                        <motion.div
-                          className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${game.gradient} flex items-center justify-center mb-4 shadow-lg`}
-                          whileHover={{ scale: 1.15, rotate: 5 }}
+                      {/* Illustration Header */}
+                      <div className={`relative h-28 sm:h-32 bg-gradient-to-br ${game.gradient} flex items-center justify-center overflow-hidden`}>
+                        {/* Decorative circles */}
+                        <div className="absolute -top-6 -right-6 w-20 h-20 bg-white/10 rounded-full" />
+                        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-white/10 rounded-full" />
+                        
+                        {/* Large emoji */}
+                        <motion.span 
+                          className="text-4xl sm:text-5xl drop-shadow-lg select-none"
+                          whileHover={{ scale: 1.2, rotate: 10 }}
                           transition={{ type: 'spring', stiffness: 300 }}
                         >
-                          <game.icon className="w-8 h-8 text-white" />
-                        </motion.div>
+                          {game.emoji}
+                        </motion.span>
+                        
+                        {/* Illustration text */}
+                        <span className="absolute bottom-2 right-3 text-white/40 text-xs font-korean font-bold">
+                          {game.illustration}
+                        </span>
 
-                        {/* Content */}
-                        <h3 className="text-lg font-bold text-slate-800 mb-2">
+                        {/* Difficulty badge */}
+                        <span className={`absolute top-2 ${isArabic ? 'right-2' : 'left-2'} text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white backdrop-blur-sm`}>
+                          {game.difficulty}
+                        </span>
+                      </div>
+
+                      <CardContent className="relative p-3 sm:p-4 flex flex-col">
+                        {/* Title */}
+                        <h3 className="text-sm sm:text-base font-bold text-foreground mb-1">
                           {game.title}
                         </h3>
 
-                        <p className="text-sm text-slate-600 mb-4 flex-grow">
+                        {/* Description */}
+                        <p className="text-[11px] sm:text-xs text-muted-foreground mb-3 line-clamp-2">
                           {game.description}
                         </p>
 
-                        <p className="text-xs font-medium text-slate-500 mb-4">
-                          {game.longDescription}
-                        </p>
-
-                        {/* Footer with Difficulty and CTA */}
-                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs font-medium text-slate-600">
-                              {isArabic ? 'المستوى: ' : '난이도: '}
-                            </span>
-                            <span className={`text-xs font-bold ${
-                              game.difficulty === (isArabic ? 'سهل' : '쉬움') ? 'text-green-600' :
-                              game.difficulty === (isArabic ? 'متوسط' : '중간') ? 'text-amber-600' :
-                              'text-red-600'
-                            }`}>
-                              {game.difficulty}
-                            </span>
-                          </div>
-
-                          <motion.div
-                            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/40 group-hover:to-purple-500/40 transition-all"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            <Play className="w-4 h-4 text-blue-600" />
-                            <span className="text-xs font-semibold text-blue-600">
-                              {isArabic ? 'لعب' : '플레이'}
-                            </span>
-                          </motion.div>
-                        </div>
+                        {/* Play Button */}
+                        <motion.div
+                          className={`flex items-center justify-center gap-1.5 py-2 rounded-xl bg-gradient-to-r ${game.gradient} text-white text-xs sm:text-sm font-semibold shadow-md`}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <Play className="w-3.5 h-3.5" />
+                          {isArabic ? 'ابدأ اللعب' : '플레이'}
+                        </motion.div>
                       </CardContent>
                     </Card>
                   </motion.div>
