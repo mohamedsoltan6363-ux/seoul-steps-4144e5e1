@@ -233,43 +233,40 @@ const Dashboard: React.FC = () => {
         animate={{ y: 0 }}
         className="sticky top-0 z-40 glass-effect border-b border-border/50 backdrop-blur-xl"
       >
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
           <motion.div 
-            className="flex items-center gap-3"
+            className="flex items-center gap-2"
             whileHover={{ scale: 1.02 }}
           >
-            <span className="font-korean text-2xl font-bold text-gradient">한국어</span>
-            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+            <span className="font-korean text-xl sm:text-2xl font-bold text-gradient">한국어</span>
+            <span className="hidden sm:inline text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
               {language === 'ar' ? 'تعلم' : '배우기'}
             </span>
           </motion.div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <LanguageSwitcher />
             <NotificationPanel />
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/reports')} 
-              className="p-2.5 rounded-xl hover:bg-primary/10 transition-all duration-300 relative group"
+              className="p-2 sm:p-2.5 rounded-xl hover:bg-primary/10 transition-all duration-300"
             >
-              <BarChart3 className="w-5 h-5 text-primary" />
-              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-card px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                {language === 'ar' ? 'التقارير' : '보고서'}
-              </span>
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </motion.button>
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/profile')} 
-              className="p-2.5 rounded-xl hover:bg-muted transition-all duration-300"
+              className="p-2 sm:p-2.5 rounded-xl hover:bg-muted transition-all duration-300"
             >
-              <User className="w-5 h-5" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => signOut()} 
-              className="p-2.5 rounded-xl hover:bg-destructive/10 text-destructive transition-all duration-300"
+              className="hidden sm:flex p-2.5 rounded-xl hover:bg-destructive/10 text-destructive transition-all duration-300"
             >
               <LogOut className="w-5 h-5" />
             </motion.button>
