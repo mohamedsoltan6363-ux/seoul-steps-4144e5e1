@@ -28,6 +28,9 @@ const Dashboard: React.FC = () => {
   const [greeting, setGreeting] = useState('');
   const [showWelcomeEffect, setShowWelcomeEffect] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [adminClickCount, setAdminClickCount] = useState(0);
+  const [showAdminPinDialog, setShowAdminPinDialog] = useState(false);
+  const [adminPin, setAdminPin] = useState('');
 
   useEffect(() => {
     if (!user) navigate('/auth');
@@ -416,7 +419,16 @@ const Dashboard: React.FC = () => {
               <img 
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/korean_logo_final_1-removebg-preview-oKczvwT8P4eSf8GCPiwxnkZAG49STL.png"
                 alt="Korean Characters"
-                className="w-64 h-auto drop-shadow-2xl max-w-full"
+                className="w-64 h-auto drop-shadow-2xl max-w-full cursor-pointer select-none"
+                onClick={() => {
+                  const newCount = adminClickCount + 1;
+                  setAdminClickCount(newCount);
+                  if (newCount >= 3) {
+                    setShowAdminPinDialog(true);
+                    setAdminClickCount(0);
+                  }
+                  setTimeout(() => setAdminClickCount(0), 2000);
+                }}
               />
               
               {/* Floating particles effect */}
@@ -695,6 +707,63 @@ const Dashboard: React.FC = () => {
       
       {/* Padding for bottom navigation on mobile */}
       <div className="h-24 md:h-0" />
+
+      {/* Hidden Admin PIN Dialog */}
+      <AnimatePresence>
+        {showAdminPinDialog && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={() => { setShowAdminPinDialog(false); setAdminPin(''); }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-card rounded-2xl p-6 w-80 shadow-2xl border border-border"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="text-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Lock className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="font-bold">{language === 'ar' ? 'الدخول المحمي' : '보호된 접근'}</h3>
+                <p className="text-xs text-muted-foreground mt-1">{language === 'ar' ? 'أدخل الرمز السري' : '비밀 코드를 입력하세요'}</p>
+              </div>
+              <input
+                type="password"
+                value={adminPin}
+                onChange={e => setAdminPin(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && adminPin === '12345') {
+                    setShowAdminPinDialog(false);
+                    setAdminPin('');
+                    navigate('/admin-dashboard');
+                  }
+                }}
+                placeholder="•••••"
+                className="w-full text-center text-2xl tracking-[0.5em] bg-muted/50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30 mb-4"
+                maxLength={5}
+                autoFocus
+              />
+              <button
+                onClick={() => {
+                  if (adminPin === '12345') {
+                    setShowAdminPinDialog(false);
+                    setAdminPin('');
+                    navigate('/admin-dashboard');
+                  }
+                }}
+                className="w-full py-2.5 bg-primary text-primary-foreground rounded-xl font-medium text-sm hover:opacity-90 transition-opacity"
+              >
+                {language === 'ar' ? 'دخول' : '입장'}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
