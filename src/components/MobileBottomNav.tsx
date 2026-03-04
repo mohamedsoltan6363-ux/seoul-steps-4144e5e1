@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Gamepad2, User, Trophy, Compass, Film } from 'lucide-react';
+import { Home, Gamepad2, User, Compass, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const MobileBottomNav: React.FC = () => {
@@ -27,9 +27,9 @@ const MobileBottomNav: React.FC = () => {
       label: language === 'ar' ? 'الألعاب' : '게임',
     },
     { 
-      path: '/korean-series', 
-      icon: Film, 
-      label: language === 'ar' ? 'المسلسلات' : '드라마',
+      path: '/forum', 
+      icon: MessageCircle, 
+      label: language === 'ar' ? 'المنتدى' : '포럼',
     },
     { 
       path: '/explore', 

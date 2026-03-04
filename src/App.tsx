@@ -33,6 +33,8 @@ import KoreanSeries from "./pages/KoreanSeries";
 import Reports from "./pages/Reports";
 import Explore from "./pages/Explore";
 import LevelLessons from "./pages/LevelLessons";
+import Forum from "./pages/Forum";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -62,7 +64,7 @@ const ScrollToTop = () => {
 // Show AI Chat button only on dashboard pages
 const ConditionalAIChatButton = () => {
   const { pathname } = useLocation();
-  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series'];
+  const showOnPaths = ['/dashboard', '/explore', '/games', '/profile', '/leaderboard', '/grammar', '/pronunciation', '/dictionary', '/reports', '/songs', '/korean-series', '/forum'];
   
   if (!showOnPaths.some(path => pathname.startsWith(path))) return null;
   
@@ -145,6 +147,8 @@ const App = () => {
                   <Route path="/songs" element={<Songs />} />
                   <Route path="/korean-series" element={<KoreanSeries />} />
                   <Route path="/reports" element={<Reports />} />
+                  <Route path="/forum" element={<Forum />} />
+                  <Route path="/admin-dashboard" element={<AdminDashboard />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <MobileBottomNav />
