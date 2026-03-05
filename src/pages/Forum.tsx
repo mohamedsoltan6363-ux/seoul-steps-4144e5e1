@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Send, Heart, ThumbsUp, ThumbsDown, Frown, Angry, MessageCircle, Share2, MoreHorizontal, Trash2, Image, X } from 'lucide-react';
+import { ArrowLeft, Send, Heart, ThumbsUp, ThumbsDown, Frown, Angry, MessageCircle, Share2, Trash2, X, Pin, Bookmark, MoreHorizontal, Copy, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
@@ -32,11 +32,11 @@ interface ForumComment {
 }
 
 const REACTIONS = [
-  { type: 'like', icon: ThumbsUp, label: '👍', color: 'text-blue-500' },
-  { type: 'love', icon: Heart, label: '❤️', color: 'text-red-500' },
-  { type: 'sad', icon: Frown, label: '😢', color: 'text-yellow-500' },
-  { type: 'angry', icon: Angry, label: '😠', color: 'text-orange-500' },
-  { type: 'dislike', icon: ThumbsDown, label: '👎', color: 'text-gray-500' },
+  { type: 'like', label: '👍', color: 'text-blue-500' },
+  { type: 'love', label: '❤️', color: 'text-red-500' },
+  { type: 'sad', label: '😢', color: 'text-yellow-500' },
+  { type: 'angry', label: '😠', color: 'text-orange-500' },
+  { type: 'dislike', label: '👎', color: 'text-gray-500' },
 ];
 
 const Forum: React.FC = () => {
@@ -54,6 +54,16 @@ const Forum: React.FC = () => {
   const [commentInputs, setCommentInputs] = useState<Record<string, string>>({});
   const [replyTo, setReplyTo] = useState<{ postId: string; commentId: string; userName: string } | null>(null);
   const [showReactions, setShowReactions] = useState<string | null>(null);
+  const [savedPosts, setSavedPosts] = useState<string[]>([]);
+  const [currentUserProfile, setCurrentUserProfile] = useState<{ display_name: string | null; avatar_url: string | null; full_name_arabic: string | null } | null>(null);
+
+  // Fetch current user's profile for immediate display
+  useEffect(() => {
+    if (!user) return;
+    supabase.from('profiles').select('display_name, avatar_url, full_name_arabic').eq('user_id', user.id).single().then(({ data }) => {
+      if (data) setCurrentUserProfile(data);
+    });
+  }, [user]);
 
   const fetchPosts = useCallback(async () => {
     const { data: postsData } = await supabase
@@ -64,32 +74,23 @@ const Forum: React.FC = () => {
     if (!postsData) return;
 
     const userIds = [...new Set(postsData.map(p => p.user_id))];
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('user_id, display_name, avatar_url, full_name_arabic')
-      .in('user_id', userIds);
-
     const postIds = postsData.map(p => p.id);
-    
-    const { data: reactions } = await supabase
-      .from('forum_reactions')
-      .select('*')
-      .in('post_id', postIds);
 
-    const { data: comments } = await supabase
-      .from('forum_comments')
-      .select('*')
-      .in('post_id', postIds)
-      .order('created_at', { ascending: true });
+    const [{ data: allProfiles }, { data: reactions }, { data: comments }] = await Promise.all([
+      supabase.from('profiles').select('user_id, display_name, avatar_url, full_name_arabic').in('user_id', userIds),
+      supabase.from('forum_reactions').select('*').in('post_id', postIds),
+      supabase.from('forum_comments').select('*').in('post_id', postIds).order('created_at', { ascending: true }),
+    ]);
 
+    // Also fetch comment authors
     const commentUserIds = comments ? [...new Set(comments.map(c => c.user_id))] : [];
-    const allUserIds = [...new Set([...userIds, ...commentUserIds])];
-    const { data: allProfiles } = await supabase
-      .from('profiles')
-      .select('user_id, display_name, avatar_url, full_name_arabic')
-      .in('user_id', allUserIds);
+    const allIds = [...new Set([...userIds, ...commentUserIds])];
+    let profileMap = new Map((allProfiles || []).map(p => [p.user_id, p]));
 
-    const profileMap = new Map((allProfiles || []).map(p => [p.user_id, p]));
+    if (commentUserIds.length > 0) {
+      const { data: commentProfiles } = await supabase.from('profiles').select('user_id, display_name, avatar_url, full_name_arabic').in('user_id', allIds);
+      profileMap = new Map((commentProfiles || allProfiles || []).map(p => [p.user_id, p]));
+    }
 
     const enrichedPosts: ForumPost[] = postsData.map(post => ({
       ...post,
@@ -122,15 +123,31 @@ const Forum: React.FC = () => {
   const createPost = async () => {
     if (!newPostContent.trim() || !user) return;
     setPosting(true);
-    const { error } = await supabase.from('forum_posts').insert({
+
+    // Optimistically add the post to the list
+    const optimisticPost: ForumPost = {
+      id: `temp-${Date.now()}`,
       user_id: user.id,
       content: newPostContent.trim(),
+      image_url: null,
+      created_at: new Date().toISOString(),
+      profiles: currentUserProfile || { display_name: user.email?.split('@')[0] || null, avatar_url: null, full_name_arabic: null },
+      reactions: [],
+      comments: [],
+    };
+    setPosts(prev => [optimisticPost, ...prev]);
+    const content = newPostContent.trim();
+    setNewPostContent('');
+
+    const { error } = await supabase.from('forum_posts').insert({
+      user_id: user.id,
+      content,
     });
     if (error) {
       toast({ title: isRTL ? 'خطأ' : '오류', description: error.message, variant: 'destructive' });
+      setPosts(prev => prev.filter(p => p.id !== optimisticPost.id));
     } else {
-      setNewPostContent('');
-      toast({ title: isRTL ? 'تم النشر!' : '게시됨!' });
+      toast({ title: isRTL ? 'تم النشر بنجاح! 🎉' : '게시됨! 🎉' });
     }
     setPosting(false);
   };
@@ -144,6 +161,9 @@ const Forum: React.FC = () => {
       await supabase.from('forum_reactions').delete()
         .eq('post_id', postId).eq('user_id', user.id).eq('reaction_type', reactionType);
     } else {
+      // Remove any other reaction from same user on same post
+      await supabase.from('forum_reactions').delete()
+        .eq('post_id', postId).eq('user_id', user.id);
       await supabase.from('forum_reactions').insert({
         post_id: postId, user_id: user.id, reaction_type: reactionType,
       });
@@ -172,6 +192,11 @@ const Forum: React.FC = () => {
     await supabase.from('forum_comments').delete().eq('id', commentId);
   };
 
+  const copyPostContent = (content: string) => {
+    navigator.clipboard.writeText(content);
+    toast({ title: isRTL ? 'تم النسخ!' : '복사됨!' });
+  };
+
   const sharePost = (post: ForumPost) => {
     const text = post.content.substring(0, 100);
     const url = window.location.href;
@@ -183,15 +208,17 @@ const Forum: React.FC = () => {
     }
   };
 
+  const toggleSave = (postId: string) => {
+    setSavedPosts(prev => prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]);
+    toast({ title: savedPosts.includes(postId) ? (isRTL ? 'تم إلغاء الحفظ' : '저장 취소됨') : (isRTL ? 'تم الحفظ! 🔖' : '저장됨! 🔖') });
+  };
+
   const getUserName = (profiles?: { display_name: string | null; full_name_arabic: string | null }) => {
     if (!profiles) return isRTL ? 'مستخدم' : '사용자';
     return profiles.full_name_arabic || profiles.display_name || (isRTL ? 'مستخدم' : '사용자');
   };
 
-  const getAvatar = (profiles?: { avatar_url: string | null; display_name: string | null }) => {
-    if (profiles?.avatar_url) return profiles.avatar_url;
-    return null;
-  };
+  const getAvatar = (profiles?: { avatar_url: string | null }) => profiles?.avatar_url || null;
 
   const renderComments = (comments: ForumComment[], postId: string, parentId: string | null = null, depth = 0) => {
     const filtered = comments.filter(c => c.parent_comment_id === parentId);
@@ -200,7 +227,7 @@ const Forum: React.FC = () => {
     return filtered.map(comment => (
       <div key={comment.id} className={`${depth > 0 ? (isRTL ? 'mr-6 border-r-2' : 'ml-6 border-l-2') + ' border-primary/20 pr-3 pl-3' : ''}`}>
         <div className="flex items-start gap-2 py-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center text-xs font-bold shrink-0 overflow-hidden">
             {getAvatar(comment.profiles) ? (
               <img src={getAvatar(comment.profiles)!} alt="" className="w-full h-full rounded-full object-cover" />
             ) : getUserName(comment.profiles).charAt(0)}
@@ -239,15 +266,20 @@ const Forum: React.FC = () => {
   return (
     <div className="min-h-screen bg-background pb-24" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/50">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-primary/10 via-background to-purple-500/10 backdrop-blur-xl border-b border-border/50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate('/dashboard')} className="gap-2">
             <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
             {isRTL ? 'العودة' : '돌아가기'}
           </Button>
           <div className="flex items-center gap-2">
-            <MessageCircle className="w-6 h-6 text-primary" />
-            <h1 className="text-lg font-bold">{isRTL ? 'المنتدى' : '포럼'}</h1>
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-base font-bold">{isRTL ? 'المنتدى' : '포럼'}</h1>
+              <p className="text-[10px] text-muted-foreground">{posts.length} {isRTL ? 'منشور' : '게시물'}</p>
+            </div>
           </div>
           <div className="w-20" />
         </div>
@@ -261,19 +293,28 @@ const Forum: React.FC = () => {
           className="bg-card rounded-2xl border border-border/50 p-4 mb-6 shadow-sm"
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center text-white font-bold shrink-0">
-              {user?.email?.charAt(0).toUpperCase()}
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center text-white font-bold shrink-0 overflow-hidden">
+              {currentUserProfile?.avatar_url ? (
+                <img src={currentUserProfile.avatar_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                getUserName(currentUserProfile || undefined).charAt(0).toUpperCase()
+              )}
             </div>
             <div className="flex-1">
+              <p className="text-xs font-semibold text-primary mb-1">
+                {getUserName(currentUserProfile || undefined)}
+              </p>
               <textarea
                 value={newPostContent}
                 onChange={e => setNewPostContent(e.target.value)}
-                placeholder={isRTL ? 'شارك أفكارك مع المتعلمين...' : '학습자들과 생각을 공유하세요...'}
+                placeholder={isRTL ? 'شارك أفكارك مع المتعلمين... 💭' : '학습자들과 생각을 공유하세요... 💭'}
                 className="w-full min-h-[80px] bg-transparent border-none outline-none resize-none text-sm placeholder:text-muted-foreground"
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
               <div className="flex items-center justify-between pt-2 border-t border-border/30">
-                <div />
+                <p className="text-[10px] text-muted-foreground">
+                  {newPostContent.length > 0 && `${newPostContent.length} ${isRTL ? 'حرف' : '자'}`}
+                </p>
                 <Button
                   onClick={createPost}
                   disabled={!newPostContent.trim() || posting}
@@ -290,8 +331,9 @@ const Forum: React.FC = () => {
 
         {/* Posts */}
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground">
-            {isRTL ? 'جاري التحميل...' : '로딩 중...'}
+          <div className="text-center py-12">
+            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-3" />
+            <p className="text-muted-foreground text-sm">{isRTL ? 'جاري التحميل...' : '로딩 중...'}</p>
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-12">
@@ -305,14 +347,14 @@ const Forum: React.FC = () => {
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                transition={{ delay: index * 0.03 }}
+                className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
               >
                 {/* Post Header */}
                 <div className="p-4 pb-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center font-bold text-sm overflow-hidden">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center font-bold text-sm overflow-hidden ring-2 ring-background">
                         {getAvatar(post.profiles) ? (
                           <img src={getAvatar(post.profiles)!} alt="" className="w-full h-full object-cover" />
                         ) : getUserName(post.profiles).charAt(0)}
@@ -324,11 +366,19 @@ const Forum: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    {post.user_id === user?.id && (
-                      <button onClick={() => deletePost(post.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive/70 hover:text-destructive transition-colors">
-                        <Trash2 className="w-4 h-4" />
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => toggleSave(post.id)} className={`p-1.5 rounded-lg transition-colors ${savedPosts.includes(post.id) ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:bg-muted/50'}`}>
+                        <Bookmark className={`w-4 h-4 ${savedPosts.includes(post.id) ? 'fill-current' : ''}`} />
                       </button>
-                    )}
+                      <button onClick={() => copyPostContent(post.content)} className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted/50 transition-colors">
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      {post.user_id === user?.id && (
+                        <button onClick={() => deletePost(post.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive/70 hover:text-destructive transition-colors">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -340,12 +390,17 @@ const Forum: React.FC = () => {
                 {/* Reactions Summary */}
                 {post.reactions.length > 0 && (
                   <div className="px-4 pb-2">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground flex-wrap">
                       {[...new Set(post.reactions.map(r => r.reaction_type))].map(type => {
                         const reaction = REACTIONS.find(r => r.type === type);
                         const count = post.reactions.filter(r => r.reaction_type === type).length;
+                        const userReacted = post.reactions.some(r => r.reaction_type === type && r.user_id === user?.id);
                         return (
-                          <span key={type} className="flex items-center gap-0.5 bg-muted/50 px-1.5 py-0.5 rounded-full">
+                          <span
+                            key={type}
+                            className={`flex items-center gap-0.5 px-2 py-1 rounded-full cursor-pointer transition-colors ${userReacted ? 'bg-primary/10 text-primary font-medium' : 'bg-muted/50 hover:bg-muted'}`}
+                            onClick={() => toggleReaction(post.id, type)}
+                          >
                             {reaction?.label} {count}
                           </span>
                         );
@@ -364,7 +419,7 @@ const Forum: React.FC = () => {
                       <ThumbsUp className="w-4 h-4" />
                       {isRTL ? 'تفاعل' : '반응'}
                     </button>
-                    
+
                     <AnimatePresence>
                       {showReactions === post.id && (
                         <motion.div
@@ -421,7 +476,7 @@ const Forum: React.FC = () => {
                     >
                       <div className="p-4 space-y-1">
                         {renderComments(post.comments, post.id)}
-                        
+
                         {/* Reply indicator */}
                         {replyTo && replyTo.postId === post.id && (
                           <div className="flex items-center gap-2 text-xs text-primary bg-primary/5 px-3 py-1.5 rounded-lg">
@@ -434,6 +489,11 @@ const Forum: React.FC = () => {
 
                         {/* Comment Input */}
                         <div className="flex items-center gap-2 pt-2">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 flex items-center justify-center text-xs font-bold shrink-0 overflow-hidden">
+                            {currentUserProfile?.avatar_url ? (
+                              <img src={currentUserProfile.avatar_url} alt="" className="w-full h-full object-cover rounded-full" />
+                            ) : getUserName(currentUserProfile || undefined).charAt(0)}
+                          </div>
                           <input
                             value={commentInputs[post.id] || ''}
                             onChange={e => setCommentInputs(prev => ({ ...prev, [post.id]: e.target.value }))}
