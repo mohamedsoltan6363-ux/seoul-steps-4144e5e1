@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface Notification {
   id: string;
-  type: 'review' | 'streak' | 'achievement' | 'daily' | 'welcome';
+  type: 'review' | 'streak' | 'achievement' | 'daily' | 'welcome' | 'forum_reaction' | 'forum_comment';
   title: string;
   message: string;
   read: boolean;
@@ -182,6 +182,25 @@ export const useNotifications = () => {
     );
   }, [addNotification]);
 
+  // إشعار تفاعل على منشور
+  const sendForumReactionNotification = useCallback((reactorName: string, reactionType: string) => {
+    const reactionEmoji: Record<string, string> = { like: '👍', love: '❤️', sad: '😢', angry: '😠', dislike: '👎' };
+    addNotification(
+      'forum_reaction',
+      `${reactionEmoji[reactionType] || '👍'} تفاعل جديد على منشورك`,
+      `${reactorName} تفاعل على منشورك`
+    );
+  }, [addNotification]);
+
+  // إشعار تعليق على منشور
+  const sendForumCommentNotification = useCallback((commenterName: string) => {
+    addNotification(
+      'forum_comment',
+      '💬 تعليق جديد على منشورك',
+      `${commenterName} علّق على منشورك`
+    );
+  }, [addNotification]);
+
   // التحقق الدوري
   useEffect(() => {
     if (!user) return;
@@ -251,6 +270,8 @@ export const useNotifications = () => {
     sendStreakNotification,
     sendAchievementNotification,
     sendDailyChallengeNotification,
+    sendForumReactionNotification,
+    sendForumCommentNotification,
     getNextReviewDate,
   };
 };
