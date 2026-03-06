@@ -5,26 +5,31 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import personEgyptianFlag from '@/assets/person-egyptian-flag.png';
 import personKoreanFlag from '@/assets/person-korean-flag.png';
+import cultureBridge from '@/assets/culture-bridge.png';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { Sparkles, ArrowRight, Globe, BookOpen, GraduationCap, Star, Zap } from 'lucide-react';
+import HomeIntroModal from '@/components/HomeIntroModal';
+import { Sparkles, ArrowRight, Globe, BookOpen, GraduationCap, Star, Zap, Users, Trophy, Brain, ChevronDown, Code, Heart } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   const { language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
 
   useEffect(() => {
-    // If user is logged in, redirect to dashboard
     if (user) {
       navigate('/dashboard');
       return;
     }
     setMounted(true);
+    const hasSeenIntro = localStorage.getItem('homepage_intro_seen');
+    if (!hasSeenIntro) {
+      setTimeout(() => setShowIntro(true), 1500);
+    }
   }, [user, navigate]);
 
   const handleStart = () => {
-    // Check if onboarding was seen
     const hasSeenOnboarding = localStorage.getItem('onboarding_seen');
     if (!hasSeenOnboarding) {
       navigate('/onboarding');
@@ -33,115 +38,81 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handleCloseIntro = () => {
+    setShowIntro(false);
+    localStorage.setItem('homepage_intro_seen', 'true');
+  };
+
   const isRTL = language === 'ar';
 
-  const floatingElements = [
-    { delay: 0.2, left: '10%', top: '15%', icon: Star },
-    { delay: 0.4, left: '85%', top: '20%', icon: Zap },
-    { delay: 0.6, left: '15%', top: '70%', icon: Sparkles },
-    { delay: 0.8, left: '80%', top: '65%', icon: Star },
-  ];
-
   return (
-    <div className="min-h-screen w-screen relative bg-gradient-to-b from-slate-50 via-sky-50 to-blue-50 overflow-x-hidden">
-      {/* Animated Background Elements - Professional Floating Objects */}
+    <div className="min-h-screen w-screen relative overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #f0f4ff 0%, #e8f0fe 30%, #fdf2f8 60%, #fef9f0 100%)' }}>
+      {/* Animated Grid Background */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{
+        backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+        backgroundSize: '60px 60px'
+      }} />
+
+      {/* Floating Gradient Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Falling circles from top */}
-        {[...Array(8)].map((_, i) => (
+        <motion.div
+          className="absolute w-[600px] h-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(220, 80%, 50%, 0.08), transparent 70%)', top: '-10%', left: '-10%' }}
+          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(340, 75%, 55%, 0.06), transparent 70%)', bottom: '-5%', right: '-5%' }}
+          animate={{ x: [0, -30, 0], y: [0, -40, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(35, 95%, 55%, 0.05), transparent 70%)', top: '40%', right: '20%' }}
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        
+        {/* Floating Particles */}
+        {[...Array(6)].map((_, i) => (
           <motion.div
-            key={`circle-${i}`}
-            className="absolute rounded-full"
+            key={i}
+            className="absolute w-2 h-2 rounded-full"
             style={{
-              left: `${15 + i * 12}%`,
-              width: 60 + (i % 3) * 30,
-              height: 60 + (i % 3) * 30,
-              backgroundColor: [
-                'rgba(59, 130, 246, 0.08)',
-                'rgba(147, 51, 234, 0.08)',
-                'rgba(251, 146, 60, 0.08)',
-              ][i % 3],
+              background: ['hsla(220, 80%, 50%, 0.3)', 'hsla(340, 75%, 55%, 0.3)', 'hsla(35, 95%, 55%, 0.3)'][i % 3],
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`
             }}
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ 
-              opacity: [0.08, 0.15, 0.08],
-              y: ['-100px', 'calc(100vh + 100px)']
-            }}
-            transition={{
-              duration: 15 + i * 2,
-              repeat: Infinity,
-              delay: i * 0.8,
-              ease: 'linear'
-            }}
+            animate={{ y: [0, -30, 0], opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 4 + i, repeat: Infinity, delay: i * 0.5 }}
           />
         ))}
-        
-        {/* Floating icons from top */}
-        {floatingElements.map((element, i) => (
-          <motion.div
-            key={`icon-${i}`}
-            className="absolute"
-            style={{ left: element.left }}
-            initial={{ opacity: 0, y: -60, x: 0 }}
-            animate={{ 
-              opacity: [0.1, 0.2, 0.1],
-              y: ['0px', '100px', '0px'],
-            }}
-            transition={{ 
-              duration: 6 + i,
-              repeat: Infinity,
-              delay: element.delay,
-              ease: 'easeInOut'
-            }}
-          >
-            <element.icon className="w-16 h-16 text-blue-300" />
-          </motion.div>
-        ))}
-        
-        {/* Large background orbs */}
-        <motion.div
-          className="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
-          animate={{ y: [0, 50, 0], x: [0, 30, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
-          animate={{ y: [0, -50, 0], x: [0, -30, 0] }}
-          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-        />
-        
-        {/* Additional accent orbs */}
-        <motion.div
-          className="absolute top-1/4 right-1/4 w-64 h-64 bg-rose-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-        />
       </div>
 
       {/* Header */}
-      <header className="relative z-30 flex justify-between items-center px-6 lg:px-12 py-4">
-        <motion.div 
+      <header className="relative z-30 flex justify-between items-center px-5 lg:px-12 py-4">
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-600/25">
-            <span className="font-korean text-white font-bold text-xl">한</span>
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)] flex items-center justify-center shadow-lg shadow-[hsl(220,80%,50%)]/20">
+            <span className="font-korean text-white font-bold text-lg">한</span>
           </div>
           <div className="hidden sm:block">
-            <span className="font-korean text-xl text-slate-800 font-semibold">한국어</span>
-            <span className="text-slate-500 text-sm block">Korean Learning</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)] bg-clip-text text-transparent">
+              {isRTL ? 'خطوات سيول' : 'Seoul Steps'}
+            </span>
+            <span className="text-muted-foreground text-xs block">{isRTL ? 'تعلم الكورية' : '한국어 학습'}</span>
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-4"
-        >
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
           <LanguageSwitcher />
           <button
             onClick={() => navigate('/auth')}
-            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800/10 backdrop-blur-sm border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-800/20 transition-all"
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card/80 backdrop-blur-sm border border-border text-foreground text-sm font-medium hover:bg-card transition-all shadow-sm"
           >
             {isRTL ? 'تسجيل الدخول' : '로그인'}
           </button>
@@ -149,339 +120,390 @@ const HomePage: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-20 w-full flex flex-col items-center justify-start px-4 py-8 lg:py-12 overflow-x-hidden">
+      <main className="relative z-20 w-full flex flex-col items-center px-4 overflow-x-hidden">
         
-        {/* Full Hero Section Container */}
-        <div className="flex flex-col-reverse lg:flex-col items-center w-full max-w-7xl mx-auto gap-2 lg:gap-8 mb-16 lg:mb-24">
-          
-          {/* Top Text Section */}
-          <motion.div
-            className="text-center max-w-3xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 30 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+        {/* Hero Section */}
+        <section className="w-full max-w-6xl mx-auto pt-8 lg:pt-16 pb-16 lg:pb-24">
+          <div className="flex flex-col items-center text-center">
+            
             {/* Badge */}
             <motion.div
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-blue-100/60 backdrop-blur-sm border border-blue-200 shadow-sm mb-6 w-fit mx-auto"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4, type: 'spring' }}
+              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+              animate={{ scale: mounted ? 1 : 0.8, opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+              transition={{ delay: 0.3, type: 'spring' }}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-card/70 backdrop-blur border border-border shadow-sm mb-8"
             >
-              <Sparkles className="w-4 h-4 text-blue-600" />
-              <span className="text-slate-700 text-sm font-medium">
-                {isRTL ? 'رحلة تعلم فريدة' : '독특한 학습 여행'}
+              <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <Sparkles className="w-4 h-4 text-accent" />
+              </motion.div>
+              <span className="text-sm font-medium text-muted-foreground">
+                {isRTL ? '🚀 منصة تعليمية متكاملة' : '🚀 올인원 학습 플랫폼'}
               </span>
             </motion.div>
 
             {/* Main Title */}
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-800 mb-6 leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] mb-6 tracking-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 30 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              {isRTL ? (
-                <>
-                  <span>من </span>
-                  <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">مصر</span>
-                  <span> إلى </span>
-                  <span className="bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">كوريا</span>
-                </>
-              ) : (
-                <>
-                  <span className="font-korean">이집트에서 </span>
-                  <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent font-korean">한국</span>
-                  <span className="font-korean">으로</span>
-                </>
-              )}
+              <span className="bg-gradient-to-r from-[hsl(220,80%,50%)] via-[hsl(270,60%,55%)] to-[hsl(340,75%,55%)] bg-clip-text text-transparent">
+                {isRTL ? 'خطوات سيول' : 'Seoul Steps'}
+              </span>
+              <br />
+              <span className="text-foreground text-3xl sm:text-4xl lg:text-5xl font-bold">
+                {isRTL ? 'رحلتك لتعلم الكورية' : '한국어 학습 여정'}
+              </span>
             </motion.h1>
 
+            {/* Description */}
             <motion.p
-              className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-8"
+              className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: mounted ? 1 : 0 }}
               transition={{ delay: 0.7 }}
             >
-              {isRTL 
-                ? 'تعلم اللغة الكورية بطريقة تفاعلية وممتعة. رحلة تعليمية شاملة تجمع بين الثقافتين المصرية والكورية'
-                : '한국어를 배우는 가장 재미있는 방법을 발견하세요. 이집트와 한국의 문화를 함께 배우며 성장하세요'}
+              {isRTL
+                ? 'من مصر إلى كوريا، منصة تفاعلية شاملة تجمع بين 6 مستويات تعليمية، ألعاب ذكية، ومحادثة بالذكاء الاصطناعي'
+                : '이집트에서 한국까지, 6단계 학습, 스마트 게임, AI 대화를 결합한 종합 인터랙티브 플랫폼'}
             </motion.p>
 
-            {/* Features Grid */}
+            {/* CTA Buttons */}
             <motion.div
-              className="grid grid-cols-3 gap-3 sm:gap-4 mb-10"
+              className="flex flex-col sm:flex-row gap-4 mb-12"
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
               transition={{ delay: 0.9 }}
             >
+              <motion.button
+                onClick={handleStart}
+                className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)] text-primary-foreground font-bold text-lg shadow-lg shadow-[hsl(220,80%,50%)]/25 overflow-hidden"
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px -10px hsla(220, 80%, 50%, 0.4)' }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[hsl(270,60%,55%)] to-[hsl(340,75%,55%)]"
+                  initial={{ x: '100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+                <span className="relative flex items-center gap-2">
+                  {isRTL ? 'ابدأ الآن مجاناً' : '지금 무료로 시작'}
+                  <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${isRTL ? 'rotate-180' : ''}`} />
+                </span>
+              </motion.button>
+              <motion.button
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-4 rounded-2xl bg-card/80 backdrop-blur border border-border text-foreground font-semibold text-lg hover:bg-card transition-all shadow-sm"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="flex items-center gap-2">
+                  {isRTL ? 'اكتشف المنصة' : '플랫폼 알아보기'}
+                  <ChevronDown className="w-5 h-5" />
+                </span>
+              </motion.button>
+            </motion.div>
+
+            {/* Flag Characters Section */}
+            <motion.div
+              className="flex items-end justify-center gap-6 sm:gap-10 lg:gap-16 mb-8"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 40 }}
+              transition={{ delay: 1.1, duration: 0.8 }}
+            >
+              {/* Egyptian Flag Person */}
+              <motion.div className="flex flex-col items-center" whileHover={{ scale: 1.05 }}>
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <motion.img
+                    src={personEgyptianFlag}
+                    alt={isRTL ? 'شخص يحمل العلم المصري' : 'Person with Egyptian Flag'}
+                    className="w-24 sm:w-32 lg:w-44 h-auto object-contain drop-shadow-xl"
+                    initial={{ scale: 0.5, opacity: 0, x: -40 }}
+                    animate={{ scale: 1, opacity: 1, x: 0 }}
+                    transition={{ delay: 1.3, type: 'spring', stiffness: 80 }}
+                  />
+                </motion.div>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.6 }}
+                  className="text-3xl mt-2"
+                >🇪🇬</motion.span>
+              </motion.div>
+
+              {/* Center Bridge Icon */}
+              <motion.div
+                className="hidden sm:flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.5, type: 'spring' }}
+              >
+                <motion.div
+                  className="w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(220,80%,50%)]/10 to-[hsl(340,75%,55%)]/10 border-2 border-dashed border-[hsl(220,80%,50%)]/30 flex items-center justify-center"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                >
+                  <Globe className="w-6 h-6 text-primary" />
+                </motion.div>
+              </motion.div>
+
+              {/* Korean Flag Person */}
+              <motion.div className="flex flex-col items-center" whileHover={{ scale: 1.05 }}>
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                >
+                  <motion.img
+                    src={personKoreanFlag}
+                    alt={isRTL ? 'شخص يحمل العلم الكوري' : 'Person with Korean Flag'}
+                    className="w-24 sm:w-32 lg:w-44 h-auto object-contain drop-shadow-xl"
+                    initial={{ scale: 0.5, opacity: 0, x: 40 }}
+                    animate={{ scale: 1, opacity: 1, x: 0 }}
+                    transition={{ delay: 1.3, type: 'spring', stiffness: 80 }}
+                  />
+                </motion.div>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.6 }}
+                  className="text-3xl mt-2"
+                >🇰🇷</motion.span>
+              </motion.div>
+            </motion.div>
+
+            {/* Stats Row */}
+            <motion.div
+              className="flex flex-wrap justify-center gap-4 sm:gap-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: mounted ? 1 : 0 }}
+              transition={{ delay: 1.3 }}
+            >
               {[
-                { icon: Globe, label: isRTL ? 'ثنائي اللغة' : '이중 언어' },
-                { icon: Zap, label: isRTL ? 'تفاعلي' : '상호작용' },
-                { icon: GraduationCap, label: isRTL ? 'معتمد' : '인증서' },
-              ].map((feature, i) => (
+                { value: '6', label: isRTL ? 'مستويات تعليمية' : '학습 레벨', icon: GraduationCap },
+                { value: '10+', label: isRTL ? 'ألعاب ذكية' : '스마트 게임', icon: Zap },
+                { value: 'AI', label: isRTL ? 'مساعد ذكي' : 'AI 어시스턴트', icon: Brain },
+              ].map((stat, i) => (
                 <motion.div
                   key={i}
-                  className="flex flex-col items-center gap-2 p-3 sm:p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-blue-100 hover:bg-white/90 transition-all"
-                  whileHover={{ y: -4 }}
+                  className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-card/60 backdrop-blur border border-border/50"
+                  whileHover={{ y: -2, boxShadow: '0 8px 25px -5px rgba(0,0,0,0.08)' }}
                 >
-                  <feature.icon className="w-6 h-6 text-blue-600" />
-                  <span className="text-xs sm:text-sm font-medium text-slate-700">{feature.label}</span>
+                  <stat.icon className="w-5 h-5 text-primary" />
+                  <div className="text-start">
+                    <span className="text-lg font-bold text-foreground">{stat.value}</span>
+                    <span className="text-xs text-muted-foreground block">{stat.label}</span>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
-
-            {/* CTA Button */}
-            <motion.button
-              onClick={handleStart}
-              className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/50 overflow-hidden transition-all"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 }}
-            >
-              <span className="relative flex items-center justify-center gap-2">
-                {isRTL ? 'ابدأ الآن' : '시작하기'}
-                <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${isRTL ? 'rotate-180' : ''}`} />
-              </span>
-            </motion.button>
-          </motion.div>
-
-          {/* Flags Section - Positioned at top with premium animations */}
-          <motion.div
-            className="w-full flex flex-row items-start justify-center gap-4 sm:gap-6 lg:gap-12 mb-8 lg:mb-16 order-first lg:order-last"
-            initial={{ opacity: 0, y: -60 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : -60 }}
-            transition={{ duration: 1, delay: 0.3 }}
-          >
-            {/* Egyptian Flag */}
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              whileHover={{ scale: 1.08 }}
-              initial={{ opacity: 0, x: -60, y: -40 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
-            >
-              <motion.div
-                className="relative"
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <motion.img
-                  src={personEgyptianFlag}
-                  alt="Person with Egyptian Flag"
-                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
-                  initial={{ scale: 0.6, opacity: 0, rotateZ: -15 }}
-                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
-                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-                className="text-center"
-              >
-                <span className="text-2xl sm:text-3xl block">🇪🇬</span>
-              </motion.div>
-            </motion.div>
-
-            {/* Decorative element between */}
-            <motion.div
-              className="flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, type: 'spring', stiffness: 100 }}
-            >
-              <div className="hidden lg:block relative">
-                <div className="w-16 h-16 rounded-full border-2 border-blue-300 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  >
-                    <Star className="w-6 h-6 text-blue-500" />
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Korean Flag */}
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              whileHover={{ scale: 1.08 }}
-              initial={{ opacity: 0, x: 60, y: -40 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, type: 'spring', stiffness: 80, damping: 15 }}
-            >
-              <motion.div
-                className="relative"
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-              >
-                <motion.img
-                  src={personKoreanFlag}
-                  alt="Person with Korean Flag"
-                  className="w-20 sm:w-24 lg:w-40 h-auto object-contain drop-shadow-2xl filter brightness-110 contrast-110"
-                  initial={{ scale: 0.6, opacity: 0, rotateZ: 15 }}
-                  animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
-                  transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 80 }}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-                className="text-center"
-              >
-                <span className="text-2xl sm:text-3xl block">🇰🇷</span>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
+          </div>
+        </section>
 
         {/* Features Section */}
-        <motion.section
-          className="w-full max-w-7xl mx-auto mb-16 lg:mb-24"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true, margin: '0px 0px -200px 0px' }}
-        >
-          <motion.h2
-            className="text-3xl lg:text-4xl font-bold text-center text-slate-800 mb-12"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+        <section id="features" className="w-full max-w-6xl mx-auto py-16 lg:py-24">
+          <motion.div
+            className="text-center mb-14"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            {isRTL ? 'لماذا تختار منصتنا؟' : '왜 우리 플랫폼을 선택할까요?'}
-          </motion.h2>
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+              {isRTL ? 'لماذا خطوات سيول؟' : 'Why Seoul Steps?'}
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mt-3">
+              {isRTL ? 'كل ما تحتاجه لتعلم الكورية' : '한국어 학습에 필요한 모든 것'}
+            </h2>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              {
-                icon: BookOpen,
-                title: isRTL ? 'دروس تفاعلية' : '대화형 수업',
-                desc: isRTL ? 'تعلم من خلال محتوى تفاعلي مصمم بعناية' : '신중하게 설계된 대화형 콘텐츠를 통해 학습하세요'
-              },
-              {
-                icon: GraduationCap,
-                title: isRTL ? 'معلمون محترفون' : '전문 강사진',
-                desc: isRTL ? 'تعليم من قبل متخصصين في اللغة الكورية' : '한국어 전문가들로부터 배우세요'
-              },
-              {
-                icon: Zap,
-                title: isRTL ? 'تقدم سريع' : '빠른 진도',
-                desc: isRTL ? 'تقدم ملحوظ في مستوى اللغة الكورية' : '한국어 수준을 빠르게 향상시키세요'
-              },
-              {
-                icon: Globe,
-                title: isRTL ? 'مجتمع عالمي' : '글로벌 커뮤니티',
-                desc: isRTL ? 'تواصل مع متعلمين من جميع أنحاء العالم' : '전 세계 학습자들과 연결하세요'
-              },
-              {
-                icon: Star,
-                title: isRTL ? 'شهادات معتمدة' : '인증 자격증',
-                desc: isRTL ? 'احصل على شهادة معترف بها دولياً' : '국제적으로 인정받는 인증서를 획득하세요'
-              },
-              {
-                icon: Sparkles,
-                title: isRTL ? 'محتوى حصري' : '독점 콘텐츠',
-                desc: isRTL ? 'وصول حصري للمحتوى الثقافي الكوري الحصري' : '독점적인 한국 문화 콘텐츠에 접근하세요'
-              },
+              { icon: BookOpen, title: isRTL ? 'دروس تفاعلية' : '대화형 수업', desc: isRTL ? '6 مستويات من المبتدئ إلى المتقدم مع محتوى تعليمي متدرج' : '초급부터 고급까지 6단계 체계적 학습', color: 'from-[hsl(220,80%,50%)] to-[hsl(220,80%,40%)]' },
+              { icon: Zap, title: isRTL ? 'ألعاب تعليمية' : '교육 게임', desc: isRTL ? '10+ لعبة ذكية تجعل التعلم ممتعاً ومثيراً' : '10+ 스마트 게임으로 재미있는 학습', color: 'from-[hsl(35,95%,55%)] to-[hsl(35,95%,45%)]' },
+              { icon: Brain, title: isRTL ? 'مساعد ذكي AI' : 'AI 어시스턴트', desc: isRTL ? 'محادثة ذكية لتعلم الكورية مع معلم افتراضي' : 'AI 가상 선생님과 대화하며 학습', color: 'from-[hsl(270,60%,55%)] to-[hsl(270,60%,45%)]' },
+              { icon: Users, title: isRTL ? 'مجتمع المنتدى' : '커뮤니티 포럼', desc: isRTL ? 'شارك وتفاعل مع زملائك في رحلة التعلم' : '동료 학습자들과 교류하고 공유', color: 'from-[hsl(155,60%,45%)] to-[hsl(155,60%,35%)]' },
+              { icon: Trophy, title: isRTL ? 'إنجازات وشهادات' : '업적 & 인증서', desc: isRTL ? 'احصل على شهادات معتمدة وتتبع تقدمك' : '인증서 획득 및 진행 상황 추적', color: 'from-[hsl(340,75%,55%)] to-[hsl(340,75%,45%)]' },
+              { icon: Globe, title: isRTL ? 'ثنائي اللغة' : '이중 언어', desc: isRTL ? 'واجهة كاملة بالعربية والكورية لتجربة سلسة' : '아랍어-한국어 완벽한 이중 언어 인터페이스', color: 'from-[hsl(200,80%,50%)] to-[hsl(200,80%,40%)]' },
             ].map((feature, i) => (
               <motion.div
                 key={i}
-                className="group relative p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-blue-100 hover:border-blue-300 hover:bg-white/80 transition-all duration-300 cursor-pointer overflow-hidden"
+                className="group relative p-6 rounded-2xl bg-card/70 backdrop-blur border border-border/50 hover:border-primary/20 transition-all duration-300 cursor-pointer"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -8 }}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.08)' }}
               >
-                {/* Gradient overlay on hover */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                />
-
-                <div className="relative z-10">
-                  <motion.div
-                    className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors"
-                    whileHover={{ rotate: 12, scale: 1.1 }}
-                  >
-                    <feature.icon className="w-6 h-6 text-blue-600" />
-                  </motion.div>
-
-                  <h3 className="text-lg font-bold text-slate-800 mb-2">
-                    {feature.title}
-                  </h3>
-
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {feature.desc}
-                  </p>
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
-        </motion.section>
+        </section>
 
-        {/* CTA Section */}
-        <motion.section
-          className="w-full max-w-5xl mx-auto mb-16 lg:mb-24"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true, margin: '0px 0px -200px 0px' }}
-        >
+        {/* Culture Bridge Section with uploaded image */}
+        <section className="w-full max-w-6xl mx-auto py-16 lg:py-24">
           <motion.div
-            className="relative rounded-3xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 p-8 sm:p-12 lg:p-16 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            className="rounded-3xl bg-card/60 backdrop-blur border border-border/50 overflow-hidden"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
             viewport={{ once: true }}
           >
-            {/* Background pattern */}
-            <motion.div
-              className="absolute inset-0 opacity-20"
-              animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-              transition={{ duration: 20, repeat: Infinity }}
-              style={{
-                backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 1px, transparent 1px)',
-                backgroundSize: '50px 50px',
-              }}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* Image */}
+              <motion.div className="relative h-64 lg:h-auto min-h-[300px]" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+                <img src={cultureBridge} alt={isRTL ? 'جسر الثقافات' : 'Culture Bridge'} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card/60 to-transparent lg:bg-gradient-to-r" />
+              </motion.div>
 
-            <div className="relative z-10 text-center text-white max-w-2xl mx-auto">
-              <motion.h2
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+              {/* Content */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center" dir={isRTL ? 'rtl' : 'ltr'}>
+                <motion.span
+                  className="text-sm font-semibold text-primary mb-3"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                >
+                  {isRTL ? 'عن المنصة' : '플랫폼 소개'}
+                </motion.span>
+                <motion.h2
+                  className="text-2xl lg:text-3xl font-bold text-foreground mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  {isRTL ? 'جسر بين الثقافات' : '문화의 다리'}
+                </motion.h2>
+                <motion.p
+                  className="text-muted-foreground leading-relaxed mb-6"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  {isRTL
+                    ? 'منصة "خطوات سيول" ليست مجرد تطبيق لتعلم اللغة، بل هي جسر ثقافي يربط بين الحضارة المصرية العريقة والثقافة الكورية الحديثة. تم بناؤها بشغف واهتمام بكل تفصيلة لتقديم تجربة تعليمية فريدة.'
+                    : '"서울 스텝스"는 단순한 언어 학습 앱이 아닌, 이집트 문명과 한국 문화를 연결하는 문화적 다리입니다. 독특한 학습 경험을 제공하기 위해 세심하게 제작되었습니다.'}
+                </motion.p>
+                <motion.div
+                  className="flex flex-wrap gap-3"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  {[
+                    { icon: Code, text: isRTL ? 'React & TypeScript' : 'React & TypeScript' },
+                    { icon: Heart, text: isRTL ? 'تطوع بالكامل' : '완전 자원봉사' },
+                  ].map((tag, i) => (
+                    <span key={i} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/5 border border-primary/10 text-sm text-foreground font-medium">
+                      <tag.icon className="w-4 h-4 text-primary" />
+                      {tag.text}
+                    </span>
+                  ))}
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Developer Section */}
+        <section className="w-full max-w-6xl mx-auto py-16 lg:py-24">
+          <motion.div
+            className="text-center mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+              {isRTL ? 'من بنى هذه المنصة؟' : '이 플랫폼을 만든 사람'}
+            </span>
+            <h2 className="text-3xl font-bold text-foreground mt-3">
+              {isRTL ? 'محمد أيمن محمد سلطان' : 'Mohamed Ayman Mohamed Sultan'}
+            </h2>
+            <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
+              {isRTL
+                ? 'طالب بالكلية البترولية - جامعة بنسلفانيا التكنولوجية. قمت ببناء هذا النظام تطوعاً لخدمة مجتمع الجامعة.'
+                : '펜실베이니아 공과대학교 석유대학 학생. 대학 커뮤니티를 위해 자발적으로 이 시스템을 구축했습니다.'}
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {[
+              { label: 'React', desc: isRTL ? 'واجهة المستخدم' : 'UI Framework' },
+              { label: 'TypeScript', desc: isRTL ? 'لغة البرمجة' : '프로그래밍 언어' },
+              { label: 'Supabase', desc: isRTL ? 'قاعدة البيانات' : '데이터베이스' },
+              { label: 'Tailwind', desc: isRTL ? 'التصميم' : '스타일링' },
+            ].map((tech, i) => (
+              <motion.div
+                key={i}
+                className="p-4 rounded-2xl bg-card/60 backdrop-blur border border-border/50 text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+              >
+                <span className="text-lg font-bold text-foreground">{tech.label}</span>
+                <span className="text-xs text-muted-foreground block mt-1">{tech.desc}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="w-full max-w-5xl mx-auto py-16 lg:py-24">
+          <motion.div
+            className="relative rounded-3xl overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, hsl(220, 80%, 50%), hsl(270, 60%, 55%), hsl(340, 75%, 55%))' }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            {/* Pattern overlay */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+              backgroundSize: '30px 30px'
+            }} />
+
+            <div className="relative z-10 text-center p-10 sm:p-14 lg:p-20">
+              <motion.h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                {isRTL 
-                  ? 'ابدأ رحلتك التعليمية اليوم'
-                  : '오늘부터 학습 여정을 시작하세요'}
+                {isRTL ? 'ابدأ رحلتك اليوم' : '오늘 여정을 시작하세요'}
               </motion.h2>
-
               <motion.p
-                className="text-lg sm:text-xl text-white/90 mb-8"
+                className="text-lg text-white/85 mb-8 max-w-xl mx-auto"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
                 {isRTL
-                  ? 'انضم إلى آلاف المتعلمين حول العالم وتعلم اللغة الكورية بطريقة ممتعة وفعالة'
-                  : '전 세계 수천 명의 학습자와 함께 재미있고 효과적인 방식으로 한국어를 배우세요'}
+                  ? 'انضم إلى مجتمع المتعلمين وابدأ تعلم اللغة الكورية بطريقة تفاعلية وممتعة'
+                  : '학습자 커뮤니티에 참여하고 재미있고 인터랙티브한 방식으로 한국어를 배우세요'}
               </motion.p>
-
               <motion.button
                 onClick={handleStart}
-                className="px-8 py-4 rounded-2xl bg-white text-blue-600 font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="px-10 py-4 rounded-2xl bg-white text-[hsl(220,80%,50%)] font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -489,18 +511,45 @@ const HomePage: React.FC = () => {
               </motion.button>
             </div>
           </motion.div>
-        </motion.section>
+        </section>
       </main>
 
       {/* Footer */}
-      <motion.footer 
-        className="relative z-20 text-center py-6 px-4 text-slate-500 text-xs sm:text-sm border-t border-blue-100/50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <p>© 2024 Korean Learning Platform</p>
-      </motion.footer>
+      <footer className="relative z-20 border-t border-border/50 bg-card/30 backdrop-blur">
+        <div className="max-w-6xl mx-auto px-4 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)] flex items-center justify-center">
+                  <span className="font-korean text-white font-bold text-sm">한</span>
+                </div>
+                <span className="font-bold text-foreground">{isRTL ? 'خطوات سيول' : 'Seoul Steps'}</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {isRTL ? 'منصة تعلم اللغة الكورية للعرب' : '아랍인을 위한 한국어 학습 플랫폼'}
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-3">{isRTL ? 'روابط سريعة' : '빠른 링크'}</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <button onClick={() => navigate('/auth')} className="block hover:text-primary transition-colors">{isRTL ? 'تسجيل الدخول' : '로그인'}</button>
+                <button onClick={handleStart} className="block hover:text-primary transition-colors">{isRTL ? 'إنشاء حساب' : '회원가입'}</button>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-3">{isRTL ? 'المطور' : '개발자'}</h4>
+              <p className="text-sm text-muted-foreground">{isRTL ? 'محمد أيمن محمد سلطان' : 'Mohamed Ayman'}</p>
+              <p className="text-sm text-muted-foreground">{isRTL ? 'جامعة بنسلفانيا التكنولوجية' : 'Pennsylvania Technology University'}</p>
+            </div>
+          </div>
+          <div className="border-t border-border/50 pt-6 text-center text-xs text-muted-foreground">
+            <p>© 2024 Seoul Steps — {isRTL ? 'خطوات سيول' : '서울 스텝스'}. {isRTL ? 'جميع الحقوق محفوظة' : '모든 권리 보유'}.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Intro Modal */}
+      <HomeIntroModal isOpen={showIntro} onClose={handleCloseIntro} />
     </div>
   );
 };
