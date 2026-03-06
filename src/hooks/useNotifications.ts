@@ -182,6 +182,25 @@ export const useNotifications = () => {
     );
   }, [addNotification]);
 
+  // إشعار تفاعل على منشور
+  const sendForumReactionNotification = useCallback((reactorName: string, reactionType: string) => {
+    const reactionEmoji: Record<string, string> = { like: '👍', love: '❤️', sad: '😢', angry: '😠', dislike: '👎' };
+    addNotification(
+      'forum_reaction',
+      `${reactionEmoji[reactionType] || '👍'} تفاعل جديد على منشورك`,
+      `${reactorName} تفاعل على منشورك`
+    );
+  }, [addNotification]);
+
+  // إشعار تعليق على منشور
+  const sendForumCommentNotification = useCallback((commenterName: string) => {
+    addNotification(
+      'forum_comment',
+      '💬 تعليق جديد على منشورك',
+      `${commenterName} علّق على منشورك`
+    );
+  }, [addNotification]);
+
   // التحقق الدوري
   useEffect(() => {
     if (!user) return;
