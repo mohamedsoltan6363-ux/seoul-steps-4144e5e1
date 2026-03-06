@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface Notification {
   id: string;
-  type: 'review' | 'streak' | 'achievement' | 'daily' | 'welcome';
+  type: 'review' | 'streak' | 'achievement' | 'daily' | 'welcome' | 'forum_reaction' | 'forum_comment';
   title: string;
   message: string;
   read: boolean;
