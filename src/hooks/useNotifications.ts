@@ -270,6 +270,8 @@ export const useNotifications = () => {
     sendStreakNotification,
     sendAchievementNotification,
     sendDailyChallengeNotification,
+    sendForumReactionNotification,
+    sendForumCommentNotification,
     getNextReviewDate,
   };
 };
