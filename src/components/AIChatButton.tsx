@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Maximize2, Send, Bot, User, Loader2, Volume2, Mic, MicOff, Sparkles } from 'lucide-react';
+import { X, Maximize2, Send, User, Loader2, Volume2, Mic, MicOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import aiMascot from '@/assets/ai-mascot.png';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -59,7 +60,6 @@ const AIChatButton: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Show tooltip every 5 minutes
   useEffect(() => {
     if (isOpen) return;
     const showTooltip = () => {
@@ -67,7 +67,6 @@ const AIChatButton: React.FC = () => {
       setTooltipIndex(prev => (prev + 1) % TOOLTIP_MESSAGES_AR.length);
       setTimeout(() => setTooltipVisible(false), 5000);
     };
-    // Show first tooltip after 3 seconds
     const initialTimeout = setTimeout(showTooltip, 3000);
     const interval = setInterval(showTooltip, 5 * 60 * 1000);
     return () => { clearTimeout(initialTimeout); clearInterval(interval); };
@@ -127,28 +126,28 @@ const AIChatButton: React.FC = () => {
 
   return (
     <>
-      {/* Tooltip Bubble */}
+      {/* Tooltip Bubble - Always appears near the button (right side) */}
       <AnimatePresence>
         {tooltipVisible && !isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className={`fixed bottom-[7.5rem] md:bottom-[5.5rem] z-40 ${isRTL ? 'left-4 right-auto' : 'right-4 left-auto'} max-w-[250px]`}
+            className="fixed bottom-[7.5rem] md:bottom-[5.5rem] z-40 right-4 max-w-[250px]"
           >
             <div className="bg-card border border-border rounded-2xl p-3 shadow-xl text-sm text-foreground relative">
-              <button onClick={() => setTooltipVisible(false)} className="absolute top-1 right-1 p-1 rounded-full hover:bg-muted">
+              <button onClick={() => setTooltipVisible(false)} className="absolute top-1 ltr:right-1 rtl:left-1 p-1 rounded-full hover:bg-muted">
                 <X className="w-3 h-3 text-muted-foreground" />
               </button>
-              <p className="pr-4">{tooltipMessages[tooltipIndex]}</p>
-              {/* Arrow */}
-              <div className={`absolute -bottom-2 ${isRTL ? 'left-6' : 'right-6'} w-4 h-4 bg-card border-r border-b border-border rotate-45`} />
+              <p className="pe-4">{tooltipMessages[tooltipIndex]}</p>
+              {/* Arrow pointing down-right toward button */}
+              <div className="absolute -bottom-2 right-6 w-4 h-4 bg-card border-r border-b border-border rotate-45" />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Floating Button - Cute Character */}
+      {/* Floating Button - Cute Korean Child Character */}
       <motion.button
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -159,17 +158,15 @@ const AIChatButton: React.FC = () => {
         className="fixed bottom-28 md:bottom-6 right-4 z-40 group"
       >
         <motion.div
-          className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-primary via-[hsl(270,60%,55%)] to-secondary blur-md opacity-40 group-hover:opacity-70 transition-opacity"
+          className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-[hsl(340,75%,55%)] via-[hsl(20,90%,60%)] to-[hsl(45,90%,55%)] blur-md opacity-40 group-hover:opacity-70 transition-opacity"
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ duration: 2.5, repeat: Infinity }}
         />
-        <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)] flex items-center justify-center shadow-xl overflow-hidden">
+        <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(0,70%,95%)] to-[hsl(0,60%,90%)] flex items-center justify-center shadow-xl overflow-hidden border-2 border-white/50">
           {isOpen ? (
-            <X className="w-6 h-6 text-white" />
+            <X className="w-6 h-6 text-[hsl(340,60%,45%)]" />
           ) : (
-            <div className="flex flex-col items-center justify-center">
-              <span className="text-2xl leading-none">🤖</span>
-            </div>
+            <img src={aiMascot} alt="AI Assistant" className="w-12 h-12 object-contain" loading="lazy" width={512} height={512} />
           )}
         </div>
         {!isOpen && (
@@ -195,10 +192,10 @@ const AIChatButton: React.FC = () => {
             dir={isRTL ? 'rtl' : 'ltr'}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-3 border-b border-border bg-gradient-to-r from-primary/5 to-[hsl(270,60%,55%)]/5">
+            <div className="flex items-center justify-between p-3 border-b border-border bg-gradient-to-r from-[hsl(340,75%,55%)]/5 to-[hsl(20,90%,60%)]/5">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-[hsl(270,60%,55%)] flex items-center justify-center text-lg">
-                  🤖
+                <div className="w-9 h-9 rounded-full overflow-hidden bg-[hsl(0,70%,95%)] flex items-center justify-center">
+                  <img src={aiMascot} alt="" className="w-8 h-8 object-contain" loading="lazy" width={512} height={512} />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground">{isRTL ? 'المساعد الذكي' : 'AI 어시스턴트'}</h3>
@@ -232,7 +229,7 @@ const AIChatButton: React.FC = () => {
             <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-[200px] max-h-[50vh]">
               {messages.length === 0 && (
                 <div className="text-center py-4">
-                  <div className="text-4xl mb-3">🤖</div>
+                  <img src={aiMascot} alt="AI" className="w-16 h-16 mx-auto mb-3 object-contain" loading="lazy" width={512} height={512} />
                   <p className="text-sm font-semibold text-foreground mb-1">
                     {isRTL ? 'مرحباً! أنا مساعدك الذكي 👋' : '안녕하세요! AI 어시스턴트입니다 👋'}
                   </p>
@@ -260,12 +257,16 @@ const AIChatButton: React.FC = () => {
 
               {messages.map((msg, i) => (
                 <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${
                     msg.role === 'user'
                       ? 'bg-gradient-to-br from-primary to-[hsl(270,60%,55%)]'
-                      : 'bg-gradient-to-br from-[hsl(220,80%,50%)] to-[hsl(270,60%,55%)]'
+                      : 'bg-[hsl(0,70%,95%)]'
                   }`}>
-                    {msg.role === 'user' ? <User className="w-3.5 h-3.5 text-white" /> : <span className="text-sm">🤖</span>}
+                    {msg.role === 'user' ? (
+                      <User className="w-3.5 h-3.5 text-white" />
+                    ) : (
+                      <img src={aiMascot} alt="" className="w-6 h-6 object-contain" loading="lazy" width={512} height={512} />
+                    )}
                   </div>
                   <div className="max-w-[80%]">
                     <div className={`rounded-2xl px-3 py-2 text-xs leading-relaxed ${
@@ -287,8 +288,8 @@ const AIChatButton: React.FC = () => {
 
               {isLoading && (
                 <div className="flex gap-2">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-[hsl(270,60%,55%)] flex items-center justify-center">
-                    <span className="text-sm">🤖</span>
+                  <div className="w-7 h-7 rounded-full bg-[hsl(0,70%,95%)] flex items-center justify-center overflow-hidden">
+                    <img src={aiMascot} alt="" className="w-6 h-6 object-contain" loading="lazy" width={512} height={512} />
                   </div>
                   <div className="bg-muted rounded-2xl px-3 py-2">
                     <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
