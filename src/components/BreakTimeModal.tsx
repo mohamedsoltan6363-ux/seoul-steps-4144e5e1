@@ -25,7 +25,7 @@ const BreakTimeModal: React.FC<BreakTimeModalProps> = ({ isOpen, onClose, studyD
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isTimerRunning && breakTimer > 0) {
       interval = setInterval(() => {
         setBreakTimer(prev => prev - 1);
