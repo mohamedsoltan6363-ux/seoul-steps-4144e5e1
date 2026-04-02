@@ -82,7 +82,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onBack }) => {
   }, [initializeGame]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval>;
     if (gameStarted && !gameComplete) {
       intervalId = setInterval(() => {
         setTime(prev => prev + 1);

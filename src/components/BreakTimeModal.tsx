@@ -35,7 +35,7 @@ const BreakTimeModal: React.FC<BreakTimeModalProps> = ({ isOpen, onClose, studyD
   }, [isTimerRunning, breakTimer]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isBreathing) {
       interval = setInterval(() => {
         setBreathCount(prev => (prev + 1) % 4);

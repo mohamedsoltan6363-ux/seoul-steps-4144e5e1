@@ -70,7 +70,7 @@ const EnhancedQuiz: React.FC<EnhancedQuizProps> = ({ level, onComplete, onBack }
 
   // Timer effect
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isTimerRunning && timeLeft > 0 && !isAnswered && !showResults) {
       interval = setInterval(() => {
         setTimeLeft(prev => {

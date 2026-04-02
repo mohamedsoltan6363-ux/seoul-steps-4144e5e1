@@ -55,7 +55,7 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
 
   // Timer effect
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     
     if (isTracking) {
       interval = setInterval(() => {
