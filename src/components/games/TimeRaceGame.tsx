@@ -35,7 +35,7 @@ const TimeRaceGame = ({ onBack }: TimeRaceGameProps) => {
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
   const [totalRounds] = useState(50); // Changed to 50 rounds instead of timed
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const generateQuestion = useCallback((): Question => {
     const types: QuestionType[] = ['vocab_to_arabic', 'arabic_to_vocab', 'letter_to_arabic'];
