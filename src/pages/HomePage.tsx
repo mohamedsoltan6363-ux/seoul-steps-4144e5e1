@@ -272,78 +272,109 @@ const HomePage: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════════ */}
       {/* ═══ HERO SECTION ═══ */}
       {/* ═══════════════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative z-20 w-full min-h-screen flex flex-col items-center justify-center px-4 pt-20">
-        <motion.div style={{ scale: parallaxScale }} className="w-full max-w-7xl mx-auto flex flex-col items-center text-center">
+      <section ref={heroRef} className="relative z-20 w-full min-h-screen flex flex-col items-center justify-start px-4 pt-16 lg:pt-12">
+        <motion.div style={{ scale: parallaxScale }} className="w-full max-w-7xl mx-auto">
           
-          {/* Multilingual Welcome Rotator */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            transition={{ delay: 0.2 }}
-            className="mb-4"
-          >
-            <MultilingualWelcome />
-          </motion.div>
-
-          {/* Badge */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: mounted ? 1 : 0.8, opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            transition={{ delay: 0.4, type: 'spring' }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-card/60 backdrop-blur-xl border border-border/40 shadow-lg shadow-black/[0.03] mb-8"
-          >
-            <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-              <Sparkles className="w-4 h-4 text-[hsl(35,95%,50%)]" />
-            </motion.div>
-            <span className="text-sm font-semibold text-muted-foreground">
-              {isRTL ? '🚀 منصة تعليمية متكاملة' : '🚀 올인원 학습 플랫폼'}
-            </span>
-          </motion.div>
-
-          {/* Main Gradient Title */}
-          <motion.h1
-            className="text-5xl sm:text-6xl lg:text-8xl font-black leading-[1.05] mb-4 tracking-tight"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 40 }}
-            transition={{ delay: 0.6, duration: 0.9 }}
-          >
-            <motion.span
-              className="inline-block bg-gradient-to-r from-[hsl(220,85%,55%)] via-[hsl(270,65%,55%)] to-[hsl(340,80%,55%)] bg-clip-text text-transparent"
-              animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-              transition={{ duration: 6, repeat: Infinity }}
-              style={{ backgroundSize: '200% 200%' }}
+          {/* Top: Welcome + Badge compact */}
+          <div className="text-center mb-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+              transition={{ delay: 0.2 }}
+              className="mb-2"
             >
-              {isRTL ? 'خطوات سيول' : 'Seoul Steps'}
-            </motion.span>
-          </motion.h1>
+              <MultilingualWelcome />
+            </motion.div>
 
-          {/* Subtitle */}
-          <motion.p
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground/80 mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            transition={{ delay: 0.8, duration: 0.7 }}
-          >
-            {isRTL ? 'رحلتك لتعلم الكورية تبدأ هنا' : '한국어 학습 여정의 시작'}
-          </motion.p>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: mounted ? 1 : 0.8, opacity: mounted ? 1 : 0 }}
+              transition={{ delay: 0.4, type: 'spring' }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/60 backdrop-blur-xl border border-border/40 shadow-lg shadow-black/[0.03] mb-3"
+            >
+              <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <Sparkles className="w-4 h-4 text-[hsl(35,95%,50%)]" />
+              </motion.div>
+              <span className="text-sm font-semibold text-muted-foreground">
+                {isRTL ? '🚀 منصة تعليمية متكاملة' : '🚀 올인원 학습 플랫폼'}
+              </span>
+            </motion.div>
+          </div>
 
-          {/* Typewriter Text */}
-          <motion.div
-            className="mb-10 h-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: mounted ? 1 : 0 }}
-            transition={{ delay: 1 }}
-          >
-            <TypewriterText texts={typewriterTexts} className="text-lg text-muted-foreground" />
-          </motion.div>
+          {/* 3 Column Layout: Egyptian | Center | Korean */}
+          <div className="flex items-center justify-between gap-2 lg:gap-6">
+            
+            {/* LEFT - Egyptian Flag (desktop only) */}
+            <motion.div
+              className="hidden lg:flex flex-col items-center flex-shrink-0 w-48"
+              initial={{ opacity: 0, x: -80 }}
+              animate={{ opacity: mounted ? 1 : 0, x: mounted ? 0 : -80 }}
+              transition={{ delay: 1.3, type: 'spring', stiffness: 60 }}
+            >
+              <motion.div className="relative" whileHover={{ scale: 1.08 }}>
+                <motion.div
+                  className="absolute -inset-4 rounded-full blur-2xl"
+                  style={{ background: 'radial-gradient(circle, hsla(35,95%,55%,0.2), transparent 70%)' }}
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}>
+                  <motion.img
+                    src={personEgyptianFlag}
+                    alt={isRTL ? 'شخص يحمل العلم المصري' : 'Person with Egyptian Flag'}
+                    className="w-40 h-auto object-contain drop-shadow-2xl relative z-10"
+                    initial={{ scale: 0.3, opacity: 0, rotate: -15 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    transition={{ delay: 1.5, type: 'spring', stiffness: 70, damping: 12 }}
+                  />
+                </motion.div>
+                <motion.span initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.8, type: 'spring' }} className="text-4xl mt-2 block text-center relative z-10">🇪🇬</motion.span>
+              </motion.div>
+            </motion.div>
 
-          {/* CTA Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 mb-14"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            transition={{ delay: 1.1 }}
-          >
+            {/* CENTER Content */}
+            <div className="flex-1 text-center">
+              <motion.h1
+                className="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.05] mb-2 tracking-tight"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 40 }}
+                transition={{ delay: 0.6, duration: 0.9 }}
+              >
+                <motion.span
+                  className="inline-block bg-gradient-to-r from-[hsl(220,85%,55%)] via-[hsl(270,65%,55%)] to-[hsl(340,80%,55%)] bg-clip-text text-transparent"
+                  animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+                  transition={{ duration: 6, repeat: Infinity }}
+                  style={{ backgroundSize: '200% 200%' }}
+                >
+                  {isRTL ? 'خطوات سيول' : 'Seoul Steps'}
+                </motion.span>
+              </motion.h1>
+
+              <motion.p
+                className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground/80 mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+                transition={{ delay: 0.8, duration: 0.7 }}
+              >
+                {isRTL ? 'رحلتك لتعلم الكورية تبدأ هنا' : '한국어 학습 여정의 시작'}
+              </motion.p>
+
+              <motion.div
+                className="mb-5 h-7"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: mounted ? 1 : 0 }}
+                transition={{ delay: 1 }}
+              >
+                <TypewriterText texts={typewriterTexts} className="text-base text-muted-foreground" />
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-3 mb-5 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+                transition={{ delay: 1.1 }}
+              >
             <motion.button
               onClick={handleStart}
               className="group relative px-10 py-4 rounded-2xl bg-gradient-to-r from-[hsl(220,80%,50%)] via-[hsl(270,60%,55%)] to-[hsl(340,75%,55%)] text-white font-bold text-lg shadow-xl shadow-[hsl(220,80%,55%)]/25 overflow-hidden"
