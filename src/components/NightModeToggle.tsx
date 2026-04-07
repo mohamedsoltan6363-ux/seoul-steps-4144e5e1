@@ -1,17 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun, Eye, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 
-interface NightModeToggleProps {
-  className?: string;
-}
-
 const STORAGE_KEY = 'night_mode_settings';
 
-const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => {
+// Apply night mode globally - survives component unmount
+const applyNightMode = (isNightMode: boolean, brightness: number, warmth: number) => {
+  const root = document.documentElement;
+  if (isNightMode) {
+    root.style.filter = `brightness(${brightness / 100}) sepia(${warmth / 100})`;
+    root.classList.add('night-mode');
+  } else {
+    root.style.filter = 'none';
+    root.classList.remove('night-mode');
+  }
+};
+
+// Apply on page load from saved settings
+const savedRaw = localStorage.getItem(STORAGE_KEY);
+if (savedRaw) {
+  try {
+    const s = JSON.parse(savedRaw);
+    if (s.isNightMode) applyNightMode(true, s.brightness ?? 100, s.warmth ?? 0);
+  } catch {}
+}
+
+const NightModeToggle: React.FC<{ className?: string }> = ({ className = '' }) => {
   const { language } = useLanguage();
   const isRTL = language === 'ar';
   
@@ -19,38 +36,31 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
   const [brightness, setBrightness] = useState(100);
   const [warmth, setWarmth] = useState(0);
   const [autoMode, setAutoMode] = useState(false);
+  const initialized = useRef(false);
 
-  // Load saved settings
+  // Load saved settings once
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      const s = JSON.parse(saved);
-      setIsNightMode(s.isNightMode ?? false);
-      setBrightness(s.brightness ?? 100);
-      setWarmth(s.warmth ?? 0);
-      setAutoMode(s.autoMode ?? false);
+      try {
+        const s = JSON.parse(saved);
+        setIsNightMode(s.isNightMode ?? false);
+        setBrightness(s.brightness ?? 100);
+        setWarmth(s.warmth ?? 0);
+        setAutoMode(s.autoMode ?? false);
+      } catch {}
     }
+    initialized.current = true;
   }, []);
 
-  // Save settings
+  // Save and apply whenever settings change (after init)
   useEffect(() => {
+    if (!initialized.current) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ isNightMode, brightness, warmth, autoMode }));
+    applyNightMode(isNightMode, brightness, warmth);
   }, [isNightMode, brightness, warmth, autoMode]);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isNightMode) {
-      root.style.filter = `brightness(${brightness / 100}) sepia(${warmth / 100})`;
-      root.classList.add('night-mode');
-    } else {
-      root.style.filter = 'none';
-      root.classList.remove('night-mode');
-    }
-    return () => {
-      root.style.filter = 'none';
-      root.classList.remove('night-mode');
-    };
-  }, [isNightMode, brightness, warmth]);
+  // NO cleanup on unmount - settings persist globally
 
   useEffect(() => {
     if (autoMode) {
@@ -68,7 +78,6 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
     { name: isRTL ? 'راحة' : '휴식', brightness: 75, warmth: 35, icon: '😌' },
   ];
 
-  // Render inline content (no Popover - parent modal handles overlay)
   return (
     <div className="space-y-5" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Main Toggle */}
@@ -95,7 +104,6 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
             exit={{ opacity: 0, height: 0 }}
             className="space-y-5"
           >
-            {/* Brightness */}
             <div className="space-y-2 p-4 rounded-2xl bg-muted/30">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground flex items-center gap-2">
@@ -107,7 +115,6 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
               <Slider value={[brightness]} onValueChange={([val]) => setBrightness(val)} min={50} max={100} step={5} />
             </div>
 
-            {/* Warmth */}
             <div className="space-y-2 p-4 rounded-2xl bg-muted/30">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground flex items-center gap-2">
@@ -119,7 +126,6 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
               <Slider value={[warmth]} onValueChange={([val]) => setWarmth(val)} min={0} max={50} step={5} />
             </div>
 
-            {/* Presets */}
             <div className="space-y-2">
               <span className="text-sm text-muted-foreground font-medium">{isRTL ? 'إعدادات سريعة' : '빠른 설정'}</span>
               <div className="grid grid-cols-4 gap-2">
@@ -138,7 +144,6 @@ const NightModeToggle: React.FC<NightModeToggleProps> = ({ className = '' }) => 
               </div>
             </div>
 
-            {/* Auto Mode */}
             <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/30">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-500" />
