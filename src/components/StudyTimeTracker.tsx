@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Clock, Play, Pause, RotateCcw, Target, TrendingUp, 
@@ -19,6 +19,7 @@ interface StudyTimeTrackerProps {
 }
 
 const STORAGE_KEY = 'studyStats';
+const TIMER_KEY = 'studyTimerActive';
 
 const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
   onTimeUpdate,
@@ -27,10 +28,17 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
   const { language } = useLanguage();
   const isRTL = language === 'ar';
   
-  const [isTracking, setIsTracking] = useState(false);
-  const [currentSession, setCurrentSession] = useState(0);
+  // Load initial state from localStorage
+  const [isTracking, setIsTracking] = useState(() => {
+    return localStorage.getItem(TIMER_KEY) === 'true';
+  });
+  const [currentSession, setCurrentSession] = useState(() => {
+    const saved = localStorage.getItem('studyCurrentSession');
+    return saved ? parseInt(saved, 10) : 0;
+  });
   const [todayTotal, setTodayTotal] = useState(0);
   const [weeklyStats, setWeeklyStats] = useState<StudySession[]>([]);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Load saved stats
   useEffect(() => {
@@ -44,33 +52,45 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
     }
   }, []);
 
-  // Timer
+  // Timer - runs independently of modal open/close
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
     if (isTracking) {
-      interval = setInterval(() => {
-        setCurrentSession(prev => prev + 1);
+      intervalRef.current = setInterval(() => {
+        setCurrentSession(prev => {
+          const next = prev + 1;
+          localStorage.setItem('studyCurrentSession', String(next));
+          return next;
+        });
         setTodayTotal(prev => prev + 1);
-        onTimeUpdate?.(currentSession + 1);
       }, 1000);
+    } else {
+      if (intervalRef.current) clearInterval(intervalRef.current);
     }
-    return () => clearInterval(interval);
-  }, [isTracking, currentSession, onTimeUpdate]);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [isTracking]);
 
-  // Save periodically
+  // Persist tracking state
+  useEffect(() => {
+    localStorage.setItem(TIMER_KEY, String(isTracking));
+  }, [isTracking]);
+
+  // Save stats periodically
   useEffect(() => {
     if (todayTotal > 0) {
       const today = new Date().toDateString();
-      const updated = [...weeklyStats];
-      const todayIndex = updated.findIndex(s => s.date === today);
-      if (todayIndex >= 0) {
-        updated[todayIndex].duration = todayTotal;
-      } else {
-        updated.push({ date: today, duration: todayTotal, itemsLearned: 0 });
-      }
-      const last7Days = updated.slice(-7);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ weekly: last7Days }));
-      setWeeklyStats(last7Days);
+      setWeeklyStats(prev => {
+        const updated = [...prev];
+        const todayIndex = updated.findIndex(s => s.date === today);
+        if (todayIndex >= 0) {
+          updated[todayIndex].duration = todayTotal;
+        } else {
+          updated.push({ date: today, duration: todayTotal, itemsLearned: 0 });
+        }
+        const last7Days = updated.slice(-7);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ weekly: last7Days }));
+        return last7Days;
+      });
+      onTimeUpdate?.(todayTotal);
     }
   }, [todayTotal]);
 
@@ -81,6 +101,11 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
     if (hrs > 0) return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }, []);
+
+  const handleReset = () => {
+    setCurrentSession(0);
+    localStorage.setItem('studyCurrentSession', '0');
+  };
 
   const dailyGoalSeconds = dailyGoalMinutes * 60;
   const dailyProgress = Math.min(100, (todayTotal / dailyGoalSeconds) * 100);
@@ -96,7 +121,6 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
 
   const maxDuration = Math.max(...weeklyStats.map(s => s.duration), dailyGoalSeconds);
 
-  // Render inline (no Dialog wrapper)
   return (
     <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Timer Control */}
@@ -132,7 +156,7 @@ const StudyTimeTracker: React.FC<StudyTimeTrackerProps> = ({
             {currentSession > 0 && (
               <motion.button
                 className={`p-3 rounded-xl ${isTracking ? 'bg-white/10' : 'bg-muted'}`}
-                onClick={() => setCurrentSession(0)}
+                onClick={handleReset}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
