@@ -7,6 +7,20 @@ import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { consonants, vowels, vocabulary, basicSentences, advancedSentences } from '@/data/koreanData';
 import { advancedVocabulary } from '@/data/level3VocabularyData';
 import { dailyLifeSentences } from '@/data/level5Data';
+import { grammarPatterns, level5AdditionalSentences, level6ExtraSentences } from '@/data/level4GrammarData';
+
+// Combined extended datasets for levels 4-6
+const level4Combined = [
+  ...basicSentences,
+  ...grammarPatterns.map(g => ({
+    id: g.id,
+    korean: g.korean,
+    romanized: g.romanized,
+    arabic: `${g.arabic} — ${g.example} (${g.exampleAr})`,
+  })),
+];
+const level5Combined = [...advancedSentences, ...level5AdditionalSentences];
+const level6Combined = [...dailyLifeSentences, ...level6ExtraSentences];
 import LetterCard from '@/components/LetterCard';
 import VocabularyCard from '@/components/VocabularyCard';
 import SentenceCard from '@/components/SentenceCard';
