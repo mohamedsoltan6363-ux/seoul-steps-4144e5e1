@@ -732,12 +732,12 @@ export const ThunderTransition: React.FC<{ onComplete: () => void }> = ({ onComp
           transition={{ duration: 0.18, delay }} />
       ))}
       <motion.svg
-        className="absolute z-25" style={{ left: '50%', top: 0, transform: 'translateX(-50%)', height: '70vh' }}
+        className="absolute z-25"
+        style={{ left: '50%', top: 0, transform: 'translateX(-50%)', height: '70vh', transformOrigin: 'top' }}
         width="200" viewBox="0 0 200 600"
         initial={{ opacity: 0, scaleY: 0 }}
         animate={{ opacity: [0, 1, 1, 0], scaleY: 1 }}
         transition={{ duration: 0.8, delay: impactTime - 0.1 }}
-        style={{ transformOrigin: 'top' }}
       >
         <path d="M100 0 L70 200 L130 200 L60 400 L150 400 L80 600"
           stroke="#fde047" strokeWidth="12" fill="none" strokeLinejoin="round"
