@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Gamepad2, User, Compass, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -8,106 +8,100 @@ const MobileBottomNav: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { language } = useLanguage();
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
   // Hide on level pages (learn routes), onboarding, auth, homepage
   const hiddenPaths = ['/learn', '/onboarding', '/auth'];
   const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path)) || location.pathname === '/';
 
+  // Auto-hide on scroll down, show on scroll up
+  useEffect(() => {
+    if (shouldHide) return;
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const diff = currentY - lastScrollY.current;
+      if (currentY < 80) {
+        setVisible(true);
+      } else if (diff > 8) {
+        setVisible(false);
+      } else if (diff < -8) {
+        setVisible(true);
+      }
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [shouldHide]);
+
   if (shouldHide) return null;
 
   const navItems = [
-    { 
-      path: '/dashboard', 
-      icon: Home, 
-      label: language === 'ar' ? 'الرئيسية' : '홈',
-    },
-    { 
-      path: '/games', 
-      icon: Gamepad2, 
-      label: language === 'ar' ? 'الألعاب' : '게임',
-    },
-    { 
-      path: '/forum', 
-      icon: MessageCircle, 
-      label: language === 'ar' ? 'المنتدى' : '포럼',
-    },
-    { 
-      path: '/explore', 
-      icon: Compass, 
-      label: language === 'ar' ? 'اكتشف' : '탐색',
-    },
-    { 
-      path: '/profile', 
-      icon: User, 
-      label: language === 'ar' ? 'حسابي' : '프로필',
-    },
+    { path: '/dashboard', icon: Home, label: language === 'ar' ? 'الرئيسية' : '홈' },
+    { path: '/games', icon: Gamepad2, label: language === 'ar' ? 'الألعاب' : '게임' },
+    { path: '/forum', icon: MessageCircle, label: language === 'ar' ? 'المنتدى' : '포럼' },
+    { path: '/explore', icon: Compass, label: language === 'ar' ? 'اكتشف' : '탐색' },
+    { path: '/profile', icon: User, label: language === 'ar' ? 'حسابي' : '프로필' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <motion.nav
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 35 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
-    >
-      {/* Premium Background */}
-      <div className="absolute inset-0 bg-white/95 backdrop-blur-md border-t border-slate-200/50" />
-      
-      {/* Navigation Items Container */}
-      <div className="relative flex items-center justify-around px-3 py-2.5 safe-area-pb">
-        {navItems.map((item, index) => {
-          const active = isActive(item.path);
-          return (
-            <motion.button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              whileTap={{ scale: 0.92 }}
-              whileHover={{ y: -2 }}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                type: 'spring',
-                stiffness: 380,
-                damping: 40,
-                delay: index * 0.04,
-              }}
-              className="relative w-full h-16 flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all duration-150 group"
-            >
-              {/* Active background */}
-              {active && (
-                <motion.div
-                  layoutId="navActiveBg"
-                  className="absolute inset-0 bg-blue-50 rounded-xl"
-                  transition={{ type: 'spring', stiffness: 500, damping: 50 }}
-                />
-              )}
-
-              {/* Icon with smooth animation */}
-              <motion.div
-                className="relative z-10"
-                animate={{
-                  scale: active ? 1.2 : 1,
-                  color: active ? 'rgb(37, 99, 235)' : 'rgb(107, 114, 128)'
-                }}
-                transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-              >
-                <item.icon className="w-6 h-6" />
-              </motion.div>
-
-              {/* Label */}
-              <motion.span 
-                className="relative z-10 text-xs font-medium transition-colors duration-200"
-                animate={{ opacity: active ? 1 : 0.5 }}
-              >
-                {item.label}
-              </motion.span>
-            </motion.button>
-          );
-        })}
-      </div>
-    </motion.nav>
+    <AnimatePresence>
+      {visible && (
+        <motion.nav
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 35 }}
+          className="fixed bottom-0 left-0 right-0 z-50 md:hidden pointer-events-none"
+        >
+          <div className="mx-3 mb-3 pointer-events-auto">
+            {/* Glass background with strong blur */}
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-2xl" />
+              <div className="relative flex items-center justify-around px-2 py-2">
+                {navItems.map((item, index) => {
+                  const active = isActive(item.path);
+                  return (
+                    <motion.button
+                      key={item.path}
+                      onClick={() => navigate(item.path)}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.04 }}
+                      className="relative flex-1 h-14 flex flex-col items-center justify-center gap-0.5 rounded-xl"
+                    >
+                      {active && (
+                        <motion.div
+                          layoutId="navActiveBg"
+                          className="absolute inset-1 bg-gradient-to-br from-rose-500/15 to-pink-500/15 rounded-xl border border-rose-500/20"
+                          transition={{ type: 'spring', stiffness: 500, damping: 50 }}
+                        />
+                      )}
+                      <motion.div
+                        className="relative z-10"
+                        animate={{ scale: active ? 1.15 : 1, color: active ? 'rgb(244,63,94)' : 'rgb(107,114,128)' }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+                      >
+                        <item.icon className="w-5 h-5" />
+                      </motion.div>
+                      <motion.span
+                        className="relative z-10 text-[10px] font-medium"
+                        animate={{ opacity: active ? 1 : 0.6, color: active ? 'rgb(244,63,94)' : 'rgb(107,114,128)' }}
+                      >
+                        {item.label}
+                      </motion.span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </motion.nav>
+      )}
+    </AnimatePresence>
   );
 };
 
