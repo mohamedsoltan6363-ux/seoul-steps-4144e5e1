@@ -7,6 +7,20 @@ import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { consonants, vowels, vocabulary, basicSentences, advancedSentences } from '@/data/koreanData';
 import { advancedVocabulary } from '@/data/level3VocabularyData';
 import { dailyLifeSentences } from '@/data/level5Data';
+import { grammarPatterns, level5AdditionalSentences, level6ExtraSentences } from '@/data/level4GrammarData';
+
+// Combined extended datasets for levels 4-6
+const level4Combined = [
+  ...basicSentences,
+  ...grammarPatterns.map(g => ({
+    id: g.id,
+    korean: g.korean,
+    romanized: g.romanized,
+    arabic: `${g.arabic} — ${g.example} (${g.exampleAr})`,
+  })),
+];
+const level5Combined = [...advancedSentences, ...level5AdditionalSentences];
+const level6Combined = [...dailyLifeSentences, ...level6ExtraSentences];
 import LetterCard from '@/components/LetterCard';
 import VocabularyCard from '@/components/VocabularyCard';
 import SentenceCard from '@/components/SentenceCard';
@@ -139,21 +153,21 @@ const Learn: React.FC = () => {
             arabic: item.arabic,
           }));
         case 4:
-          return basicSentences.map(item => ({
+          return level4Combined.map(item => ({
             id: item.id,
             korean: item.korean,
             romanized: item.romanized,
             arabic: item.arabic,
           }));
         case 5:
-          return advancedSentences.map(item => ({
+          return level5Combined.map(item => ({
             id: item.id,
             korean: item.korean,
             romanized: item.romanized,
             arabic: item.arabic,
           }));
         case 6:
-          return dailyLifeSentences.map(item => ({
+          return level6Combined.map(item => ({
             id: item.id,
             korean: item.korean,
             romanized: item.romanized,
@@ -199,9 +213,9 @@ const Learn: React.FC = () => {
     1: { title: language === 'ar' ? 'الحروف الكورية' : '한글', subtitle: language === 'ar' ? 'تعلم الأساسيات' : '기초 배우기', total: consonants.length + vowels.length },
     2: { title: language === 'ar' ? 'المفردات الأساسية' : '기본 어휘', subtitle: language === 'ar' ? 'كلمات يومية' : '일상 단어', total: vocabulary.length },
     3: { title: language === 'ar' ? 'المفردات المتقدمة' : '고급 어휘', subtitle: language === 'ar' ? 'توسيع المعرفة' : '지식 확장', total: advancedVocabulary.length },
-    4: { title: language === 'ar' ? 'الجمل الأساسية' : '기본 문장', subtitle: language === 'ar' ? 'تكوين الجمل' : '문장 만들기', total: basicSentences.length },
-    5: { title: language === 'ar' ? 'الجمل المتقدمة' : '고급 문장', subtitle: language === 'ar' ? 'محادثات معقدة' : '복잡한 대화', total: advancedSentences.length },
-    6: { title: language === 'ar' ? 'الحياة اليومية' : '일상 생활', subtitle: language === 'ar' ? 'تطبيق عملي' : '실용적 적용', total: dailyLifeSentences.length },
+    4: { title: language === 'ar' ? 'الجمل الأساسية' : '기본 문장', subtitle: language === 'ar' ? 'تكوين الجمل' : '문장 만들기', total: level4Combined.length },
+    5: { title: language === 'ar' ? 'الجمل المتقدمة' : '고급 문장', subtitle: language === 'ar' ? 'محادثات معقدة' : '복잡한 대화', total: level5Combined.length },
+    6: { title: language === 'ar' ? 'الحياة اليومية' : '일상 생활', subtitle: language === 'ar' ? 'تطبيق عملي' : '실용적 적용', total: level6Combined.length },
   };
 
   const currentLevelInfo = levelInfo[levelNum as keyof typeof levelInfo];
@@ -390,7 +404,7 @@ const Learn: React.FC = () => {
   };
 
   const renderLevel4 = () => {
-    const filteredItems = filterItems(basicSentences);
+    const filteredItems = filterItems(level4Combined);
     return (
       <motion.div 
         initial={{ opacity: 0 }}
@@ -418,7 +432,7 @@ const Learn: React.FC = () => {
   };
 
   const renderLevel5 = () => {
-    const filteredItems = filterItems(advancedSentences);
+    const filteredItems = filterItems(level5Combined);
     return (
       <motion.div 
         initial={{ opacity: 0 }}
@@ -446,7 +460,7 @@ const Learn: React.FC = () => {
   };
 
   const renderLevel6 = () => {
-    const filteredItems = filterItems(dailyLifeSentences);
+    const filteredItems = filterItems(level6Combined);
     return (
       <motion.div 
         initial={{ opacity: 0 }}
