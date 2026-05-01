@@ -14,8 +14,13 @@ import AchievementsList from '@/components/AchievementsList';
 import IdVerification from '@/components/IdVerification';
 import CertificatePreview from '@/components/CertificatePreview';
 import ReferralSystem from '@/components/ReferralSystem';
-import { ArrowLeft, Settings, Mail, Edit2, Award, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
+import {
+  ArrowLeft, Settings, Mail, Edit2, BarChart3, Trophy, Users2,
+  Flame, Gift, Award, Shield, Sparkles, Star, Zap
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+type TabId = 'stats' | 'achievements' | 'referral' | 'streak' | 'rewards' | 'certificate' | 'verification';
 
 const Profile: React.FC = () => {
   const { t, language } = useLanguage();
@@ -26,7 +31,7 @@ const Profile: React.FC = () => {
   const { getDueCount, totalReviews, masteredCount } = useSpacedRepetition();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'stats' | 'achievements' | 'streak' | 'rewards' | 'verification' | 'certificate' | 'referral'>('stats');
+  const [activeTab, setActiveTab] = useState<TabId>('stats');
   const [quizzesPassed, setQuizzesPassed] = useState(0);
 
   const isRTL = language === 'ar';
@@ -34,35 +39,29 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
-      
       const { data: profileData } = await supabase
         .from('profiles')
         .select('avatar_url, display_name')
         .eq('user_id', user.id)
         .single();
-      
       if (profileData) {
         setAvatarUrl(profileData.avatar_url);
         setDisplayName(profileData.display_name || '');
       }
-
-      // Fetch quiz results
       const { data: quizData } = await supabase
         .from('quiz_results')
         .select('passed')
         .eq('user_id', user.id)
         .eq('passed', true);
-
       setQuizzesPassed(quizData?.length || 0);
     };
     fetchProfile();
   }, [user]);
-  
-  // Calculate all achievements
+
   const level1Memorized = progressByLevel[1]?.memorizedCount || 0;
   const level2Memorized = progressByLevel[2]?.memorizedCount || 0;
   const level3Memorized = progressByLevel[3]?.memorizedCount || 0;
-  
+
   const achievements = [
     { id: 'first_letter', unlocked: level1Memorized > 0 },
     { id: 'consonant_master', unlocked: level1Memorized >= 19, progress: level1Memorized, maxProgress: 19 },
@@ -82,167 +81,262 @@ const Profile: React.FC = () => {
   ];
 
   const totalMemorized = level1Memorized + level2Memorized + level3Memorized;
+  const unlockedAchievements = achievements.filter(a => a.unlocked).length;
 
-  const tabs = [
-    { id: 'stats', label: isRTL ? 'الإحصائيات' : '통계' },
-    { id: 'achievements', label: isRTL ? 'الإنجازات' : '업적' },
-    { id: 'referral', label: isRTL ? 'الإحالات' : '추천' },
-    { id: 'streak', label: isRTL ? 'السلسلة' : '연속' },
-    { id: 'rewards', label: isRTL ? 'المكافآت' : '보상' },
-    { id: 'certificate', label: isRTL ? 'الشهادة' : '인증서' },
-    { id: 'verification', label: isRTL ? 'التوثيق' : '인증' },
+  const tabs: { id: TabId; label: string; icon: any; gradient: string }[] = [
+    { id: 'stats', label: isRTL ? 'الإحصائيات' : '통계', icon: BarChart3, gradient: 'from-blue-400 to-cyan-400' },
+    { id: 'achievements', label: isRTL ? 'الإنجازات' : '업적', icon: Trophy, gradient: 'from-amber-400 to-orange-400' },
+    { id: 'streak', label: isRTL ? 'السلسلة' : '연속', icon: Flame, gradient: 'from-rose-400 to-pink-400' },
+    { id: 'rewards', label: isRTL ? 'المكافآت' : '보상', icon: Gift, gradient: 'from-purple-400 to-violet-400' },
+    { id: 'referral', label: isRTL ? 'الإحالات' : '추천', icon: Users2, gradient: 'from-emerald-400 to-teal-400' },
+    { id: 'certificate', label: isRTL ? 'الشهادة' : '인증서', icon: Award, gradient: 'from-yellow-400 to-amber-400' },
+    { id: 'verification', label: isRTL ? 'التوثيق' : '인증', icon: Shield, gradient: 'from-indigo-400 to-blue-400' },
   ];
 
+  const overallProgress = Math.round(
+    (getLevelProgress(1) + getLevelProgress(2) + getLevelProgress(3) +
+     getLevelProgress(4) + getLevelProgress(5) + getLevelProgress(6)) / 6
+  );
+
   return (
-    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Header */}
-      <header className="sticky top-0 z-50 glass-effect border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <button 
-            onClick={() => navigate('/dashboard')} 
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+    <div
+      className="min-h-screen relative overflow-hidden"
+      dir={isRTL ? 'rtl' : 'ltr'}
+      style={{
+        background: 'linear-gradient(135deg, #fef3f9 0%, #f0e7ff 35%, #e0f2fe 70%, #fce7f3 100%)',
+      }}
+    >
+      {/* Animated background blobs - Korean K-pop pastel aesthetic */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-50"
+          style={{ background: 'radial-gradient(circle, #fda4af 0%, transparent 70%)' }}
+          animate={{ scale: [1, 1.15, 1], rotate: [0, 90, 0] }}
+          transition={{ duration: 18, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full opacity-50"
+          style={{ background: 'radial-gradient(circle, #c4b5fd 0%, transparent 70%)' }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, -90, 0] }}
+          transition={{ duration: 22, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/4 w-64 h-64 rounded-full opacity-40"
+          style={{ background: 'radial-gradient(circle, #93c5fd 0%, transparent 70%)' }}
+          animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
+          transition={{ duration: 16, repeat: Infinity }}
+        />
+        {/* Tiny floating sparkles */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1.5 h-1.5 rounded-full bg-white/60"
+            style={{ left: `${(i * 7) % 100}%`, top: `${(i * 13) % 100}%` }}
+            animate={{ y: [0, -30, 0], opacity: [0, 1, 0] }}
+            transition={{ duration: 3 + (i % 4), repeat: Infinity, delay: i * 0.3 }}
+          />
+        ))}
+      </div>
+
+      {/* Glass Header */}
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/40 border-b border-white/30">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between max-w-3xl">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 backdrop-blur hover:bg-white/80 transition text-slate-700"
           >
-            <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
-            <span className="font-medium">{t('dashboard')}</span>
+            <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
+            <span className="text-sm font-medium">{t('dashboard')}</span>
           </button>
-          <h1 className="font-bold text-lg">{t('profile')}</h1>
-          <button className="p-2 rounded-xl hover:bg-muted transition-colors">
-            <Settings className="w-5 h-5" />
+          <h1 className="font-bold text-base text-slate-800 flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-rose-500" />
+            {t('profile')}
+          </h1>
+          <button className="p-2 rounded-full bg-white/60 backdrop-blur hover:bg-white/80 transition text-slate-700">
+            <Settings className="w-4 h-4" />
           </button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-2xl">
-        {/* Profile Card */}
-        <motion.div 
+      <main className="container mx-auto px-4 py-5 pb-32 md:pb-8 max-w-3xl relative z-10">
+        {/* Hero Glass Card */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mb-6"
+          className="relative mb-5"
         >
-          <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
-            <div className="absolute inset-0 opacity-30" />
-          </div>
-          
-          <div className="relative p-6 pt-8 flex flex-col items-center">
-            <AvatarUpload 
-              currentAvatarUrl={avatarUrl}
-              onAvatarChange={setAvatarUrl}
-            />
-            
-            <h2 className="text-xl font-bold text-white mt-4 flex items-center gap-2">
-              {displayName || user?.email?.split('@')[0]}
-              <button className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <Edit2 className="w-4 h-4 text-white/70" />
-              </button>
-            </h2>
-            <div className="flex items-center gap-2 text-white/70 text-sm mt-1">
-              <Mail className="w-4 h-4" />
-              <span>{user?.email}</span>
-            </div>
-            <p className="text-white/60 text-sm mt-2">
-              {isRTL ? 'متعلم اللغة الكورية' : '한국어 학습자'}
-            </p>
+          <div className="relative rounded-3xl overflow-hidden backdrop-blur-2xl bg-white/50 border border-white/60 shadow-[0_8px_32px_rgba(244,114,182,0.15)] p-5 sm:p-6">
+            {/* Decorative gradient orbs inside card */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br from-rose-300/40 to-pink-300/40 blur-2xl" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-gradient-to-br from-violet-300/40 to-blue-300/40 blur-2xl" />
 
-            {/* Quick Stats in Header */}
-            <div className="flex items-center gap-6 mt-4 text-white/80">
-              <div className="text-center">
-                <p className="text-2xl font-bold">{totalPoints}</p>
-                <p className="text-xs text-white/60">{isRTL ? 'نقطة' : '점'}</p>
+            <div className="relative flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
+              {/* Avatar with animated ring */}
+              <div className="relative">
+                <motion.div
+                  className="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-violet-400 opacity-70"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                />
+                <div className="relative">
+                  <AvatarUpload currentAvatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
+                </div>
               </div>
-              <div className="w-px h-8 bg-white/20" />
-              <div className="text-center">
-                <p className="text-2xl font-bold">{streakDays}</p>
-                <p className="text-xs text-white/60">{isRTL ? 'يوم' : '일'}</p>
+
+              {/* Name & Email */}
+              <div className="flex-1 text-center sm:text-start min-w-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-800 flex items-center justify-center sm:justify-start gap-2 truncate">
+                  {displayName || user?.email?.split('@')[0]}
+                  <Edit2 className="w-3.5 h-3.5 text-slate-400" />
+                </h2>
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 text-slate-500 text-xs mt-1">
+                  <Mail className="w-3 h-3" />
+                  <span className="truncate">{user?.email}</span>
+                </div>
+                <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                  <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow">
+                    {isRTL ? `المستوى ${currentLevel}` : `레벨 ${currentLevel}`}
+                  </span>
+                  <span className="px-2.5 py-0.5 text-[11px] font-medium rounded-full bg-white/70 text-slate-600 border border-white/80">
+                    {isRTL ? '한국어 학습자' : 'متعلم كوري'}
+                  </span>
+                </div>
               </div>
-              <div className="w-px h-8 bg-white/20" />
-              <div className="text-center">
-                <p className="text-2xl font-bold">{achievements.filter(a => a.unlocked).length}</p>
-                <p className="text-xs text-white/60">{isRTL ? 'إنجاز' : '업적'}</p>
+            </div>
+
+            {/* Quick stats */}
+            <div className="relative mt-5 grid grid-cols-3 gap-2 sm:gap-3">
+              {[
+                { value: totalPoints, label: isRTL ? 'نقطة' : '점', icon: Star, color: 'from-amber-400 to-orange-400' },
+                { value: streakDays, label: isRTL ? 'يوم' : '일', icon: Flame, color: 'from-rose-400 to-pink-400' },
+                { value: unlockedAchievements, label: isRTL ? 'إنجاز' : '업적', icon: Trophy, color: 'from-violet-400 to-purple-400' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.08 }}
+                  className="relative rounded-2xl p-3 backdrop-blur bg-white/60 border border-white/70 text-center"
+                >
+                  <div className={`mx-auto w-7 h-7 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-1.5 shadow`}>
+                    <stat.icon className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <p className="text-lg font-bold text-slate-800">{stat.value}</p>
+                  <p className="text-[10px] text-slate-500">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div className="relative mt-4">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-medium text-slate-600 flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-rose-500" />
+                  {isRTL ? 'التقدم العام' : '전체 진행률'}
+                </span>
+                <span className="text-xs font-bold text-rose-600">{overallProgress}%</span>
+              </div>
+              <div className="h-2 bg-white/60 rounded-full overflow-hidden backdrop-blur">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-rose-400 via-pink-400 to-violet-400 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${overallProgress}%` }}
+                  transition={{ duration: 1.2, ease: 'easeOut' }}
+                />
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mb-6 p-1 bg-muted rounded-2xl overflow-x-auto">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2.5 px-3 rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
-                activeTab === tab.id 
-                  ? 'bg-card shadow-sm text-foreground' 
-                  : 'text-muted-foreground'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Glass Tabs - scrollable */}
+        <div className="mb-5 -mx-4 px-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 pb-1 min-w-max">
+            {tabs.map(tab => {
+              const active = activeTab === tab.id;
+              return (
+                <motion.button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition backdrop-blur border ${
+                    active
+                      ? 'text-white border-transparent shadow-lg'
+                      : 'bg-white/50 text-slate-600 border-white/60 hover:bg-white/70'
+                  }`}
+                  style={
+                    active
+                      ? { backgroundImage: `linear-gradient(135deg, var(--tw-gradient-stops))` }
+                      : undefined
+                  }
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="activeTabBg"
+                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${tab.gradient} shadow-lg`}
+                      transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                    />
+                  )}
+                  <tab.icon className="w-3.5 h-3.5 relative z-10" />
+                  <span className="relative z-10">{tab.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {activeTab === 'stats' && (
-            <ProfileStats
-              totalPoints={totalPoints}
-              currentLevel={currentLevel}
-              streakDays={streakDays}
-              totalMemorized={totalMemorized}
-              lettersMemorized={level1Memorized}
-              vocabularyMemorized={level2Memorized}
-              sentencesMemorized={level3Memorized}
-              totalReviews={totalReviews}
-              masteredItems={masteredCount}
-              quizzesPassed={quizzesPassed}
-              dueReviews={getDueCount()}
-            />
-          )}
-          
-          {activeTab === 'achievements' && (
-            <AchievementsList
-              achievements={achievements}
-              totalPoints={totalPoints}
-              streakDays={streakDays}
-            />
-          )}
-          
-          {activeTab === 'streak' && (
-            <div className="space-y-4">
-              <h3 className="font-bold">{isRTL ? 'أيامك المتتالية' : '연속 학습 일수'}</h3>
-              <StreakDisplay 
-                streakDays={streakDays} 
-                todayCompleted={todayCompleted} 
+        {/* Tab Content - Glass Container */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-3xl backdrop-blur-2xl bg-white/50 border border-white/60 shadow-[0_8px_32px_rgba(168,85,247,0.1)] p-4 sm:p-5"
+          >
+            {activeTab === 'stats' && (
+              <ProfileStats
+                totalPoints={totalPoints}
+                currentLevel={currentLevel}
+                streakDays={streakDays}
+                totalMemorized={totalMemorized}
+                lettersMemorized={level1Memorized}
+                vocabularyMemorized={level2Memorized}
+                sentencesMemorized={level3Memorized}
+                totalReviews={totalReviews}
+                masteredItems={masteredCount}
+                quizzesPassed={quizzesPassed}
+                dueReviews={getDueCount()}
               />
-            </div>
-          )}
-          
-          {activeTab === 'rewards' && (
-            <RewardsDisplay
-              totalPoints={totalPoints}
-              currentLevel={currentLevel}
-              streakDays={streakDays}
-              achievements={achievements}
-            />
-          )}
-
-          {activeTab === 'certificate' && (
-            <CertificatePreview />
-          )}
-          
-          {activeTab === 'verification' && (
-            <IdVerification />
-          )}
-
-          {activeTab === 'referral' && (
-            <ReferralSystem />
-          )}
-        </motion.div>
+            )}
+            {activeTab === 'achievements' && (
+              <AchievementsList achievements={achievements} totalPoints={totalPoints} streakDays={streakDays} />
+            )}
+            {activeTab === 'streak' && (
+              <div className="space-y-4">
+                <h3 className="font-bold text-slate-800">{isRTL ? 'أيامك المتتالية' : '연속 학습 일수'}</h3>
+                <StreakDisplay streakDays={streakDays} todayCompleted={todayCompleted} />
+              </div>
+            )}
+            {activeTab === 'rewards' && (
+              <RewardsDisplay
+                totalPoints={totalPoints}
+                currentLevel={currentLevel}
+                streakDays={streakDays}
+                achievements={achievements}
+              />
+            )}
+            {activeTab === 'certificate' && <CertificatePreview />}
+            {activeTab === 'verification' && <IdVerification />}
+            {activeTab === 'referral' && <ReferralSystem />}
+          </motion.div>
+        </AnimatePresence>
       </main>
+
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   );
 };
