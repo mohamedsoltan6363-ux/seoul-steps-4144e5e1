@@ -141,7 +141,7 @@ const Reports: React.FC = () => {
       </header>
 
       <motion.main 
-        className="container mx-auto px-4 py-6 max-w-6xl relative z-10"
+        className="container mx-auto px-4 py-6 pb-32 md:pb-6 max-w-6xl relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
