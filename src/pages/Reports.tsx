@@ -69,9 +69,9 @@ const Reports: React.FC = () => {
     { name: language === 'ar' ? 'المستوى 1' : '레벨 1', progress: progressByLevel[1]?.memorizedCount || 0, total: progressByLevel[1]?.totalItems || 40, color: '#3B82F6' },
     { name: language === 'ar' ? 'المستوى 2' : '레벨 2', progress: progressByLevel[2]?.memorizedCount || 0, total: progressByLevel[2]?.totalItems || 130, color: '#EC4899' },
     { name: language === 'ar' ? 'المستوى 3' : '레벨 3', progress: progressByLevel[3]?.memorizedCount || 0, total: progressByLevel[3]?.totalItems || 200, color: '#06B6D4' },
-    { name: language === 'ar' ? 'المستوى 4' : '레벨 4', progress: progressByLevel[4]?.memorizedCount || 0, total: progressByLevel[4]?.totalItems || 40, color: '#F59E0B' },
-    { name: language === 'ar' ? 'المستوى 5' : '레벨 5', progress: progressByLevel[5]?.memorizedCount || 0, total: progressByLevel[5]?.totalItems || 50, color: '#8B5CF6' },
-    { name: language === 'ar' ? 'المستوى 6' : '레벨 6', progress: progressByLevel[6]?.memorizedCount || 0, total: progressByLevel[6]?.totalItems || 100, color: '#10B981' },
+    { name: language === 'ar' ? 'المستوى 4' : '레벨 4', progress: progressByLevel[4]?.memorizedCount || 0, total: progressByLevel[4]?.totalItems || 70, color: '#F59E0B' },
+    { name: language === 'ar' ? 'المستوى 5' : '레벨 5', progress: progressByLevel[5]?.memorizedCount || 0, total: progressByLevel[5]?.totalItems || 75, color: '#8B5CF6' },
+    { name: language === 'ar' ? 'المستوى 6' : '레벨 6', progress: progressByLevel[6]?.memorizedCount || 0, total: progressByLevel[6]?.totalItems || 120, color: '#10B981' },
   ];
 
   // Pie chart data
