@@ -178,14 +178,19 @@ const Onboarding: React.FC = () => {
     () => onboardingSounds.playTrainSound(),
   ];
 
+  // Map each slide-transition to a specific transition index for thematic match
+  // slide 0 (hero) -> next is slide 1, use idx 0 (Tank), etc.
+  // Slides count = 13 (indices 0..12). Transitions used between slides: idx 0..11.
+  const slideTransitionMap = [0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 14, 15]; // Tank,Buffalo,RPG,Elephant,Jet,Kid,Rocket,Heli,Volcano,Meteor,Earthquake,Ice
+
   const goToNextSlide = useCallback(() => {
     if (isTransitioning || currentSlide >= slides.length - 1) return;
     
-    const transitionIndex = currentSlide % transitions.length;
+    const transitionIndex = slideTransitionMap[currentSlide] ?? (currentSlide % transitions.length);
     setIsTransitioning(true);
     setTransitionType(transitionIndex);
     
-    // Play sound for this transition
+    // Play sound for this transition (only first 9 have custom sounds)
     if (transitionSounds[transitionIndex]) {
       transitionSounds[transitionIndex]();
     }
