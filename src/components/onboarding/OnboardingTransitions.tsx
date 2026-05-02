@@ -401,18 +401,50 @@ export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onC
   );
 };
 
-// 6. KID THROWING BRICK
+// 6. KID THROWING BRICK - kid visible on left side
 export const KidThrowTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3;
-  const impactTime = calculateImpactTime(totalDuration, -25, 90);
+  const totalDuration = 4.5;
+  const impactTime = calculateImpactTime(totalDuration, -10, 90);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-yellow-50/60 to-orange-50/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="left" />
       <ImpactEffect delay={impactTime} color="#dc2626" />
+
+      {/* The naughty kid throwing - visible on the left */}
+      <motion.div
+        className="absolute z-15"
+        style={{ left: '4%', bottom: '15%' }}
+        initial={{ opacity: 0, x: -80 }}
+        animate={{ opacity: [0, 1, 1, 0.9], x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        <svg width="160" height="240" viewBox="0 0 160 240">
+          <ellipse cx="80" cy="232" rx="55" ry="6" fill="rgba(0,0,0,0.25)" />
+          <rect x="55" y="160" width="20" height="70" fill="#1d4ed8" rx="4" />
+          <rect x="85" y="160" width="20" height="70" fill="#1d4ed8" rx="4" />
+          <ellipse cx="65" cy="232" rx="16" ry="6" fill="#dc2626" />
+          <ellipse cx="95" cy="232" rx="16" ry="6" fill="#dc2626" />
+          <rect x="48" y="95" width="64" height="75" fill="#ef4444" rx="10" />
+          <circle cx="80" cy="65" r="28" fill="#fde68a" stroke="#92400e" strokeWidth="2" />
+          <path d="M55 50 Q80 30 105 50 Q100 40 80 38 Q60 40 55 50 Z" fill="#451a03" />
+          <circle cx="71" cy="63" r="3.5" fill="#0f172a" />
+          <circle cx="89" cy="63" r="3.5" fill="#0f172a" />
+          <path d="M70 78 Q80 86 90 78" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <motion.g
+            animate={{ rotate: [-30, 60, -30] }}
+            style={{ transformOrigin: '110px 110px' }}
+            transition={{ duration: 0.6, repeat: Infinity }}
+          >
+            <rect x="105" y="105" width="50" height="14" fill="#fde68a" stroke="#92400e" strokeWidth="2" rx="6" />
+          </motion.g>
+          <rect x="20" y="110" width="40" height="14" fill="#fde68a" stroke="#92400e" strokeWidth="2" rx="6" />
+        </svg>
+      </motion.div>
+
       <motion.div className="absolute z-20" style={{ top: '40%' }}
-        initial={{ x: '-25vw', y: 0, rotate: 0 }}
-        animate={{ x: '90vw', y: [0, -100, 0, -50, 0], rotate: 720 }}
-        transition={{ duration: totalDuration, ease: 'linear' }}
+        initial={{ x: '-5vw', y: 0, rotate: 0 }}
+        animate={{ x: '90vw', y: [0, -120, 0, -60, 0], rotate: 720 }}
+        transition={{ duration: totalDuration * 0.85, delay: 0.5, ease: 'linear' }}
         onAnimationComplete={onComplete}>
         <svg width="80" height="60" viewBox="0 0 80 60">
           <rect x="5" y="10" width="70" height="40" fill="#b45309" stroke="#78350f" strokeWidth="3" rx="4" />
