@@ -968,6 +968,15 @@ const Learn: React.FC = () => {
                 />
                 
                 <div className="relative p-3">
+                  {/* Collapse button */}
+                  <button
+                    onClick={() => setShowToolbar(false)}
+                    title={language === 'ar' ? 'إخفاء الشريط' : '도구 숨기기'}
+                    aria-label={language === 'ar' ? 'إخفاء الشريط' : '도구 숨기기'}
+                    className="absolute -top-2 -right-2 z-20 w-6 h-6 rounded-full bg-card border border-border shadow-md flex items-center justify-center hover:bg-muted transition"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                   <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-hide">
                     {[
                       { id: 'rewards' as FeatureModal, icon: Gift, label: language === 'ar' ? 'المكافآت' : '보상', color: 'from-yellow-500 to-orange-500', sound: 'chime' as const },
@@ -1013,6 +1022,8 @@ const Learn: React.FC = () => {
                           
                           setActiveFeature(feature.id);
                         }}
+                        title={feature.label}
+                        aria-label={feature.label}
                         className={`relative flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all overflow-hidden ${
                           activeFeature === feature.id
                             ? `bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-current/30`
@@ -1074,6 +1085,25 @@ const Learn: React.FC = () => {
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating reopen bubble when toolbar is hidden */}
+      <AnimatePresence>
+        {!showToolbar && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowToolbar(true)}
+            title={language === 'ar' ? 'إظهار الأدوات' : '도구 보기'}
+            aria-label={language === 'ar' ? 'إظهار الأدوات' : '도구 보기'}
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 text-white shadow-2xl flex items-center justify-center"
+          >
+            <Sparkles className="w-6 h-6" />
+          </motion.button>
         )}
       </AnimatePresence>
 
