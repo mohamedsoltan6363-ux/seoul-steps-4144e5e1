@@ -111,7 +111,55 @@ const Onboarding: React.FC = () => {
       bgGradient: 'bg-gradient-to-br from-rose-100 via-pink-50 to-rose-100',
       iconEmoji: '🏆'
     },
-    // Slide 8: Final - Call to Action
+    // Slide 8: Volcano - Power of consistency 🌋
+    {
+      type: 'content',
+      title: isRTL ? 'قوة الاستمرارية' : '꾸준함의 힘',
+      subtitle: isRTL ? 'تعلم يومي = نتائج بركانية' : '매일 학습 = 폭발적 성과',
+      description: isRTL
+        ? 'مثل البركان الذي يجمع قوته بصمت قبل الانفجار، تعلمك اليومي يبني داخلك ثروة لغوية ستنفجر إبداعاً.'
+        : '화산이 조용히 힘을 모으듯, 매일의 학습이 당신 안에 폭발적인 언어 능력을 쌓아갑니다.',
+      koreanText: '화산처럼 강하게! 🌋',
+      bgGradient: 'bg-gradient-to-br from-orange-100 via-red-50 to-amber-100',
+      iconEmoji: '🌋'
+    },
+    // Slide 9: Meteor - Speed & impact ☄️
+    {
+      type: 'content',
+      title: isRTL ? 'انطلق بسرعة النيزك' : '유성처럼 빠르게',
+      subtitle: isRTL ? 'منهج مكثّف وفعّال' : '집중 교육 과정',
+      description: isRTL
+        ? 'بمنهجنا المكثف، تتقدم بسرعة النيزك. دروس قصيرة، مكثفة، وأثرها يدوم طويلاً في ذاكرتك.'
+        : '집중 과정으로 유성처럼 빠르게 발전합니다. 짧고 강력한 수업, 오래 기억되는 효과.',
+      koreanText: '유성 ☄️',
+      bgGradient: 'bg-gradient-to-br from-indigo-100 via-purple-50 to-violet-100',
+      iconEmoji: '☄️'
+    },
+    // Slide 10: Earthquake - Foundations ⚡
+    {
+      type: 'content',
+      title: isRTL ? 'أسس صلبة لا تهتز' : '흔들리지 않는 기초',
+      subtitle: isRTL ? 'القواعد قبل التركيب' : '문법이 첫 번째',
+      description: isRTL
+        ? 'كل لغة تحتاج أسساً قوية. نبدأ معك من الصفر بقواعد راسخة لا يهزّها أي زلزال نسيان.'
+        : '모든 언어는 단단한 기초가 필요합니다. 잊혀지지 않는 견고한 문법부터 시작합니다.',
+      koreanText: '튼튼한 기초 ⚡',
+      bgGradient: 'bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100',
+      iconEmoji: '⚡'
+    },
+    // Slide 11: Ice Blast - Cool & confident ❄️
+    {
+      type: 'content',
+      title: isRTL ? 'تحدّث ببرودة وثقة' : '얼음처럼 침착하게',
+      subtitle: isRTL ? 'تدريب على المحادثة الحقيقية' : '실전 회화 훈련',
+      description: isRTL
+        ? 'ستتحدث الكورية ببرودة وثقة كأنك من سكانها الأصليين. تمارين نطق، حوارات، ومواقف يومية.'
+        : '원어민처럼 자신감 있게 말하게 됩니다. 발음 연습, 대화, 일상 상황 훈련.',
+      koreanText: '자신 있게 ❄️',
+      bgGradient: 'bg-gradient-to-br from-sky-100 via-cyan-50 to-blue-100',
+      iconEmoji: '❄️'
+    },
+    // Slide 12: Final - Call to Action
     {
       type: 'final',
     }
