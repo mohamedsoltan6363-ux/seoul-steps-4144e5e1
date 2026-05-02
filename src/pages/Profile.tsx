@@ -248,9 +248,9 @@ const Profile: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Glass Tabs - scrollable */}
-        <div className="mb-5 -mx-4 px-4 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 pb-1 min-w-max">
+        {/* Glass Tabs - wrap (no horizontal scroll) */}
+        <div className="mb-5">
+          <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
             {tabs.map(tab => {
               const active = activeTab === tab.id;
               return (
@@ -258,26 +258,22 @@ const Profile: React.FC = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition backdrop-blur border ${
+                  title={tab.label}
+                  className={`relative flex flex-col items-center justify-center gap-1 px-2 py-2.5 rounded-2xl text-[10px] font-semibold transition backdrop-blur border ${
                     active
                       ? 'text-white border-transparent shadow-lg'
                       : 'bg-white/50 text-slate-600 border-white/60 hover:bg-white/70'
                   }`}
-                  style={
-                    active
-                      ? { backgroundImage: `linear-gradient(135deg, var(--tw-gradient-stops))` }
-                      : undefined
-                  }
                 >
                   {active && (
                     <motion.div
                       layoutId="activeTabBg"
-                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${tab.gradient} shadow-lg`}
+                      className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} shadow-lg`}
                       transition={{ type: 'spring', stiffness: 400, damping: 35 }}
                     />
                   )}
-                  <tab.icon className="w-3.5 h-3.5 relative z-10" />
-                  <span className="relative z-10">{tab.label}</span>
+                  <tab.icon className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10 leading-tight text-center truncate max-w-full">{tab.label}</span>
                 </motion.button>
               );
             })}
