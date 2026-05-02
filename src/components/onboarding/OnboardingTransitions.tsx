@@ -595,7 +595,7 @@ export const TsunamiTransition: React.FC<{ onComplete: () => void }> = ({ onComp
 
 // 11. 🌋 VOLCANO ERUPTION
 export const VolcanoTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3.5;
+  const totalDuration = 5;
   const impactTime = totalDuration * 0.5;
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden" style={{ background: 'linear-gradient(180deg, #1e1b4b 0%, #7f1d1d 100%)' }}
@@ -648,7 +648,7 @@ export const VolcanoTransition: React.FC<{ onComplete: () => void }> = ({ onComp
 
 // 12. ☄️ METEOR FROM SPACE
 export const MeteorTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3;
+  const totalDuration = 5;
   const impactTime = totalDuration * 0.7;
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden"
@@ -835,7 +835,7 @@ export const EarthquakeTransition: React.FC<{ onComplete: () => void }> = ({ onC
 
 // 16. ❄️ ICE / FROZEN BLAST
 export const IceBlastTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3.5;
+  const totalDuration = 5;
   const impactTime = calculateImpactTime(totalDuration, -40, 120);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden"
@@ -874,7 +874,7 @@ export const IceBlastTransition: React.FC<{ onComplete: () => void }> = ({ onCom
 
 // 17. ⚡ THUNDER STRIKE
 export const ThunderTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3;
+  const totalDuration = 4.5;
   const impactTime = totalDuration * 0.5;
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden"
