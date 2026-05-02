@@ -879,11 +879,14 @@ export const IceBlastTransition: React.FC<{ onComplete: () => void }> = ({ onCom
 export const ThunderTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const totalDuration = 4.5;
   const impactTime = totalDuration * 0.5;
+  React.useEffect(() => {
+    const t = setTimeout(onComplete, totalDuration * 1000);
+    return () => clearTimeout(t);
+  }, [onComplete]);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #1e1b4b 0%, #581c87 100%)' }}
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      onAnimationComplete={onComplete}>
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="explode" />
       <ImpactEffect delay={impactTime} color="#fde047" />
       {[0.3, 0.6, 1, 1.4, 1.7].map((delay, i) => (
