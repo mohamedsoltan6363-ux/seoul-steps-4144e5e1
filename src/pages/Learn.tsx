@@ -968,6 +968,15 @@ const Learn: React.FC = () => {
                 />
                 
                 <div className="relative p-3">
+                  {/* Collapse button */}
+                  <button
+                    onClick={() => setShowToolbar(false)}
+                    title={language === 'ar' ? 'إخفاء الشريط' : '도구 숨기기'}
+                    aria-label={language === 'ar' ? 'إخفاء الشريط' : '도구 숨기기'}
+                    className="absolute -top-2 -right-2 z-20 w-6 h-6 rounded-full bg-card border border-border shadow-md flex items-center justify-center hover:bg-muted transition"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                   <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-hide">
                     {[
                       { id: 'rewards' as FeatureModal, icon: Gift, label: language === 'ar' ? 'المكافآت' : '보상', color: 'from-yellow-500 to-orange-500', sound: 'chime' as const },
