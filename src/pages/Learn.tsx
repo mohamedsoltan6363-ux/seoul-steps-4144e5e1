@@ -1088,6 +1088,25 @@ const Learn: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {/* Floating reopen bubble when toolbar is hidden */}
+      <AnimatePresence>
+        {!showToolbar && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowToolbar(true)}
+            title={language === 'ar' ? 'إظهار الأدوات' : '도구 보기'}
+            aria-label={language === 'ar' ? 'إظهار الأدوات' : '도구 보기'}
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 text-white shadow-2xl flex items-center justify-center"
+          >
+            <Sparkles className="w-6 h-6" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Feature Modals */}
       <AnimatePresence>
         {activeFeature && (
