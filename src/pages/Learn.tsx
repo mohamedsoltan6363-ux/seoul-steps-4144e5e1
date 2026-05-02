@@ -1013,6 +1013,8 @@ const Learn: React.FC = () => {
                           
                           setActiveFeature(feature.id);
                         }}
+                        title={feature.label}
+                        aria-label={feature.label}
                         className={`relative flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all overflow-hidden ${
                           activeFeature === feature.id
                             ? `bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-current/30`
