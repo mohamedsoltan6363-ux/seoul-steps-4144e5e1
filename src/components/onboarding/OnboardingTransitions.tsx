@@ -254,7 +254,7 @@ export const RPGTransition: React.FC<{ onComplete: () => void }> = ({ onComplete
   );
 };
 
-// 4. ELEPHANT
+// 4. ELEPHANT - with proper legs and trunk
 export const ElephantTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const totalDuration = 7;
   const impactTime = calculateImpactTime(totalDuration, -65, 150);
@@ -262,33 +262,80 @@ export const ElephantTransition: React.FC<{ onComplete: () => void }> = ({ onCom
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-stone-100/60 to-amber-100/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="up" />
       <ImpactEffect delay={impactTime} color="#a8a29e" />
-      <motion.div className="absolute z-20" style={{ bottom: '12%' }}
+      <motion.div className="absolute z-20" style={{ bottom: '10%' }}
         initial={{ x: '-65vw' }} animate={{ x: '150vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <motion.svg width="500" height="350" viewBox="0 0 500 350" animate={{ y: [0, -10, 0] }} transition={{ duration: 0.5, repeat: Infinity }}>
-          <ellipse cx="250" cy="335" rx="200" ry="22" fill="rgba(0,0,0,0.25)" />
-          <ellipse cx="240" cy="190" rx="170" ry="105" fill="#9ca3af" stroke="#4b5563" strokeWidth="3" />
-          <ellipse cx="400" cy="170" rx="80" ry="75" fill="#9ca3af" stroke="#4b5563" strokeWidth="3" />
-          <motion.path d="M460 195 Q500 230 490 280 Q485 310 470 320" stroke="#9ca3af" strokeWidth="35" fill="none" strokeLinecap="round"
-            animate={{ rotate: [-5, 5, -5] }} transition={{ duration: 0.6, repeat: Infinity }} style={{ transformOrigin: '460px 195px' }} />
-          <ellipse cx="350" cy="155" rx="40" ry="55" fill="#6b7280" stroke="#4b5563" strokeWidth="2" />
-          <path d="M440 215 Q455 240 450 260" stroke="#fef3c7" strokeWidth="10" fill="none" strokeLinecap="round" />
-          <path d="M460 215 Q475 240 470 260" stroke="#fef3c7" strokeWidth="10" fill="none" strokeLinecap="round" />
-          <circle cx="395" cy="155" r="8" fill="#0f172a" />
-          {[120, 200, 290, 360].map((x, i) => (
-            <motion.rect key={i} x={x} y="270" width="40" height="80" fill="#9ca3af" stroke="#4b5563" strokeWidth="3"
-              animate={{ y: i % 2 === 0 ? [270, 250, 270] : [250, 270, 250] }}
-              transition={{ duration: 0.5, repeat: Infinity }} />
+        <motion.svg width="540" height="420" viewBox="0 0 540 420" animate={{ y: [0, -8, 0] }} transition={{ duration: 0.5, repeat: Infinity }}>
+          {/* Shadow */}
+          <ellipse cx="270" cy="405" rx="220" ry="20" fill="rgba(0,0,0,0.3)" />
+          
+          {/* Body - large rounded */}
+          <ellipse cx="240" cy="220" rx="180" ry="115" fill="#9ca3af" stroke="#4b5563" strokeWidth="4" />
+          
+          {/* Belly highlight */}
+          <ellipse cx="240" cy="250" rx="140" ry="70" fill="#d1d5db" opacity="0.5" />
+          
+          {/* Head */}
+          <ellipse cx="420" cy="195" rx="90" ry="85" fill="#9ca3af" stroke="#4b5563" strokeWidth="4" />
+          
+          {/* Big floppy ear */}
+          <motion.path d="M355 145 Q310 130 305 195 Q310 245 365 230 Z" fill="#6b7280" stroke="#4b5563" strokeWidth="3"
+            animate={{ rotate: [-8, 8, -8] }} style={{ transformOrigin: '360px 190px' }}
+            transition={{ duration: 0.6, repeat: Infinity }} />
+          
+          {/* TRUNK - long curved trunk */}
+          <motion.path
+            d="M488 215 Q540 250 530 310 Q525 350 505 375 Q490 395 475 380"
+            stroke="#9ca3af" strokeWidth="42" fill="none" strokeLinecap="round"
+            animate={{ rotate: [-4, 4, -4] }} style={{ transformOrigin: '488px 215px' }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+          />
+          <motion.path
+            d="M488 215 Q540 250 530 310 Q525 350 505 375 Q490 395 475 380"
+            stroke="#4b5563" strokeWidth="44" fill="none" strokeLinecap="round" opacity="0.3"
+            animate={{ rotate: [-4, 4, -4] }} style={{ transformOrigin: '488px 215px' }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+          />
+          
+          {/* Tusks */}
+          <path d="M455 240 Q470 270 463 295" stroke="#fef3c7" strokeWidth="12" fill="none" strokeLinecap="round" />
+          <path d="M478 240 Q493 270 486 295" stroke="#fef3c7" strokeWidth="12" fill="none" strokeLinecap="round" />
+          
+          {/* Eye */}
+          <circle cx="415" cy="175" r="10" fill="white" />
+          <circle cx="417" cy="178" r="6" fill="#0f172a" />
+          
+          {/* LEGS - 4 thick legs clearly visible */}
+          {[
+            { x: 110, y: 305 }, { x: 195, y: 310 },
+            { x: 290, y: 310 }, { x: 365, y: 305 }
+          ].map((leg, i) => (
+            <motion.g key={i}
+              animate={{ y: i % 2 === 0 ? [0, -15, 0] : [-15, 0, -15] }}
+              transition={{ duration: 0.5, repeat: Infinity }}>
+              <rect x={leg.x} y={leg.y} width="48" height="100" fill="#9ca3af" stroke="#4b5563" strokeWidth="3" rx="6" />
+              {/* Foot */}
+              <ellipse cx={leg.x + 24} cy={leg.y + 100} rx="28" ry="10" fill="#6b7280" stroke="#4b5563" strokeWidth="3" />
+              {/* Toenails */}
+              <circle cx={leg.x + 8} cy={leg.y + 100} r="4" fill="#fef3c7" />
+              <circle cx={leg.x + 24} cy={leg.y + 102} r="4" fill="#fef3c7" />
+              <circle cx={leg.x + 40} cy={leg.y + 100} r="4" fill="#fef3c7" />
+            </motion.g>
           ))}
+          
+          {/* Tail */}
+          <motion.path d="M65 220 Q35 240 25 275 L20 285" stroke="#9ca3af" strokeWidth="14" fill="none" strokeLinecap="round"
+            animate={{ rotate: [-15, 15, -15] }} style={{ transformOrigin: '65px 220px' }}
+            transition={{ duration: 0.6, repeat: Infinity }} />
         </motion.svg>
       </motion.div>
     </motion.div>
   );
 };
 
-// 5. FIGHTER JET
+// 5. FIGHTER JET (slowed down)
 export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3.5;
+  const totalDuration = 6;
   const impactTime = calculateImpactTime(totalDuration, -50, 130);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-sky-100/60 to-blue-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
