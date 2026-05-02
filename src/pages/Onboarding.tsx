@@ -206,12 +206,12 @@ const Onboarding: React.FC = () => {
     navigate('/auth');
   };
 
-  // Auto-advance slides (except the last one)
+  // Auto-advance slides (except the last one) - 7s gives enough time to read
   useEffect(() => {
     if (currentSlide < slides.length - 1 && !isTransitioning) {
       const timer = setTimeout(() => {
         goToNextSlide();
-      }, 5000); // 5 seconds per slide
+      }, 7000);
       
       return () => clearTimeout(timer);
     }
