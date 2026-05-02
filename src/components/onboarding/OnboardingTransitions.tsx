@@ -785,16 +785,19 @@ export const TornadoTransition: React.FC<{ onComplete: () => void }> = ({ onComp
 
 // 15. ⚡ EARTHQUAKE / GROUND SPLIT
 export const EarthquakeTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 3.5;
+  const totalDuration = 5;
   const impactTime = totalDuration * 0.4;
+  React.useEffect(() => {
+    const t = setTimeout(onComplete, totalDuration * 1000);
+    return () => clearTimeout(t);
+  }, [onComplete]);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #fef3c7 0%, #92400e 100%)' }}
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      onAnimationComplete={onComplete}>
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <motion.div className="absolute inset-0"
         animate={{ x: [0, -20, 20, -15, 15, -10, 10, -5, 5, 0], y: [0, 10, -10, 8, -8, 5, -5, 0] }}
-        transition={{ duration: totalDuration, repeat: Infinity, repeatDelay: 0 }}>
+        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0 }}>
         <HitCharacter impactTime={impactTime} direction="down" />
         <motion.div className="absolute bottom-0 left-0 right-0 z-20" style={{ height: '40%' }}>
           <svg width="100%" height="100%" viewBox="0 0 1000 400" preserveAspectRatio="none">
