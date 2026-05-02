@@ -229,16 +229,58 @@ export const BuffaloTransition: React.FC<{ onComplete: () => void }> = ({ onComp
 };
 
 // 3. RPG
+// 3. RPG - masked shooter on left + rocket flying right
 export const RPGTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 4;
+  const totalDuration = 5;
   const impactTime = calculateImpactTime(totalDuration, -40, 100);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-stone-100/70 to-orange-100/70" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="explode" />
       <ExplosionEffect delay={impactTime} />
-      <motion.div className="absolute z-20" style={{ top: '40%' }}
-        initial={{ x: '-40vw', rotate: 0 }} animate={{ x: '100vw', rotate: 0 }}
-        transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
+
+      {/* Masked shooter standing on the left */}
+      <motion.div
+        className="absolute z-15"
+        style={{ left: '5%', bottom: '15%' }}
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: [0, 1, 1, 0.8], x: 0 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <svg width="180" height="280" viewBox="0 0 180 280">
+          {/* Shadow */}
+          <ellipse cx="90" cy="270" rx="60" ry="8" fill="rgba(0,0,0,0.3)" />
+          {/* Legs */}
+          <rect x="65" y="180" width="22" height="85" fill="#1c1917" rx="4" />
+          <rect x="93" y="180" width="22" height="85" fill="#1c1917" rx="4" />
+          {/* Boots */}
+          <ellipse cx="76" cy="268" rx="18" ry="8" fill="#0a0a0a" />
+          <ellipse cx="104" cy="268" rx="18" ry="8" fill="#0a0a0a" />
+          {/* Body / vest */}
+          <rect x="55" y="100" width="70" height="90" fill="#3f3f46" rx="8" />
+          <rect x="58" y="115" width="64" height="15" fill="#52525b" />
+          <rect x="58" y="140" width="64" height="15" fill="#52525b" />
+          {/* Head with mask (balaclava) */}
+          <circle cx="90" cy="80" r="30" fill="#1c1917" />
+          {/* Eyes slot */}
+          <rect x="68" y="72" width="44" height="10" rx="5" fill="#fef3c7" />
+          <circle cx="80" cy="77" r="3" fill="#0f172a" />
+          <circle cx="100" cy="77" r="3" fill="#0f172a" />
+          {/* Arms holding RPG */}
+          <motion.g
+            animate={{ rotate: [-3, 3, -3] }}
+            style={{ transformOrigin: '90px 130px' }}
+            transition={{ duration: 0.4, repeat: Infinity }}
+          >
+            <rect x="120" y="115" width="50" height="18" fill="#1c1917" rx="6" />
+            <rect x="20" y="120" width="50" height="16" fill="#1c1917" rx="6" />
+          </motion.g>
+        </svg>
+      </motion.div>
+
+      {/* RPG rocket flying */}
+      <motion.div className="absolute z-20" style={{ top: '60%' }}
+        initial={{ x: '-15vw', rotate: 0 }} animate={{ x: '100vw', rotate: 0 }}
+        transition={{ duration: totalDuration * 0.7, delay: 0.6, ease: 'linear' }} onAnimationComplete={onComplete}>
         <svg width="280" height="80" viewBox="0 0 280 80">
           <rect x="20" y="30" width="180" height="20" rx="10" fill="#374151" />
           <path d="M200 25 L260 40 L200 55 Z" fill="#dc2626" />
