@@ -11,45 +11,81 @@ const calculateImpactTime = (totalDuration: number, startPosition: number = -60,
   return totalDuration * (distanceToCenter / totalDistance);
 };
 
-// Hit character launched on impact
+// Hit character: stands waiting, then gets launched on impact
 const HitCharacter: React.FC<{ impactTime: number; direction: 'left' | 'right' | 'up' | 'explode' | 'down' }> = ({ impactTime, direction }) => {
-  const getAnim = () => {
+  const launchAnim = () => {
     switch (direction) {
-      case 'explode': return { opacity: [1, 1, 0], scale: [1, 1.6, 0], rotate: [0, 90, 360] };
-      case 'up': return { opacity: [1, 1, 0], y: [0, -150, -500], rotate: [0, 360, 720] };
-      case 'down': return { opacity: [1, 1, 0], y: [0, 80, 300], scale: [1, 0.6, 0.2] };
+      case 'explode': return { opacity: [1, 1, 0], scale: [1, 1.8, 0], rotate: [0, 180, 540] };
+      case 'up': return { opacity: [1, 1, 0], y: [0, -200, -600], rotate: [0, 360, 720] };
+      case 'down': return { opacity: [1, 1, 0], y: [0, 100, 350], scale: [1, 0.7, 0.2] };
       default: return {
         opacity: [1, 1, 0],
-        x: direction === 'right' ? [0, 200, 500] : [0, -200, -500],
-        y: [0, -140, -100],
-        rotate: direction === 'right' ? [0, 240, 480] : [0, -240, -480],
+        x: direction === 'right' ? [0, 250, 600] : [0, -250, -600],
+        y: [0, -180, -120],
+        rotate: direction === 'right' ? [0, 320, 640] : [0, -320, -640],
       };
     }
   };
   return (
-    <motion.div
-      className="absolute z-10"
-      style={{ bottom: '25%', left: '50%', transform: 'translateX(-50%)' }}
-      initial={{ opacity: 1 }}
-      animate={getAnim()}
-      transition={{ duration: 1.3, delay: impactTime, ease: 'easeOut' }}
-    >
-      <img src={characterImage} alt="Character" className="w-36 h-36 object-contain drop-shadow-2xl" />
-      {[...Array(10)].map((_, i) => (
+    <>
+      {/* Standing/waiting phase - visible BEFORE impact */}
+      <motion.div
+        className="absolute z-10"
+        style={{ bottom: '25%', left: '50%', transform: 'translateX(-50%)' }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{
+          opacity: [0, 1, 1, 0],
+          scale: [0.5, 1, 1.05, 1],
+          y: [0, 0, -5, 0],
+        }}
+        transition={{
+          duration: impactTime,
+          times: [0, 0.25, 0.85, 1],
+          ease: 'easeOut',
+        }}
+      >
+        <motion.img
+          src={characterImage}
+          alt="Character"
+          className="w-40 h-40 object-contain drop-shadow-2xl"
+          animate={{ y: [0, -8, 0], rotate: [-3, 3, -3] }}
+          transition={{ duration: 0.8, repeat: Infinity }}
+        />
+        {/* Worried face emoji */}
         <motion.div
-          key={i}
-          className="absolute text-3xl"
-          style={{
-            left: `${50 + Math.cos(i * 36 * Math.PI / 180) * 70}%`,
-            top: `${50 + Math.sin(i * 36 * Math.PI / 180) * 70}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: [0, 1, 0], scale: [0, 2.2, 0] }}
-          transition={{ duration: 0.5, delay: impactTime + i * 0.04 }}
-        >💥</motion.div>
-      ))}
-    </motion.div>
+          className="absolute -top-8 left-1/2 -translate-x-1/2 text-4xl"
+          animate={{ y: [0, -5, 0], opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 0.5, repeat: Infinity }}
+        >
+          😰
+        </motion.div>
+      </motion.div>
+
+      {/* Launch phase - happens AT impact */}
+      <motion.div
+        className="absolute z-10"
+        style={{ bottom: '25%', left: '50%', transform: 'translateX(-50%)' }}
+        initial={{ opacity: 0 }}
+        animate={launchAnim()}
+        transition={{ duration: 1.5, delay: impactTime, ease: 'easeOut' }}
+      >
+        <img src={characterImage} alt="Character" className="w-40 h-40 object-contain drop-shadow-2xl" />
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-4xl"
+            style={{
+              left: `${50 + Math.cos(i * 30 * Math.PI / 180) * 80}%`,
+              top: `${50 + Math.sin(i * 30 * Math.PI / 180) * 80}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0, 1, 0], scale: [0, 2.5, 0] }}
+            transition={{ duration: 0.6, delay: impactTime + i * 0.04 }}
+          >💥</motion.div>
+        ))}
+      </motion.div>
+    </>
   );
 };
 
