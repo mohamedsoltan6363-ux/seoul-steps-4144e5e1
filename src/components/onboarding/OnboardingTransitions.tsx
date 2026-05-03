@@ -918,24 +918,260 @@ export const ThunderTransition: React.FC<{ onComplete: () => void }> = ({ onComp
 };
 
 // ============================================================
+// 18. 🚜 BULLDOZER - pushes character right
+// ============================================================
+export const BulldozerTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 6;
+  const impactTime = calculateImpactTime(totalDuration, -55, 150);
+  return (
+    <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-yellow-50/70 to-amber-100/70" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <HitCharacter impactTime={impactTime} direction="right" />
+      <ImpactEffect delay={impactTime} color="#f59e0b" />
+      <motion.div className="absolute z-20" style={{ bottom: '15%' }}
+        initial={{ x: '-55vw' }} animate={{ x: '150vw' }}
+        transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
+        <svg width="480" height="280" viewBox="0 0 480 280">
+          <ellipse cx="240" cy="270" rx="200" ry="10" fill="rgba(0,0,0,0.25)" />
+          <path d="M380 80 L470 200 L470 230 L380 230 Z" fill="#fbbf24" stroke="#78350f" strokeWidth="4" />
+          <path d="M385 90 L455 200 L385 200 Z" fill="#fde68a" />
+          <rect x="80" y="100" width="280" height="100" rx="10" fill="#f59e0b" stroke="#78350f" strokeWidth="4" />
+          <rect x="120" y="60" width="180" height="60" rx="8" fill="#fbbf24" stroke="#78350f" strokeWidth="4" />
+          <rect x="135" y="72" width="150" height="36" fill="#0c4a6e" opacity="0.7" />
+          <rect x="40" y="195" width="340" height="40" rx="20" fill="#1f2937" />
+          {[80, 150, 220, 290, 350].map((x, i) => (
+            <motion.circle key={i} cx={x} cy="220" r="22" fill="#0f172a" stroke="#374151" strokeWidth="3"
+              animate={{ rotate: 360 }} transition={{ duration: 0.6, repeat: Infinity, ease: 'linear' }}
+              style={{ transformOrigin: `${x}px 220px` }} />
+          ))}
+          {[0, 1, 2].map(i => (
+            <motion.circle key={i} cx={20 - i * 18} cy={120 + i * 5} r={14 - i * 3} fill="#78716c" opacity={0.5}
+              animate={{ x: -40, y: -20, opacity: 0, scale: 2 }}
+              transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.25 }} />
+          ))}
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ============================================================
+// 19. 🏗️ WRECKING BALL - swings into character
+// ============================================================
+export const WreckingBallTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 5.5;
+  const impactTime = totalDuration * 0.55;
+  React.useEffect(() => {
+    const t = setTimeout(onComplete, totalDuration * 1000);
+    return () => clearTimeout(t);
+  }, [onComplete]);
+  return (
+    <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-slate-200/70 to-zinc-300/70" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <HitCharacter impactTime={impactTime} direction="left" />
+      <ImpactEffect delay={impactTime} color="#475569" />
+      {/* Crane on right */}
+      <div className="absolute right-4 top-0 bottom-0 z-10">
+        <svg width="240" height="100%" viewBox="0 0 240 700" preserveAspectRatio="xMidYMin meet">
+          <rect x="100" y="50" width="20" height="650" fill="#374151" />
+          <rect x="40" y="40" width="180" height="20" fill="#374151" />
+          {/* Pivot point at top-left of arm */}
+          <motion.g
+            style={{ transformOrigin: '40px 50px' }}
+            animate={{ rotate: [-50, 50, -50] }}
+            transition={{ duration: totalDuration / 2, repeat: 1, ease: 'easeInOut' }}
+          >
+            <line x1="40" y1="60" x2="40" y2="280" stroke="#1f2937" strokeWidth="4" />
+            <circle cx="40" cy="320" r="45" fill="#374151" stroke="#0f172a" strokeWidth="4" />
+            <circle cx="30" cy="310" r="10" fill="#6b7280" />
+          </motion.g>
+        </svg>
+      </div>
+      {/* Dust on impact */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div key={i} className="absolute z-25 rounded-full bg-stone-400"
+          style={{ left: '50%', bottom: '30%', width: 20 + i, height: 20 + i, opacity: 0.6, filter: 'blur(4px)' }}
+          initial={{ x: 0, y: 0, opacity: 0 }}
+          animate={{ x: (Math.random() - 0.5) * 400, y: -Math.random() * 200, opacity: [0, 0.7, 0] }}
+          transition={{ duration: 1.5, delay: impactTime + i * 0.02 }}
+        />
+      ))}
+    </motion.div>
+  );
+};
+
+// ============================================================
+// 20. ⚽ SOCCER KICK - football slams into character
+// ============================================================
+export const SoccerKickTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 4.5;
+  const impactTime = calculateImpactTime(totalDuration, -10, 95);
+  return (
+    <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-emerald-100/70 to-green-200/70" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      {/* Field stripes */}
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="absolute inset-x-0 h-12" style={{ top: `${i * 12.5}%`, background: i % 2 === 0 ? 'rgba(34,197,94,0.08)' : 'transparent' }} />
+      ))}
+      <HitCharacter impactTime={impactTime} direction="right" />
+      <ImpactEffect delay={impactTime} color="#16a34a" />
+      {/* Player on left */}
+      <motion.div className="absolute z-15" style={{ left: '4%', bottom: '15%' }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <svg width="170" height="240" viewBox="0 0 170 240">
+          <ellipse cx="85" cy="232" rx="55" ry="6" fill="rgba(0,0,0,0.25)" />
+          <circle cx="85" cy="55" r="26" fill="#fde68a" stroke="#92400e" strokeWidth="2" />
+          <path d="M62 45 Q85 25 108 45 Q103 35 85 33 Q67 35 62 45 Z" fill="#1c1917" />
+          <circle cx="76" cy="55" r="3" fill="#0f172a" />
+          <circle cx="94" cy="55" r="3" fill="#0f172a" />
+          <rect x="55" y="80" width="60" height="80" fill="#dc2626" rx="8" />
+          <text x="85" y="130" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">10</text>
+          <rect x="58" y="160" width="22" height="50" fill="white" rx="4" />
+          {/* Kicking leg */}
+          <motion.g style={{ transformOrigin: '95px 165px' }}
+            animate={{ rotate: [0, -85, 0] }}
+            transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}>
+            <rect x="90" y="160" width="22" height="65" fill="white" rx="4" />
+            <ellipse cx="100" cy="225" rx="14" ry="6" fill="#0f172a" />
+          </motion.g>
+        </svg>
+      </motion.div>
+      {/* Ball */}
+      <motion.div className="absolute z-20" style={{ top: '55%' }}
+        initial={{ x: '-5vw', y: 0, rotate: 0 }}
+        animate={{ x: '95vw', y: [0, -250, 0, -120, 0], rotate: 1440 }}
+        transition={{ duration: totalDuration * 0.85, delay: 0.9, ease: 'linear' }}
+        onAnimationComplete={onComplete}>
+        <svg width="70" height="70" viewBox="0 0 70 70">
+          <circle cx="35" cy="35" r="32" fill="white" stroke="#0f172a" strokeWidth="3" />
+          <polygon points="35,18 50,28 44,46 26,46 20,28" fill="#0f172a" />
+          <polygon points="35,18 20,28 8,22 12,10" fill="white" stroke="#0f172a" strokeWidth="2" />
+          <polygon points="35,18 50,28 62,22 58,10" fill="white" stroke="#0f172a" strokeWidth="2" />
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ============================================================
+// 21. 🎳 BOWLING BALL - rolls in and knocks character down
+// ============================================================
+export const BowlingTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 4.5;
+  const impactTime = calculateImpactTime(totalDuration, -20, 110);
+  return (
+    <motion.div className="absolute inset-0 z-50 overflow-hidden" style={{ background: 'linear-gradient(180deg, #fef3c7 0%, #fbbf24 100%)' }}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      {/* Lane */}
+      <div className="absolute left-0 right-0 z-0" style={{ bottom: '12%', height: '60%', background: 'linear-gradient(180deg, #fde68a 0%, #b45309 100%)', boxShadow: 'inset 0 0 50px rgba(0,0,0,0.2)' }} />
+      <HitCharacter impactTime={impactTime} direction="up" />
+      <ImpactEffect delay={impactTime} color="#7c2d12" />
+      <motion.div className="absolute z-20" style={{ bottom: '22%' }}
+        initial={{ x: '-20vw', rotate: 0 }} animate={{ x: '110vw', rotate: 1080 }}
+        transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <defs>
+            <radialGradient id="bowlGrad" cx="35%" cy="35%">
+              <stop offset="0%" stopColor="#7e22ce" />
+              <stop offset="100%" stopColor="#1e1b4b" />
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="80" r="72" fill="url(#bowlGrad)" stroke="#0f172a" strokeWidth="4" />
+          <circle cx="55" cy="60" r="6" fill="#0f172a" />
+          <circle cx="75" cy="60" r="6" fill="#0f172a" />
+          <circle cx="65" cy="80" r="6" fill="#0f172a" />
+          <ellipse cx="55" cy="50" rx="18" ry="10" fill="white" opacity="0.3" />
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ============================================================
+// 22. 🥷 NINJA STAR / SHURIKEN - lightning fast slice
+// ============================================================
+export const NinjaTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const totalDuration = 4;
+  const impactTime = calculateImpactTime(totalDuration, -15, 110);
+  return (
+    <motion.div className="absolute inset-0 z-50 overflow-hidden" style={{ background: 'linear-gradient(180deg, #0f172a 0%, #4c1d95 100%)' }}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <HitCharacter impactTime={impactTime} direction="explode" />
+      <ExplosionEffect delay={impactTime} />
+      {/* Ninja standing on left rooftop silhouette */}
+      <motion.div className="absolute z-15" style={{ left: '5%', bottom: '22%' }}
+        initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+        <svg width="160" height="240" viewBox="0 0 160 240">
+          <ellipse cx="80" cy="232" rx="50" ry="6" fill="rgba(0,0,0,0.4)" />
+          <rect x="60" y="160" width="20" height="70" fill="#1c1917" />
+          <rect x="80" y="160" width="20" height="70" fill="#1c1917" />
+          <rect x="50" y="100" width="60" height="70" fill="#1c1917" rx="8" />
+          <rect x="40" y="120" width="20" height="40" fill="#1c1917" />
+          <rect x="100" y="120" width="20" height="40" fill="#1c1917" />
+          <circle cx="80" cy="70" r="28" fill="#1c1917" />
+          <rect x="58" y="64" width="44" height="8" rx="3" fill="#dc2626" />
+          <circle cx="72" cy="68" r="2.5" fill="white" />
+          <circle cx="88" cy="68" r="2.5" fill="white" />
+          {/* Throwing arm */}
+          <motion.g style={{ transformOrigin: '120px 130px' }}
+            animate={{ rotate: [80, -40, 80] }} transition={{ duration: 0.4, repeat: Infinity }}>
+            <rect x="115" y="125" width="40" height="14" fill="#1c1917" rx="4" />
+          </motion.g>
+        </svg>
+      </motion.div>
+      {/* Multiple shurikens */}
+      {[0, 0.15, 0.3].map((delay, i) => (
+        <motion.div key={i} className="absolute z-20"
+          style={{ top: `${30 + i * 15}%` }}
+          initial={{ x: '-15vw', rotate: 0 }} animate={{ x: '110vw', rotate: 2880 }}
+          transition={{ duration: totalDuration * 0.7, delay: 0.7 + delay, ease: 'linear' }}
+          onAnimationComplete={i === 2 ? onComplete : undefined}>
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <defs>
+              <linearGradient id={`shuri${i}`} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#e5e7eb" />
+                <stop offset="100%" stopColor="#6b7280" />
+              </linearGradient>
+            </defs>
+            <polygon points="40,5 50,30 75,40 50,50 40,75 30,50 5,40 30,30"
+              fill={`url(#shuri${i})`} stroke="#0f172a" strokeWidth="2" />
+            <circle cx="40" cy="40" r="6" fill="#0f172a" />
+          </svg>
+        </motion.div>
+      ))}
+      {/* Speed lines */}
+      {[...Array(15)].map((_, i) => (
+        <motion.div key={i} className="absolute h-0.5 bg-white/40 z-10"
+          style={{ top: `${20 + i * 5}%`, width: '20%' }}
+          initial={{ x: '-30%' }} animate={{ x: '130vw' }}
+          transition={{ duration: 0.6, delay: 0.8 + i * 0.05, repeat: Infinity }} />
+      ))}
+    </motion.div>
+  );
+};
+
+// ============================================================
 // EXPORT TRANSITIONS ARRAY
 // ============================================================
 export const transitions = [
-  TankTransition,
-  BuffaloTransition,
-  RPGTransition,
-  ElephantTransition,
-  FighterJetTransition,
-  KidThrowTransition,
-  RocketTransition,
-  HelicopterTransition,
-  TrainTransition,
-  TsunamiTransition,
-  VolcanoTransition,
-  MeteorTransition,
-  DragonTransition,
-  TornadoTransition,
-  EarthquakeTransition,
-  IceBlastTransition,
-  ThunderTransition,
+  TankTransition,            // 0
+  BuffaloTransition,         // 1
+  RPGTransition,             // 2
+  ElephantTransition,        // 3
+  FighterJetTransition,      // 4
+  KidThrowTransition,        // 5
+  RocketTransition,          // 6
+  HelicopterTransition,      // 7
+  TrainTransition,           // 8
+  TsunamiTransition,         // 9
+  VolcanoTransition,         // 10
+  MeteorTransition,          // 11
+  DragonTransition,          // 12
+  TornadoTransition,         // 13
+  EarthquakeTransition,      // 14
+  IceBlastTransition,        // 15
+  ThunderTransition,         // 16
+  BulldozerTransition,       // 17
+  WreckingBallTransition,    // 18
+  SoccerKickTransition,      // 19
+  BowlingTransition,         // 20
+  NinjaTransition,           // 21
 ];
+

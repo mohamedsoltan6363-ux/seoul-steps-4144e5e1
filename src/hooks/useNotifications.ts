@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useSpacedRepetition } from './useSpacedRepetition';
 import { useToast } from './use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -201,14 +201,18 @@ export const useNotifications = () => {
     );
   }, [addNotification]);
 
-  // التحقق الدوري
+  // تحميل الإشعارات مرة واحدة عند تغيّر المستخدم فقط (يمنع الوميض)
+  const loadedForUser = useRef<string | null>(null);
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      loadedForUser.current = null;
+      return;
+    }
+    if (loadedForUser.current === user.id) return;
+    loadedForUser.current = user.id;
 
-    // طلب إذن الإشعارات
     requestPermission();
 
-    // تحميل الإشعارات المحفوظة
     const savedNotifications = localStorage.getItem(`notifications_${user.id}`);
     if (savedNotifications) {
       try {
@@ -217,41 +221,39 @@ export const useNotifications = () => {
         setUnreadCount(parsed.filter((n: any) => !n.read).length);
       } catch (e) {}
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
-    // التحقق من المراجعات كل 30 دقيقة
+  // المؤقتات الدورية - منفصلة ولا تعتمد على دوال متغيّرة
+  useEffect(() => {
+    if (!user) return;
+
     const reviewInterval = setInterval(() => {
       const { hasDue, count } = checkDueReviews();
       if (hasDue && count >= 3) {
-        addNotification(
-          'review',
-          'تذكير المراجعة 📚',
-          `لديك ${count} عناصر جاهزة للمراجعة`
-        );
+        addNotification('review', 'تذكير المراجعة 📚', `لديك ${count} عناصر جاهزة للمراجعة`);
       }
     }, 30 * 60 * 1000);
 
-    // إشعار التحدي اليومي كل يوم في الساعة 9 صباحاً
     const now = new Date();
     const tomorrow9am = new Date(now);
     tomorrow9am.setDate(tomorrow9am.getDate() + 1);
     tomorrow9am.setHours(9, 0, 0, 0);
-    const timeUntil9am = tomorrow9am.getTime() - now.getTime();
-
     const dailyTimeout = setTimeout(() => {
       sendDailyChallengeNotification();
-    }, timeUntil9am);
+    }, tomorrow9am.getTime() - now.getTime());
 
     return () => {
       clearInterval(reviewInterval);
       clearTimeout(dailyTimeout);
     };
-  }, [user, requestPermission, checkDueReviews, addNotification, sendDailyChallengeNotification]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
-  // حفظ الإشعارات في localStorage
+  // حفظ الإشعارات في localStorage (يحفظ حتى عند التفريغ لتثبيت حالة الحذف)
   useEffect(() => {
-    if (user && notifications.length > 0) {
-      localStorage.setItem(`notifications_${user.id}`, JSON.stringify(notifications));
-    }
+    if (!user) return;
+    localStorage.setItem(`notifications_${user.id}`, JSON.stringify(notifications));
   }, [notifications, user]);
 
   return {

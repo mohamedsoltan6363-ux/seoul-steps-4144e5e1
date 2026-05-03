@@ -159,7 +159,67 @@ const Onboarding: React.FC = () => {
       bgGradient: 'bg-gradient-to-br from-sky-100 via-cyan-50 to-blue-100',
       iconEmoji: '❄️'
     },
-    // Slide 12: Final - Call to Action
+    // Slide 12: Bulldozer - Push through obstacles 🚜
+    {
+      type: 'content',
+      title: isRTL ? 'لا شيء يوقف تقدّمك' : '아무것도 당신을 멈출 수 없다',
+      subtitle: isRTL ? 'اهدم حاجز اللغة' : '언어 장벽을 무너뜨리세요',
+      description: isRTL
+        ? 'مثل الجرّافة التي تشقّ طريقها بقوة، نهدم لك حواجز الخوف من الكلام وننحت لك طريقاً مباشراً للإتقان.'
+        : '불도저처럼 강하게, 말하기에 대한 두려움의 벽을 부수고 숙달로 가는 직선 길을 만들어드립니다.',
+      koreanText: '돌파해요! 🚜',
+      bgGradient: 'bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100',
+      iconEmoji: '🚜'
+    },
+    // Slide 13: Wrecking Ball - Demolish weak foundations 🏗️
+    {
+      type: 'content',
+      title: isRTL ? 'حطّم العادات القديمة' : '낡은 습관을 부수세요',
+      subtitle: isRTL ? 'بناء جديد من الصفر' : '처음부터 새롭게',
+      description: isRTL
+        ? 'نحن لا نُرقّع. نهدم طرق الحفظ القديمة ونبني لك ذاكرة لغوية حديثة بأسس متينة.'
+        : '우리는 땜질하지 않습니다. 낡은 암기 방식을 부수고 견고한 기초로 새로운 언어 기억을 구축합니다.',
+      koreanText: '새로 시작! 🏗️',
+      bgGradient: 'bg-gradient-to-br from-slate-100 via-zinc-50 to-stone-100',
+      iconEmoji: '🏗️'
+    },
+    // Slide 14: Soccer Kick - Goal of fluency ⚽
+    {
+      type: 'content',
+      title: isRTL ? 'سدّد نحو الهدف' : '목표를 향해 슛!',
+      subtitle: isRTL ? 'كل درس = خطوة نحو الطلاقة' : '모든 수업 = 유창함을 향한 한 걸음',
+      description: isRTL
+        ? 'كل تمرين تُنهيه هو ركلة قوية تسجّل بها هدفاً جديداً في مرمى اللغة الكورية.'
+        : '당신이 끝내는 모든 연습은 한국어 골문에 새로운 골을 넣는 강력한 슛입니다.',
+      koreanText: '골! ⚽',
+      bgGradient: 'bg-gradient-to-br from-emerald-100 via-green-50 to-teal-100',
+      iconEmoji: '⚽'
+    },
+    // Slide 15: Bowling - Strike all targets 🎳
+    {
+      type: 'content',
+      title: isRTL ? 'اضرب كل أهدافك دفعة واحدة' : '모든 목표를 한 번에',
+      subtitle: isRTL ? 'تعلم شامل ومتكامل' : '종합적이고 통합적인 학습',
+      description: isRTL
+        ? 'مفردات، قواعد، استماع، نطق، كتابة - كلها معاً في ضربة واحدة كركبة البولينج المثالية.'
+        : '어휘, 문법, 듣기, 발음, 쓰기 - 완벽한 볼링 스트라이크처럼 한 번에 모두.',
+      koreanText: '스트라이크! 🎳',
+      bgGradient: 'bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100',
+      iconEmoji: '🎳'
+    },
+    // Slide 16: Ninja - Master precision 🥷
+    {
+      type: 'content',
+      title: isRTL ? 'دقّة النينجا في كل كلمة' : '닌자의 정확함',
+      subtitle: isRTL ? 'تحدّث بثقة تامة' : '완벽한 자신감으로',
+      description: isRTL
+        ? 'تمارين النطق الدقيقة تجعل لسانك ينطق الكورية بسرعة وبراعة كنينجا محترف.'
+        : '정밀한 발음 연습으로 전문 닌자처럼 한국어를 빠르고 능숙하게 구사하게 됩니다.',
+      koreanText: '완벽해! 🥷',
+      bgGradient: 'bg-gradient-to-br from-violet-100 via-purple-50 to-indigo-100',
+      iconEmoji: '🥷'
+    },
+    // Slide 17: Final - Call to Action
     {
       type: 'final',
     }
@@ -178,10 +238,28 @@ const Onboarding: React.FC = () => {
     () => onboardingSounds.playTrainSound(),
   ];
 
-  // Map each slide-transition to a specific transition index for thematic match
-  // slide 0 (hero) -> next is slide 1, use idx 0 (Tank), etc.
-  // Slides count = 13 (indices 0..12). Transitions used between slides: idx 0..11.
-  const slideTransitionMap = [0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 14, 15]; // Tank,Buffalo,RPG,Elephant,Jet,Kid,Rocket,Heli,Volcano,Meteor,Earthquake,Ice
+  // Map each slide-transition to a specific transition index for thematic match.
+  // Slides count = 18 (indices 0..17). Transitions used between slides 0..16.
+  // Indexes refer to `transitions` array in OnboardingTransitions.tsx
+  const slideTransitionMap = [
+    0,  // 0->1  Tank
+    1,  // 1->2  Buffalo
+    2,  // 2->3  RPG
+    3,  // 3->4  Elephant
+    4,  // 4->5  Jet
+    5,  // 5->6  Kid
+    6,  // 6->7  Rocket
+    7,  // 7->8  Helicopter (cert reveal)
+    10, // 8->9  Volcano
+    11, // 9->10 Meteor
+    14, // 10->11 Earthquake
+    15, // 11->12 Ice
+    17, // 12->13 Bulldozer ⭐ NEW
+    18, // 13->14 WreckingBall ⭐ NEW
+    19, // 14->15 Soccer ⭐ NEW
+    20, // 15->16 Bowling ⭐ NEW
+    21, // 16->17 Ninja ⭐ NEW
+  ];
 
   const goToNextSlide = useCallback(() => {
     if (isTransitioning || currentSlide >= slides.length - 1) return;
