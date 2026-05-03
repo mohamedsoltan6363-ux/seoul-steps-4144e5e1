@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useSpacedRepetition } from './useSpacedRepetition';
 import { useToast } from './use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -202,7 +202,7 @@ export const useNotifications = () => {
   }, [addNotification]);
 
   // تحميل الإشعارات مرة واحدة عند تغيّر المستخدم فقط (يمنع الوميض)
-  const loadedForUser = React.useRef<string | null>(null);
+  const loadedForUser = useRef<string | null>(null);
   useEffect(() => {
     if (!user) {
       loadedForUser.current = null;
