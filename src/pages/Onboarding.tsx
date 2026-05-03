@@ -206,13 +206,20 @@ const Onboarding: React.FC = () => {
     navigate('/auth');
   };
 
-  // Auto-advance slides (except the last one) - 7s gives enough time to read
+  // Auto-advance slides (except the last one).
+  // Hero slide gets a longer pause so the user can SEE it before it transitions out.
+  // Content slides get 8s — enough time to read Arabic + Korean comfortably.
   useEffect(() => {
     if (currentSlide < slides.length - 1 && !isTransitioning) {
+      const slide = slides[currentSlide];
+      const dwell =
+        slide.type === 'hero' ? 4500 :
+        slide.type === 'final' ? 999999 :
+        8000;
       const timer = setTimeout(() => {
         goToNextSlide();
-      }, 7000);
-      
+      }, dwell);
+
       return () => clearTimeout(timer);
     }
   }, [currentSlide, isTransitioning, goToNextSlide, slides.length]);
