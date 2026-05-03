@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,13 +11,66 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let userId: string | null = null;
+
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not set');
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({
+        error: 'يجب تسجيل الدخول لاستخدام المحادثة',
+        success: false,
+      }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    const { message, conversationHistory = [] } = await req.json();
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({
+        error: 'يجب تسجيل الدخول لاستخدام المحادثة',
+        success: false,
+      }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    userId = user.id;
+
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      console.error('Configuration error: LOVABLE_API_KEY missing');
+      return new Response(JSON.stringify({
+        error: 'الخدمة غير متاحة حالياً',
+        success: false,
+      }), {
+        status: 503,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const message = typeof body?.message === 'string' ? body.message.slice(0, 4000) : '';
+    const conversationHistory = Array.isArray(body?.conversationHistory)
+      ? body.conversationHistory.slice(-20)
+      : [];
+
+    if (!message.trim()) {
+      return new Response(JSON.stringify({
+        error: 'الرسالة فارغة',
+        success: false,
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     const systemPrompt = `أنت معلم لغة كورية محترف ومتحمس. مهمتك هي:
 1. مساعدة الطلاب في تعلم اللغة الكورية
@@ -40,7 +94,7 @@ serve(async (req) => {
     const messages = [
       { role: "system", content: systemPrompt },
       ...conversationHistory,
-      { role: "user", content: message }
+      { role: "user", content: message },
     ];
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -58,26 +112,44 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error("AI Gateway error:", error);
-      throw new Error(`AI Gateway error: ${response.status}`);
+      const errText = await response.text().catch(() => '');
+      console.error("AI Gateway error:", { status: response.status, userId, errText });
+      if (response.status === 429) {
+        return new Response(JSON.stringify({
+          error: 'تم تجاوز الحد المسموح. حاول لاحقاً',
+          success: false,
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      return new Response(JSON.stringify({
+        error: 'الخدمة غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى',
+        success: false,
+      }), {
+        status: 502,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const data = await response.json();
-    const aiMessage = data.choices[0]?.message?.content || "عذراً، لم أستطع الرد. حاول مرة أخرى.";
+    const aiMessage = data.choices?.[0]?.message?.content || "عذراً، لم أستطع الرد. حاول مرة أخرى.";
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       message: aiMessage,
-      success: true 
+      success: true,
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error("Error:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ 
-      error: errorMessage,
-      success: false 
+    console.error("Chat function error:", {
+      error: error instanceof Error ? error.message : 'Unknown',
+      userId,
+      timestamp: new Date().toISOString(),
+    });
+    return new Response(JSON.stringify({
+      error: 'حدث خطأ. يرجى المحاولة مرة أخرى',
+      success: false,
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
