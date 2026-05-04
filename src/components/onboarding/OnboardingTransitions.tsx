@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import characterImage from '@/assets/onboarding-character.png';
+import { Model3DView } from './Model3D';
 
 // ============================================================
 // SHARED HELPERS
@@ -163,29 +164,12 @@ export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplet
       <HitCharacter impactTime={impactTime} direction="right" />
       <ImpactEffect delay={impactTime} color="#f59e0b" />
       <motion.div
-        className="absolute z-20" style={{ bottom: '18%' }}
+        className="absolute z-20" style={{ bottom: '14%' }}
         initial={{ x: '-60vw' }} animate={{ x: '150vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }}
         onAnimationComplete={onComplete}
       >
-        <svg width="450" height="260" viewBox="0 0 450 260">
-          <rect x="20" y="180" width="380" height="50" rx="20" fill="#1f2937" />
-          {[60, 130, 200, 270, 340].map((x, i) => (
-            <motion.circle key={i} cx={x} cy="205" r="28" fill="#0f172a" stroke="#374151" strokeWidth="4"
-              animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-              style={{ transformOrigin: `${x}px 205px` }} />
-          ))}
-          <path d="M40 175 L70 105 L370 105 L400 175 Z" fill="#4b5d3e" />
-          <ellipse cx="220" cy="105" rx="80" ry="25" fill="#5a6e4a" />
-          <path d="M150 105 L165 50 L290 50 L305 105 Z" fill="#4b5d3e" />
-          <rect x="295" y="68" width="160" height="20" fill="#374151" />
-          <rect x="445" y="62" width="22" height="32" fill="#1f2937" />
-          {[0, 1, 2].map(i => (
-            <motion.ellipse key={i} cx={30 - i * 25} cy={140} rx="20" ry="15" fill="#6b7280" opacity={0.5}
-              animate={{ x: -50, y: -30, scale: 2.5, opacity: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }} />
-          ))}
-        </svg>
+        <Model3DView url="/models/tank.glb" width={520} height={340} rotation={[0, Math.PI / 2.2, 0]} />
       </motion.div>
     </motion.div>
   );
@@ -383,19 +367,10 @@ export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onC
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-sky-100/60 to-blue-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="explode" />
       <ExplosionEffect delay={impactTime} />
-      <motion.div className="absolute z-20" style={{ top: '25%' }}
+      <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-50vw' }} animate={{ x: '130vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <svg width="320" height="120" viewBox="0 0 320 120">
-          <path d="M30 60 L240 50 L290 60 L240 70 Z" fill="#475569" />
-          <path d="M100 50 L130 20 L180 20 L160 50 Z" fill="#334155" />
-          <path d="M100 70 L130 100 L180 100 L160 70 Z" fill="#334155" />
-          <ellipse cx="270" cy="60" rx="20" ry="12" fill="#0f172a" />
-          {[0, 1, 2].map(i => (
-            <motion.ellipse key={i} cx={20 - i * 15} cy={60} rx={10 - i * 2} ry={6 - i} fill={['#fbbf24', '#f97316', '#dc2626'][i]}
-              animate={{ x: -30, opacity: 0, scaleX: 2 }} transition={{ duration: 0.3, repeat: Infinity, delay: i * 0.05 }} />
-          ))}
-        </svg>
+        <Model3DView url="/models/jet.glb" width={420} height={260} rotation={[0, Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
@@ -418,27 +393,7 @@ export const KidThrowTransition: React.FC<{ onComplete: () => void }> = ({ onCom
         animate={{ opacity: [0, 1, 1, 0.9], x: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <svg width="160" height="240" viewBox="0 0 160 240">
-          <ellipse cx="80" cy="232" rx="55" ry="6" fill="rgba(0,0,0,0.25)" />
-          <rect x="55" y="160" width="20" height="70" fill="#1d4ed8" rx="4" />
-          <rect x="85" y="160" width="20" height="70" fill="#1d4ed8" rx="4" />
-          <ellipse cx="65" cy="232" rx="16" ry="6" fill="#dc2626" />
-          <ellipse cx="95" cy="232" rx="16" ry="6" fill="#dc2626" />
-          <rect x="48" y="95" width="64" height="75" fill="#ef4444" rx="10" />
-          <circle cx="80" cy="65" r="28" fill="#fde68a" stroke="#92400e" strokeWidth="2" />
-          <path d="M55 50 Q80 30 105 50 Q100 40 80 38 Q60 40 55 50 Z" fill="#451a03" />
-          <circle cx="71" cy="63" r="3.5" fill="#0f172a" />
-          <circle cx="89" cy="63" r="3.5" fill="#0f172a" />
-          <path d="M70 78 Q80 86 90 78" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <motion.g
-            animate={{ rotate: [-30, 60, -30] }}
-            style={{ transformOrigin: '110px 110px' }}
-            transition={{ duration: 0.6, repeat: Infinity }}
-          >
-            <rect x="105" y="105" width="50" height="14" fill="#fde68a" stroke="#92400e" strokeWidth="2" rx="6" />
-          </motion.g>
-          <rect x="20" y="110" width="40" height="14" fill="#fde68a" stroke="#92400e" strokeWidth="2" rx="6" />
-        </svg>
+        <Model3DView url="/models/kid.glb" width={220} height={300} rotation={[0, Math.PI / 4, 0]} />
       </motion.div>
 
       <motion.div className="absolute z-20" style={{ top: '40%' }}
@@ -467,19 +422,7 @@ export const HelicopterTransition: React.FC<{ onComplete: () => void }> = ({ onC
       <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-40vw' }} animate={{ x: '120vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <svg width="280" height="180" viewBox="0 0 280 180">
-          <ellipse cx="140" cy="100" rx="80" ry="35" fill="#475569" />
-          <rect x="60" y="90" width="160" height="20" fill="#334155" />
-          <path d="M210 95 L260 100 L210 115" fill="#475569" />
-          <motion.g style={{ transformOrigin: '140px 60px' }} animate={{ rotate: 360 }} transition={{ duration: 0.15, repeat: Infinity, ease: 'linear' }}>
-            <rect x="20" y="58" width="240" height="4" fill="#0f172a" />
-            <rect x="138" y="40" width="4" height="40" fill="#0f172a" />
-          </motion.g>
-          <line x1="140" y1="62" x2="140" y2="80" stroke="#1f2937" strokeWidth="3" />
-          <line x1="80" y1="135" x2="200" y2="135" stroke="#1f2937" strokeWidth="4" />
-          <line x1="100" y1="115" x2="100" y2="135" stroke="#1f2937" strokeWidth="3" />
-          <line x1="180" y1="115" x2="180" y2="135" stroke="#1f2937" strokeWidth="3" />
-        </svg>
+        <Model3DView url="/models/helicopter.glb" width={420} height={280} rotation={[0, Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
