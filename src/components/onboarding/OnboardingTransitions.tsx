@@ -367,19 +367,10 @@ export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onC
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-sky-100/60 to-blue-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="explode" />
       <ExplosionEffect delay={impactTime} />
-      <motion.div className="absolute z-20" style={{ top: '25%' }}
+      <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-50vw' }} animate={{ x: '130vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <svg width="320" height="120" viewBox="0 0 320 120">
-          <path d="M30 60 L240 50 L290 60 L240 70 Z" fill="#475569" />
-          <path d="M100 50 L130 20 L180 20 L160 50 Z" fill="#334155" />
-          <path d="M100 70 L130 100 L180 100 L160 70 Z" fill="#334155" />
-          <ellipse cx="270" cy="60" rx="20" ry="12" fill="#0f172a" />
-          {[0, 1, 2].map(i => (
-            <motion.ellipse key={i} cx={20 - i * 15} cy={60} rx={10 - i * 2} ry={6 - i} fill={['#fbbf24', '#f97316', '#dc2626'][i]}
-              animate={{ x: -30, opacity: 0, scaleX: 2 }} transition={{ duration: 0.3, repeat: Infinity, delay: i * 0.05 }} />
-          ))}
-        </svg>
+        <Model3DView url="/models/jet.glb" width={420} height={260} rotation={[0, Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
