@@ -359,9 +359,9 @@ export const ElephantTransition: React.FC<{ onComplete: () => void }> = ({ onCom
   );
 };
 
-// 5. FIGHTER JET (slowed down)
+// 5. FIGHTER JET - nose-first, slow & gentle
 export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 6;
+  const totalDuration = 7.5;
   const impactTime = calculateImpactTime(totalDuration, -50, 130);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-sky-100/60 to-blue-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -370,7 +370,7 @@ export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onC
       <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-50vw' }} animate={{ x: '130vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <Model3DView url="/models/jet.glb" width={420} height={260} rotation={[0, Math.PI / 2, 0]} />
+        <Model3DView url="/models/jet.glb" width={460} height={280} rotation={[0, -Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
