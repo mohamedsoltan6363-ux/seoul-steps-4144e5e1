@@ -155,9 +155,9 @@ const ExplosionEffect: React.FC<{ delay: number }> = ({ delay }) => (
   </>
 );
 
-// 1. TANK
+// 1. TANK - barrel/front faces direction of motion (right)
 export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 6.5;
+  const totalDuration = 7.5;
   const impactTime = calculateImpactTime(totalDuration, -60, 150);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-amber-50/60 to-orange-100/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -169,7 +169,7 @@ export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplet
         transition={{ duration: totalDuration, ease: 'linear' }}
         onAnimationComplete={onComplete}
       >
-        <Model3DView url="/models/tank.glb" width={520} height={340} rotation={[0, Math.PI / 2.2, 0]} />
+        <Model3DView url="/models/tank.glb" width={420} height={280} rotation={[0, -Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
@@ -359,9 +359,9 @@ export const ElephantTransition: React.FC<{ onComplete: () => void }> = ({ onCom
   );
 };
 
-// 5. FIGHTER JET (slowed down)
+// 5. FIGHTER JET - nose-first, slow & gentle
 export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 6;
+  const totalDuration = 7.5;
   const impactTime = calculateImpactTime(totalDuration, -50, 130);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-sky-100/60 to-blue-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -370,22 +370,22 @@ export const FighterJetTransition: React.FC<{ onComplete: () => void }> = ({ onC
       <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-50vw' }} animate={{ x: '130vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <Model3DView url="/models/jet.glb" width={420} height={260} rotation={[0, Math.PI / 2, 0]} />
+        <Model3DView url="/models/jet.glb" width={460} height={280} rotation={[0, -Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
 };
 
-// 6. KID THROWING BRICK - kid visible on left side
+// 6. KID THROWING BRICK - kid faces forward (toward viewer/character)
 export const KidThrowTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 4.5;
+  const totalDuration = 5;
   const impactTime = calculateImpactTime(totalDuration, -10, 90);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-yellow-50/60 to-orange-50/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <HitCharacter impactTime={impactTime} direction="left" />
       <ImpactEffect delay={impactTime} color="#dc2626" />
 
-      {/* The naughty kid throwing - visible on the left */}
+      {/* The naughty kid throwing - facing forward */}
       <motion.div
         className="absolute z-15"
         style={{ left: '4%', bottom: '15%' }}
@@ -393,7 +393,7 @@ export const KidThrowTransition: React.FC<{ onComplete: () => void }> = ({ onCom
         animate={{ opacity: [0, 1, 1, 0.9], x: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <Model3DView url="/models/kid.glb" width={220} height={300} rotation={[0, Math.PI / 4, 0]} />
+        <Model3DView url="/models/kid.glb" width={240} height={320} rotation={[0, 0, 0]} />
       </motion.div>
 
       <motion.div className="absolute z-20" style={{ top: '40%' }}
@@ -411,9 +411,9 @@ export const KidThrowTransition: React.FC<{ onComplete: () => void }> = ({ onCom
   );
 };
 
-// 7. HELICOPTER
+// 7. HELICOPTER - nose-first, slow approach
 export const HelicopterTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 5;
+  const totalDuration = 7;
   const impactTime = calculateImpactTime(totalDuration, -40, 120);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-slate-100/60 to-zinc-200/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -422,7 +422,7 @@ export const HelicopterTransition: React.FC<{ onComplete: () => void }> = ({ onC
       <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-40vw' }} animate={{ x: '120vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <Model3DView url="/models/helicopter.glb" width={420} height={280} rotation={[0, Math.PI / 2, 0]} />
+        <Model3DView url="/models/helicopter.glb" width={440} height={290} rotation={[0, -Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
