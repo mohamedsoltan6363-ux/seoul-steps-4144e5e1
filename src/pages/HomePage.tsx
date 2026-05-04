@@ -591,74 +591,7 @@ const HomePage: React.FC = () => {
       {/* ═══ GRADIENT DIVIDER ═══ */}
       <div className="relative z-20 h-1.5 bg-gradient-to-r from-[hsl(220,80%,55%)] via-[hsl(270,60%,55%)] to-[hsl(340,75%,55%)]" />
 
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      {/* ═══ KOREAN BAKERY 3D SHOWCASE ═══ */}
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative z-20 py-20 lg:py-28 bg-gradient-to-br from-[hsl(340,80%,97%)] via-background to-[hsl(35,95%,97%)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
-          {/* LEFT: 3D Bakery */}
-          <motion.div
-            className="lg:col-span-3 order-2 lg:order-1"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.8, type: 'spring' }}
-          >
-            <KoreanBakery3D height={460} enableControls />
-            <p className="text-center text-xs text-muted-foreground mt-3">
-              {isRTL ? '🖱️ اسحب للتدوير • مرر للتكبير' : '🖱️ 드래그하여 회전 • 스크롤하여 확대'}
-            </p>
-          </motion.div>
-
-          {/* RIGHT: Story */}
-          <motion.div
-            className="lg:col-span-2 order-1 lg:order-2 text-center lg:text-start"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.8, type: 'spring', delay: 0.15 }}
-          >
-            <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-xl border border-border/40 mb-5 shadow-md"
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <span className="text-xl">🥐</span>
-              <span className="text-xs font-bold text-[hsl(340,75%,50%)]">
-                {isRTL ? 'تجربة كورية ثلاثية الأبعاد' : '3D 한국 체험'}
-              </span>
-            </motion.div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 leading-tight">
-              <span className="bg-gradient-to-r from-[hsl(340,80%,50%)] via-[hsl(35,95%,55%)] to-[hsl(220,80%,55%)] bg-clip-text text-transparent">
-                {isRTL ? 'مخبزة كورية حقيقية' : '진짜 한국 빵집'}
-              </span>
-            </h2>
-
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6">
-              {isRTL
-                ? 'تجوّل داخل مخبزة كورية تقليدية ثلاثية الأبعاد، استكشف التفاصيل، وانغمس في الهوية البصرية الكورية الأصيلة من قلب سيول.'
-                : '서울 한복판에서 직접 가져온 듯한 3D 한국 전통 빵집을 자유롭게 둘러보세요. 모든 디테일을 탐험하고 한국 문화에 빠져보세요.'}
-            </p>
-
-            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-              {[
-                { e: '🎨', t: isRTL ? 'هوية بصرية كورية' : '한국 디자인' },
-                { e: '🔄', t: isRTL ? 'تدوير 360°' : '360° 회전' },
-                { e: '🔍', t: isRTL ? 'تكبير وتفاصيل' : '확대 가능' },
-              ].map((b, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/50 text-xs font-semibold shadow-sm"
-                >
-                  <span>{b.e}</span>
-                  <span>{b.t}</span>
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Korean Bakery 3D moved into hero section below */}
 
       {/* ═══ GRADIENT DIVIDER ═══ */}
       <div className="relative z-20 h-1.5 bg-gradient-to-r from-[hsl(220,80%,55%)] via-[hsl(270,60%,55%)] to-[hsl(340,75%,55%)]" />
