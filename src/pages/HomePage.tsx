@@ -499,6 +499,16 @@ const HomePage: React.FC = () => {
               </motion.div>
             </motion.div>
           </div>
+
+          {/* Compact 3D Korean Bakery showcase — placed below hero content */}
+          <motion.div
+            className="mt-6 lg:mt-8 mx-auto w-full max-w-3xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 30 }}
+            transition={{ delay: 1.7, duration: 0.8 }}
+          >
+            <KoreanBakery3D height={260} enableControls />
+          </motion.div>
         </motion.div>
 
         {/* Scroll Indicator */}
