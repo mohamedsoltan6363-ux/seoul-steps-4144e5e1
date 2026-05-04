@@ -155,9 +155,9 @@ const ExplosionEffect: React.FC<{ delay: number }> = ({ delay }) => (
   </>
 );
 
-// 1. TANK
+// 1. TANK - barrel/front faces direction of motion (right)
 export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const totalDuration = 6.5;
+  const totalDuration = 7.5;
   const impactTime = calculateImpactTime(totalDuration, -60, 150);
   return (
     <motion.div className="absolute inset-0 z-50 overflow-hidden bg-gradient-to-b from-amber-50/60 to-orange-100/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -169,7 +169,7 @@ export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplet
         transition={{ duration: totalDuration, ease: 'linear' }}
         onAnimationComplete={onComplete}
       >
-        <Model3DView url="/models/tank.glb" width={520} height={340} rotation={[0, Math.PI / 2.2, 0]} />
+        <Model3DView url="/models/tank.glb" width={420} height={280} rotation={[0, -Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
