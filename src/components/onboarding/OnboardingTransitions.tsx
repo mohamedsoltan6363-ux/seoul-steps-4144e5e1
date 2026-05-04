@@ -164,29 +164,12 @@ export const TankTransition: React.FC<{ onComplete: () => void }> = ({ onComplet
       <HitCharacter impactTime={impactTime} direction="right" />
       <ImpactEffect delay={impactTime} color="#f59e0b" />
       <motion.div
-        className="absolute z-20" style={{ bottom: '18%' }}
+        className="absolute z-20" style={{ bottom: '14%' }}
         initial={{ x: '-60vw' }} animate={{ x: '150vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }}
         onAnimationComplete={onComplete}
       >
-        <svg width="450" height="260" viewBox="0 0 450 260">
-          <rect x="20" y="180" width="380" height="50" rx="20" fill="#1f2937" />
-          {[60, 130, 200, 270, 340].map((x, i) => (
-            <motion.circle key={i} cx={x} cy="205" r="28" fill="#0f172a" stroke="#374151" strokeWidth="4"
-              animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-              style={{ transformOrigin: `${x}px 205px` }} />
-          ))}
-          <path d="M40 175 L70 105 L370 105 L400 175 Z" fill="#4b5d3e" />
-          <ellipse cx="220" cy="105" rx="80" ry="25" fill="#5a6e4a" />
-          <path d="M150 105 L165 50 L290 50 L305 105 Z" fill="#4b5d3e" />
-          <rect x="295" y="68" width="160" height="20" fill="#374151" />
-          <rect x="445" y="62" width="22" height="32" fill="#1f2937" />
-          {[0, 1, 2].map(i => (
-            <motion.ellipse key={i} cx={30 - i * 25} cy={140} rx="20" ry="15" fill="#6b7280" opacity={0.5}
-              animate={{ x: -50, y: -30, scale: 2.5, opacity: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }} />
-          ))}
-        </svg>
+        <Model3DView url="/models/tank.glb" width={520} height={340} rotation={[0, Math.PI / 2.2, 0]} />
       </motion.div>
     </motion.div>
   );
