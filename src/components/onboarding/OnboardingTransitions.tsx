@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import characterImage from '@/assets/onboarding-character.png';
+import { Model3DView } from './Model3D';
 
 // ============================================================
 // SHARED HELPERS
