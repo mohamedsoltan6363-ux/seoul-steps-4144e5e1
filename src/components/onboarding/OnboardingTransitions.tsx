@@ -422,19 +422,7 @@ export const HelicopterTransition: React.FC<{ onComplete: () => void }> = ({ onC
       <motion.div className="absolute z-20" style={{ top: '20%' }}
         initial={{ x: '-40vw' }} animate={{ x: '120vw' }}
         transition={{ duration: totalDuration, ease: 'linear' }} onAnimationComplete={onComplete}>
-        <svg width="280" height="180" viewBox="0 0 280 180">
-          <ellipse cx="140" cy="100" rx="80" ry="35" fill="#475569" />
-          <rect x="60" y="90" width="160" height="20" fill="#334155" />
-          <path d="M210 95 L260 100 L210 115" fill="#475569" />
-          <motion.g style={{ transformOrigin: '140px 60px' }} animate={{ rotate: 360 }} transition={{ duration: 0.15, repeat: Infinity, ease: 'linear' }}>
-            <rect x="20" y="58" width="240" height="4" fill="#0f172a" />
-            <rect x="138" y="40" width="4" height="40" fill="#0f172a" />
-          </motion.g>
-          <line x1="140" y1="62" x2="140" y2="80" stroke="#1f2937" strokeWidth="3" />
-          <line x1="80" y1="135" x2="200" y2="135" stroke="#1f2937" strokeWidth="4" />
-          <line x1="100" y1="115" x2="100" y2="135" stroke="#1f2937" strokeWidth="3" />
-          <line x1="180" y1="115" x2="180" y2="135" stroke="#1f2937" strokeWidth="3" />
-        </svg>
+        <Model3DView url="/models/helicopter.glb" width={420} height={280} rotation={[0, Math.PI / 2, 0]} />
       </motion.div>
     </motion.div>
   );
