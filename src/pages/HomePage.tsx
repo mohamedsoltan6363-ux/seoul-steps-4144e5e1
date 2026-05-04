@@ -13,6 +13,7 @@ import WaveDivider from '@/components/WaveDivider';
 import TypewriterText from '@/components/TypewriterText';
 import EgyptMap from '@/components/maps/EgyptMap';
 import SouthKoreaMap from '@/components/maps/SouthKoreaMap';
+import KoreanBakery3D from '@/components/KoreanBakery3D';
 import {
   Sparkles, ArrowRight, Globe, BookOpen, GraduationCap, Star, Zap,
   Users, Trophy, Brain, ChevronDown, Code, Heart, Play, MessageCircle,
